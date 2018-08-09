@@ -6,6 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "cordova-build": "npm run build && cordova build",
+    "cordova-run": "npm run build && cordova run browser",
+    "cordova-run-android": "npm run build && cordova run android",
     "start": "npm run dev",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
