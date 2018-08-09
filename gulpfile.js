@@ -1,7 +1,7 @@
 'use strict';
 
 var gulp = require('gulp'),
-	browserSync = require('browser-sync'),
+    browserSync = require('browser-sync'),
     exec = require('child_process').exec // для запуска команд в терминале
 ;
 
@@ -9,32 +9,37 @@ var gulp = require('gulp'),
 // чтобы cordova успела перезапуститься
 var RELOAD_TIMEOUT = 2000;
 
-gulp.task('browser-sync', ['webpack-dev','cordova-run'], function() {
-// gulp.task('browser-sync', ['cordova-run'], function() {
+// gulp.task('browser-sync', ['webpack-dev','cordova-run'], function() {
+gulp.task('browser-sync', ['cordova-run'], function() {
     setTimeout(() => {
-    	browserSync({
-    		/*server: {
-    			baseDir: 'www'
-    		},*/
-    		proxy: 'localhost:8000',
-    		port: 	9999,
-    		notify: false,
-    		ghostMode: false
-    	});
+        browserSync({
+            /*server: {
+                baseDir: 'www'
+            },*/
+            proxy: 'localhost:8000',
+            port:   9999,
+            notify: false,
+            ghostMode: false
+        });
     }, RELOAD_TIMEOUT);
 });
 
-gulp.task('webpack-deferred-reload', ['webpack-build'], function() {
+/*gulp.task('webpack-deferred-reload', ['webpack-build'], function() {
     console.log('Waiting for ' + (RELOAD_TIMEOUT / 1000) + 's...');
     setTimeout(() => {
         browserSync.reload();
     }, RELOAD_TIMEOUT);
-});
+});*/
 
 gulp.task('webpack-build', function() {
     console.log('::webpack:build');
 
-    exec('npm run build && cordova build &&  cordova run browser && cordova serve && cordova run android');
+    // exec('npm run build && cordova build && cordova serve && cordova run android', (error, stdout, stderr) => {
+    exec('npm run cordova-run-all', (error, stdout, stderr) => {
+        exec('cordova serve');
+        console.log('::browserSync:reload');
+        browserSync.reload();
+    });
 });
 
 gulp.task('webpack-dev', function() {
@@ -77,7 +82,7 @@ gulp.task('cordova-run-android', function() {
 });
 
 gulp.task('watch', ['browser-sync'], function() {
-	gulp.watch('src/**/*.*', ['webpack-deferred-reload']);
+    gulp.watch('src/**/*.*', ['webpack-build']);
 
     // gulp.watch('www/**/*.html', ['deferred-reload']);
     // gulp.watch('www/**/*.js', ['deferred-reload']);
