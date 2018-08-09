@@ -2,10 +2,6 @@
   <div id="app">
     <router-view/>
 
-    <div id="deviceready" class="blink">
-        <p class="event listening">Connecting to Device</p>
-        <p class="event received">Device is Ready</p>
-    </div>
   </div>
 </template>
 
