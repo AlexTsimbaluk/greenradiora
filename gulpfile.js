@@ -7,7 +7,7 @@ var gulp = require('gulp'),
 
 // при изменении файлов откладываем перезагрузку на это время,
 // чтобы cordova успела перезапуститься
-var RELOAD_TIMEOUT = 2000;
+var RELOAD_TIMEOUT = 1000;
 
 // gulp.task('browser-sync', ['webpack-dev','cordova-run'], function() {
 gulp.task('browser-sync', ['cordova-run'], function() {
@@ -36,9 +36,12 @@ gulp.task('webpack-build', function() {
 
     // exec('npm run build && cordova build && cordova serve && cordova run android', (error, stdout, stderr) => {
     exec('npm run cordova-run-all', (error, stdout, stderr) => {
+        exec('cordova build browser');
         exec('cordova serve');
         console.log('::browserSync:reload');
-        browserSync.reload();
+        setTimeout(() => {
+            browserSync.reload();
+        }, RELOAD_TIMEOUT);
     });
 });
 
