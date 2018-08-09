@@ -8,7 +8,7 @@ Vue.config.productionTip = false;
 var cordova = {
     initialize: function() {
         document.addEventListener('deviceready', () => {
-			console.log('::event:deviceready');
+			console.log('::Cordova event::deviceready');
 		}, false);
     }
 };
