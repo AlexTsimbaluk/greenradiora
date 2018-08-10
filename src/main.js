@@ -1,4 +1,5 @@
 /* eslint-disable */
+import $ from 'jquery';
 import Vue from 'vue';
 import App from './App';
 import router from './router';
@@ -21,3 +22,5 @@ new Vue({
   components: { App },
   template: '<App/>'
 });
+
+console.log($('h1'));
