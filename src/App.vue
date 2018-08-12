@@ -1,14 +1,27 @@
 <template>
   <div id="app">
+    <img src="./assets/logo.png">
     <router-view/>
 
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  name: 'App'
+  name: 'App',
+  created () {
+    var formdata = new FormData();
+    formdata.append('action', 'getAllStations');
+
+    axios
+      .post('../api/actions.php', formdata)
+      .then(response => console.log(response.data))
+      .catch(error => console.log(error));
+  }
 }
+
 </script>
 
 <style>

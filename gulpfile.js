@@ -16,7 +16,8 @@ gulp.task('browser-sync', ['cordova-run'], function() {
             /*server: {
                 baseDir: 'www'
             },*/
-            proxy: 'localhost:8000',
+            // proxy: 'localhost:8000',
+            proxy: 'greenra',
             port:   9999,
             notify: false,
             ghostMode: false
