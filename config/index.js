@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         'api': {
-            target: 'greenra',
+            target: 'greenra/api/',
             changeOrigin: true
         }
     },

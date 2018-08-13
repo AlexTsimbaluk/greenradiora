@@ -1,25 +1,14 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
-
+    {{ stationsArray }}
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'App',
-  created () {
-    var formdata = new FormData();
-    formdata.append('action', 'getAllStations');
-
-    axios
-      .post('../api/actions.php', formdata)
-      .then(response => console.log(response.data))
-      .catch(error => console.log(error));
-  }
+  props: ['stationsArray']
 }
 
 </script>

@@ -1,16 +1,22 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'Player',
   data () {
     return {
       msg: 'Welcome to GreenRadioRa'
+      // station: stationsArray
     }
+  },
+  props: {
+    stationsArray: Object,
+    stationsArrayOn100: Array
   }
 }
 </script>
