@@ -1,14 +1,18 @@
 <template>
   <div id="app">
-    <router-view/>
-    <!-- {{ stationsArray['10'] }} -->
+	<router-view/>
+	
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
-  props: ['stationsArray']
+  data () {
+  	return {
+  		
+  	}
+  }
 }
 
 </script>
@@ -21,5 +25,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#app.error-no-response-data {
+	color: #ff0;
+}
+#app.error-ajax-query {
+	color: #f00;
 }
 </style>
