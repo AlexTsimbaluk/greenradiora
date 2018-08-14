@@ -33,7 +33,7 @@ new Vue({
     formdata.append('action', 'getAllStations');
 
     axios
-      .post('../api/actions.php', formdata)
+      .post('/api/actions.php', formdata)
       .then((response) => {
       	try {
       		this.stationsArray = (response);

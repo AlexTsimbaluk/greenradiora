@@ -11,8 +11,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        'api': {
-            target: 'greenra/api/',
+        '**/*.php': {
+            target: 'hhtp://greenra',
             changeOrigin: true
         }
     },
