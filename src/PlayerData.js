@@ -37,6 +37,12 @@ export default new Vue({
 			// const proxy = "https://cors-anywhere.herokuapp.com/";
 			// axios.post(proxy + url).then()
 
+			// 2
+			// https://toster.ru/q/454760
+			// прописать origin ('Access-Control-Allow-Origin') в хедер ответа сервера. Это адреса хостов, к которым разрешены внешние запросы.
+			// судя по всему, в db_connection.php
+			// <?php header("Access-Control-Allow-Origin: *"); ?>
+
 			if(localStorage.getItem('stations') == undefined) {
 				console.log('::Need ajax for allStations list');
 				$('body').append('<div>Data from local storage is empty, need ajax for data list');
