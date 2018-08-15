@@ -31,7 +31,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     hot: true,
     headers: {
       'Access-Control-Allow-Origin': '*'
-    }
+    },
     contentBase: false, // since we use CopyWebpackPlugin.
     compress: true,
     host: HOST || config.dev.host,
