@@ -26,10 +26,21 @@ export default new Vue({
 		},
 		getAllStations () {
 			console.log('::PlayerData.getAllStations');
+
+			// варианты с запросом
+			// 1
+			// добавить прокси если в config/index.js dev.proxyTable.target = 'http://greenradiora.ru'
+			// https://ru.stackoverflow.com/questions/772198/react-axios-no-access-control-allow-origin-header-is-present-on-the-requested
+			// тогда вместо
+			// axios.post(url).then()
+			// будет
+			// const proxy = "https://cors-anywhere.herokuapp.com/";
+			// axios.post(proxy + url).then()
+
 			if(localStorage.getItem('stations') == undefined) {
 				console.log('::Need ajax for allStations list');
 				$('body').append('<div>Data from local storage is empty, need ajax for data list');
-				
+
 				let formdata = new FormData();
 				formdata.append('action', 'getAllStations');
 
