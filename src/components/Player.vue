@@ -1,12 +1,8 @@
 <template>
   <div class="hello">
-	<h1>{{ msg }}</h1>
-
-	<div>{{ station.station_title }}</div>
+	<div>{{ station }}</div>
 	
-	<button @click="getAllStations">Get data</button>
 	<button @click="clearLocalStorage">Clear LS</button>
-	<!-- <button @click="displayStation">Display station</button> -->
   </div>
 </template>
 
@@ -18,8 +14,7 @@ export default {
   name: 'Player',
   data () {
 	return {
-	  msg: 'Welcome to GreenRadioRa',
-	  station: {},
+	  station: '',
 	  stationsArray: {},
 	  stationsArrayOn100: []
 	}
@@ -31,22 +26,18 @@ export default {
   },*/
   methods: {
   	clearLocalStorage () {
-  		localStorage.clear();
-  		console.log('Clear Local storage');
-  		$('body').append('<div>Clear Local storage');
-  	},
-  	getAllStations () {
-  		console.log('::Player.getAllStations');
-  		// this.$emit('PlayerData.getAllStations')
-  		PlayerData.getAllStations();
-  	},
-  	displayStation () {
-  		this.station_title = this.stationsArray['2'].station_title;
-  	}
+	    localStorage.clear();
+	    console.log('Clear Local storage');
+	    $('body').append('<div>Clear Local storage');
+	    setTimeout(() => {
+	    	location.reload();
+	    }, 1000);
+	}
   },
   created () {
-  	// this.stationsArray = PlayerData.stationsArray;
-  	// this.stationsArrayOn100 = PlayerData.stationsArrayOn100;
+  	this.stationsArray = PlayerData.stationsArray;
+  	this.stationsArrayOn100 = PlayerData.stationsArrayOn100;
+	this.station = this.stationsArray['111'].station_title;
   }
 }
 </script>
