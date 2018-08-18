@@ -1,49 +1,73 @@
 <template>
-  <div class="hello">
-	<div>{{ station }}</div>
-	
-	<button @click="clearLocalStorage">Clear LS</button>
-  </div>
+	<div>
+		<div
+			v-if="xhrResponceRecieved"
+		>
+			<station
+				:station="stationsArray['1111']"
+			></station>
+		</div>
+
+		<button @click="clearLocalStorage">Clear LS</button>
+	</div>
 </template>
 
 <script>
+import Vue from 'vue';
 import $ from 'jquery';
 import PlayerData from '@/PlayerData.js';
+import Station from '@/components/Station'
+
+Vue.component('Station', Station);
 
 export default {
-  name: 'Player',
-  data () {
-	return {
-	  station: '',
-	  stationsArray: {},
-	  stationsArrayOn100: []
+	name: 'Player',
+	data () {
+		return {
+			xhrResponceRecieved: false,
+			stationsArray: {},
+			stationsArrayOn100: []
+		}
+	},
+	/*computed: {
+	station_title: function () {
+	return this.stationsArray['2'].station_title;
 	}
-  },
-  /*computed: {
-	  station_title: function () {
-	  	return this.stationsArray['2'].station_title;
-	  }
-  },*/
-  methods: {
-  	clearLocalStorage () {
-	    localStorage.clear();
-	    console.log('Clear Local storage');
-	    $('body').append('<div>Clear Local storage');
-	    setTimeout(() => {
-	    	location.reload();
-	    }, 1000);
+	},*/
+	methods: {
+		clearLocalStorage () {
+			localStorage.clear();
+			console.log('::Player:method:clearLocalStorage');
+			$('body').append('<div>Clear Local storage');
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
+		},
+		xhrRecieved () {
+			console.log(('::Player:method:xhrRecieved'));
+			console.log(PlayerData.xhrResponceRecieved);
+			return PlayerData.xhrResponceRecieved;
+		},
+		dataTransfered (all, on100) {
+			console.log('::Player:method:dataTransfered');
+			this.stationsArray = all;
+			this.stationsArrayOn100 = on100;
+			this.xhrResponceRecieved = true;
+		}
+	},
+	created () {
+		console.log('::Player:hook:created');
+		// console.log(this.xhrRecieved());
+
+		PlayerData.$on('dataTransfer', (all, on100) => {
+			console.log('::Player:$on:dataTransfer');
+			this.dataTransfered(all, on100);
+		});
 	}
-  },
-  created () {
-  	this.stationsArray = PlayerData.stationsArray;
-  	this.stationsArrayOn100 = PlayerData.stationsArrayOn100;
-	this.station = this.stationsArray['111'].station_title;
-  }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 h1, h2 {
   font-weight: normal;
 }
