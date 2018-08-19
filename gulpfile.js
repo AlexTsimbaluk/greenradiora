@@ -9,8 +9,8 @@ var gulp = require('gulp'),
 // чтобы cordova успела перезапуститься
 var RELOAD_TIMEOUT = 1000;
 
-// gulp.task('browser-sync', ['webpack-dev','cordova-run'], function() {
-gulp.task('browser-sync', ['cordova-run'], function() {
+// gulp.task('browser-sync', ['cordova-run'], function() {
+gulp.task('browser-sync', function() {
     setTimeout(() => {
         browserSync({
             /*server: {
@@ -86,11 +86,7 @@ gulp.task('cordova-run-android', function() {
 });
 
 gulp.task('watch', ['browser-sync'], function() {
-    gulp.watch('src/**/*.*', ['webpack-build']);
-
-    // gulp.watch('www/**/*.html', ['deferred-reload']);
-    // gulp.watch('www/**/*.js', ['deferred-reload']);
-    // gulp.watch('www/**/*.css', ['deferred-reload']);
+    // gulp.watch('src/**/*.*', ['webpack-build']);
 });
 
 gulp.task('default', ['watch']);
