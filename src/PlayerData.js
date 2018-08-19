@@ -120,9 +120,6 @@ export default new Vue({
 			this.logs('::Data from local storage is empty, need ajax for data list');
 
 			let urlApi = this.apiPrefix + '/api/actions.php';
-			console.log(window.location);
-
-			this.logs(urlApi);
 			
 			console.log('hostname=' + window.location.hostname);
 			console.log('host=' + window.location.host);
@@ -133,8 +130,8 @@ export default new Vue({
 
 			setTimeout(() => {
 				this.createdInfo();
+				this.logs(urlApi);
 			}, 50);
-
 
 			this.getAllStations(this.apiPrefix + '/api/actions.php');
 		} else {
