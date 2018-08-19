@@ -23,11 +23,11 @@
 		},
 		data () {
 			return {
-				
+				test: 'sssss'
 			}
 		},
 		created () {
-			
+			console.log('::Station:hook:created');
 		}
 	}
 </script>

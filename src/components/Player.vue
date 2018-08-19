@@ -6,7 +6,11 @@
 			<station
 				:station="stationsArray['1111']"
 			></station>
+
+			<hr>
 		</div>
+		
+		<log></log>
 
 		<button @click="clearLocalStorage">Clear LS</button>
 	</div>
@@ -15,30 +19,30 @@
 <script>
 import Vue from 'vue';
 import $ from 'jquery';
+
 import PlayerData from '@/PlayerData.js';
+
+import Log from '@/components/Log'
 import Station from '@/components/Station'
 
+Vue.component('Log', Log);
 Vue.component('Station', Station);
 
 export default {
 	name: 'Player',
 	data () {
 		return {
+			logs: [],
 			xhrResponceRecieved: false,
 			stationsArray: {},
 			stationsArrayOn100: []
 		}
 	},
-	/*computed: {
-	station_title: function () {
-	return this.stationsArray['2'].station_title;
-	}
-	},*/
 	methods: {
 		clearLocalStorage () {
 			localStorage.clear();
 			console.log('::Player:method:clearLocalStorage');
-			$('body').append('<div>Clear Local storage');
+			PlayerData.logs('::Clear Local storage');
 			setTimeout(() => {
 				location.reload();
 			}, 1000);
@@ -57,10 +61,18 @@ export default {
 	},
 	created () {
 		console.log('::Player:hook:created');
-		// console.log(this.xhrRecieved());
 
 		PlayerData.$on('dataTransfer', (all, on100) => {
-			console.log('::Player:$on:dataTransfer');
+			setTimeout(() => {
+				PlayerData.logs('::Player:$on:dataTransfer');
+				PlayerData.logs('Data from local storage recieved');
+				PlayerData.logs('hostname=' + window.location.hostname);
+				PlayerData.logs('host=' + window.location.host);
+				PlayerData.logs('hash=' + window.location.hash);
+				PlayerData.logs('href=' + window.location.href);
+				PlayerData.logs('origin=' + window.location.origin);
+			}, 50);
+
 			this.dataTransfered(all, on100);
 		});
 	}

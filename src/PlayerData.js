@@ -10,10 +10,22 @@ export default new Vue({
 		// Массив со всеми станциями, только станции сгруппированы в массивы по 100шт
 		stationsArrayOn100: [],
 		// префикс для url API для android на cordova
-		androidPrefix: '',
+		apiPrefix: '',
 		xhrResponceRecieved: false
 	},
 	methods: {
+		createdInfo () {
+			this.logs('PlayerData.apiPrefix=' + this.apiPrefix);
+			this.logs('host=' + window.location.host);
+			this.logs('hostname=' + window.location.hostname);
+			this.logs('pathname=' + window.location.pathname);
+			this.logs('hash=' + window.location.hash);
+			this.logs('href=' + window.location.href);
+			this.logs('origin=' + window.location.origin);
+		},
+		logs (text) {
+			this.$emit('log', text);
+		},
 		clearLocalStorage () {
 			localStorage.clear();
 			console.log('Clear Local storage');
@@ -79,7 +91,7 @@ export default new Vue({
 						localStorage.setItem('stations', JSON.stringify(this.stationsArray));
 						localStorage.setItem('stationsOn100', JSON.stringify(this.stationsArrayOn100));
 
-						$('body').append('<div>Data from Database success and placed in localstorage');
+						this.logs('::Data from Database success and placed in localstorage');
 
 						// location.reload();
 					} catch(e) {
@@ -87,12 +99,12 @@ export default new Vue({
 						console.log('Error::No response');
 						throw new Error(e);
 						$('#app').addClass('js-error error-no-response-data');
-						$('body').append('<div>Data from Database failed');
+						this.logs('::Data from Database failed');
 					}
 				})
 				.catch((error) => {
 					console.log('Error::не удалось создать ajax-запрос');
-					$('body').append('<div>Ajax failed');
+					this.logs('::Ajax failed');
 					// TODO: переделать на добавление класса объекту Vue
 					$('#app').addClass('js-error error-ajax-query');
 					console.log(error)
@@ -100,23 +112,33 @@ export default new Vue({
 		}
 	},
 	created () {
-		/*let path = window.location.pathname;
-		console.log(path);
-		$('body').append('<div>' + path);*/
 		console.log('::PlayerData:hook:created');
-
 		console.log('::PlayerData:method:getAllStations');
+
 		if(localStorage.getItem('stations') == undefined) {
 			console.log('::Need ajax for allStations list');
-			$('body').append('<div>Data from local storage is empty, need ajax for data list');
+			this.logs('::Data from local storage is empty, need ajax for data list');
 
-			let urlApi = this.androidPrefix + '/api/actions.php';
-			console.log(urlApi);
+			let urlApi = this.apiPrefix + '/api/actions.php';
+			console.log(window.location);
 
-			this.getAllStations(this.androidPrefix + '/api/actions.php');
+			this.logs(urlApi);
+			
+			console.log('hostname=' + window.location.hostname);
+			console.log('host=' + window.location.host);
+			console.log('hash=' + window.location.hash);
+			console.log('href=' + window.location.href);
+			console.log('origin=' + window.location.origin);
+			console.log('urlApi=' + urlApi);
+
+			setTimeout(() => {
+				this.createdInfo();
+			}, 50);
+
+
+			this.getAllStations(this.apiPrefix + '/api/actions.php');
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');
-			$('body').append('<div>Data from local storage success');
 			this.stationsArray 		= JSON.parse(localStorage.getItem('stations'));
 			this.stationsArrayOn100 	= JSON.parse(localStorage.getItem('stationsOn100'));
 			this.xhrResponceRecieved = true;
