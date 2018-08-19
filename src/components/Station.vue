@@ -7,8 +7,6 @@
 		<div class="url">
 			{{ station.station_url }}
 		</div>
-
-		{{ fake }}
 	</div>
 </template>
 
@@ -25,9 +23,7 @@
 		},
 		data () {
 			return {
-				title: '',
-				url: '',
-				fake: 'aaa'
+				
 			}
 		},
 		created () {
