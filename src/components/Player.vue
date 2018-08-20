@@ -4,12 +4,12 @@
 			v-if="xhrResponceRecieved"
 		>
 			<station
-				:station="stationsArray['1111']"
+				:station="stationsArray[random]"
 			></station>
 
 			<hr>
 		</div>
-		
+
 		<log></log>
 
 		<button @click="clearLocalStorage">Clear LS</button>
@@ -35,7 +35,9 @@ export default {
 			logs: [],
 			xhrResponceRecieved: false,
 			stationsArray: {},
-			stationsArrayOn100: []
+			stationsArrayOn100: [],
+			// random: PlayerData.getRandomInt(2, 9000)
+			random: 1000
 		}
 	},
 	methods: {
@@ -65,12 +67,8 @@ export default {
 		PlayerData.$on('dataTransfer', (all, on100) => {
 			setTimeout(() => {
 				PlayerData.logs('::Player:$on:dataTransfer');
-				PlayerData.logs('Data from local storage recieved');
-				PlayerData.logs('hostname=' + window.location.hostname);
-				PlayerData.logs('host=' + window.location.host);
-				PlayerData.logs('hash=' + window.location.hash);
-				PlayerData.logs('href=' + window.location.href);
-				PlayerData.logs('origin=' + window.location.origin);
+				PlayerData.logs('::Data recieved');
+				PlayerData.createdInfo();
 			}, 50);
 
 			this.dataTransfered(all, on100);

@@ -7,6 +7,7 @@ export default new Vue({
 	data: {
 		// Массив со всеми станциями
 		stationsArray: {},
+		stationsAll: 0,
 		// Массив со всеми станциями, только станции сгруппированы в массивы по 100шт
 		stationsArrayOn100: [],
 		// префикс для url API для android на cordova
@@ -14,6 +15,9 @@ export default new Vue({
 		xhrResponceRecieved: false
 	},
 	methods: {
+		getRandomInt (min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		},
 		createdInfo () {
 			this.logs('PlayerData.apiPrefix=' + this.apiPrefix);
 			this.logs('host=' + window.location.host);
@@ -58,6 +62,9 @@ export default new Vue({
 						for (var key in this.stationsArray) {
 							size++;
 						}
+						this.stationsAll = size;
+						console.log(size);
+
 						var totalArrays = Math.ceil(size / 100);
 
 						// массив имен станций
@@ -129,7 +136,6 @@ export default new Vue({
 			console.log('urlApi=' + urlApi);
 
 			setTimeout(() => {
-				this.createdInfo();
 				this.logs(urlApi);
 			}, 50);
 
