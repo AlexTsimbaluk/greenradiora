@@ -20,14 +20,14 @@ var cordova = {
 		let path = window.location.pathname;
 		console.log(path);
 
+		PlayerData.apiPrefix = 'http://greenra';
+		
 		if (device.platform.toLowerCase() == 'android') {
-			PlayerData.apiPrefix = path.substring(0, path.lastIndexOf('/'));
+			// PlayerData.apiPrefix = path.substring(0, path.lastIndexOf('/'));
 		} else if (device.platform.toLowerCase() == 'browser') {
 			// PlayerData.apiPrefix = path.substring(0, path.lastIndexOf('/'));
-			// PlayerData.apiPrefix = 'platforms/browser/www';
-			PlayerData.apiPrefix = 'http://greenra';
 		} else {
-			PlayerData.apiPrefix = '';
+			// PlayerData.apiPrefix = '';
 		}
 		PlayerData.getAllStations(PlayerData.apiPrefix + '/api/actions.php');
 
