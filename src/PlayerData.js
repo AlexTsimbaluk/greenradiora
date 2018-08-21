@@ -7,11 +7,6 @@ export default new Vue({
 	data: {
 		// Массив со всеми станциями
 		stationsArray: {},
-		// Массив со всеми станциями, только станции сгруппированы в массивы по 100шт
-		stationsArrayOn100: [],
-		stationKeys: [],
-		stTotal: 0,
-		rnd: 0,
 		// префикс для url API для android на cordova
 		apiPrefix: '',
 		xhrResponceRecieved: false
@@ -39,10 +34,9 @@ export default new Vue({
 		},
 		dataTransfer (msec) {
 			console.log('dataTransfer');
-			this.rnd = this.stationKeys[this.getRandomInt(0, this.stTotal)];
-			// передача с отсрочкой, потому что Player не успевает создаться, пусть тоже стоит задержка
+			// передача с отсрочкой, потому что Player не успевает создаться
 			setTimeout(() => {
-				this.$emit('dataTransfer', this.stationsArray, this.stationsArrayOn100, this.rnd);
+				this.$emit('dataTransfer');
 			}, msec);
 		},
 		getAllStations (urlApi) {
@@ -65,15 +59,14 @@ export default new Vue({
 				)
 				.then((response) => {
 					try {
-						this.stationsArray = (response.data);
 						console.log('::xhr:stop:succecc');
-						this.makeOn100();
+						this.stationsArray = (response.data);
+
+						this.xhrResponceRecieved = true;
+						localStorage.setItem('stations', JSON.stringify(this.stationsArray));
 
 						console.log('::PlayerData:$emit:dataTransfer:xhr');
 						this.dataTransfer(50);
-						this.xhrResponceRecieved = true;
-
-						localStorage.setItem('stations', JSON.stringify(this.stationsArray));
 
 						this.logs('::Data from Database success and placed in localstorage');
 
@@ -143,7 +136,6 @@ export default new Vue({
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');
 			this.stationsArray 		= JSON.parse(localStorage.getItem('stations'));
-			this.makeOn100();
 			this.xhrResponceRecieved = true;
 
 			console.log('::PlayerData:$emit:dataTransfer:ls');

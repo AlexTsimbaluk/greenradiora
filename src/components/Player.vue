@@ -36,6 +36,8 @@ export default {
 			xhrResponceRecieved: false,
 			stationsArray: {},
 			stationsArrayOn100: [],
+			stationKeys: [],
+			stTotal: 0,
 			random: null
 		}
 	},
@@ -48,12 +50,37 @@ export default {
 				location.reload();
 			}, 1000);
 		},
-		dataTransfered (all, on100, rnd) {
+		dataTransfered () {
 			console.log('::Player:method:dataTransfered');
-			this.stationsArray = all;
-			this.stationsArrayOn100 = on100;
-			this.random = rnd;
+			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
+			this.makeOn100();
+			this.random = this.stationKeys[PlayerData.getRandomInt(0, this.stTotal)];
+
 			this.xhrResponceRecieved = true;
+		},
+		makeOn100 () {
+			// массив имен станций
+			// нужен для правильного получения stationsIndex
+			// var this.stationKeys = [];
+			for (var key in this.stationsArray) {
+				this.stationKeys.push(key);
+			}
+			this.stTotal = this.stationKeys.length;
+
+			var totalArrays = Math.ceil(this.stTotal / 100);
+
+			for (var i = 0; i < totalArrays; i++) {
+				this.stationsArrayOn100[i] = [];
+				for (var j = 0; j < 100; j++) {
+					var stationsIndex = this.stationKeys[i * 100 + j];
+					
+					if(i == totalArrays - 1 && j == this.stTotal % 100) {
+						break;
+					}
+
+					this.stationsArrayOn100[i][j] = this.stationsArray[stationsIndex];
+				}
+			}
 		}
 	},
 	created () {
@@ -66,7 +93,8 @@ export default {
 				PlayerData.createdInfo();
 			}, 50);
 
-			this.dataTransfered(all, on100, rnd);
+			this.dataTransfered();
+
 		});
 	}
 }
