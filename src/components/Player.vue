@@ -36,8 +36,7 @@ export default {
 			xhrResponceRecieved: false,
 			stationsArray: {},
 			stationsArrayOn100: [],
-			// random: PlayerData.getRandomInt(2, 9000)
-			random: 1000
+			random: null
 		}
 	},
 	methods: {
@@ -49,29 +48,25 @@ export default {
 				location.reload();
 			}, 1000);
 		},
-		xhrRecieved () {
-			console.log(('::Player:method:xhrRecieved'));
-			console.log(PlayerData.xhrResponceRecieved);
-			return PlayerData.xhrResponceRecieved;
-		},
-		dataTransfered (all, on100) {
+		dataTransfered (all, on100, rnd) {
 			console.log('::Player:method:dataTransfered');
 			this.stationsArray = all;
 			this.stationsArrayOn100 = on100;
+			this.random = rnd;
 			this.xhrResponceRecieved = true;
 		}
 	},
 	created () {
 		console.log('::Player:hook:created');
 
-		PlayerData.$on('dataTransfer', (all, on100) => {
+		PlayerData.$on('dataTransfer', (all, on100, rnd) => {
 			setTimeout(() => {
 				PlayerData.logs('::Player:$on:dataTransfer');
 				PlayerData.logs('::Data recieved');
 				PlayerData.createdInfo();
 			}, 50);
 
-			this.dataTransfered(all, on100);
+			this.dataTransfered(all, on100, rnd);
 		});
 	}
 }

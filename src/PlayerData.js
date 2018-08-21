@@ -7,9 +7,11 @@ export default new Vue({
 	data: {
 		// Массив со всеми станциями
 		stationsArray: {},
-		stationsAll: 0,
 		// Массив со всеми станциями, только станции сгруппированы в массивы по 100шт
 		stationsArrayOn100: [],
+		stationKeys: [],
+		stTotal: 0,
+		rnd: 0,
 		// префикс для url API для android на cordova
 		apiPrefix: '',
 		xhrResponceRecieved: false
@@ -35,6 +37,14 @@ export default new Vue({
 			console.log('Clear Local storage');
 			$('body').append('<div>Clear Local storage');
 		},
+		dataTransfer (msec) {
+			console.log('dataTransfer');
+			this.rnd = this.stationKeys[this.getRandomInt(0, this.stTotal)];
+			// передача с отсрочкой, потому что Player не успевает создаться, пусть тоже стоит задержка
+			setTimeout(() => {
+				this.$emit('dataTransfer', this.stationsArray, this.stationsArrayOn100, this.rnd);
+			}, msec);
+		},
 		getAllStations (urlApi) {
 			console.log('::xhr:start');
 			axios
@@ -57,46 +67,13 @@ export default new Vue({
 					try {
 						this.stationsArray = (response.data);
 						console.log('::xhr:stop:succecc');
-
-						var size 		= 0;
-						for (var key in this.stationsArray) {
-							size++;
-						}
-						this.stationsAll = size;
-						console.log(size);
-
-						var totalArrays = Math.ceil(size / 100);
-
-						// массив имен станций
-						// нужен для правильного получения stationsIndex
-						var keys = [];
-
-						for(var key in this.stationsArray) {
-							keys.push(key);
-						}
-
-						for (var i = 0; i < totalArrays; i++) {
-							this.stationsArrayOn100[i] = [];
-							for (var j = 0; j < 100; j++) {
-								var stationsIndex = keys[i * 100 + j];
-								
-								if(i == totalArrays - 1 && j == size % 100) {
-									break;
-								}
-
-								this.stationsArrayOn100[i][j] = this.stationsArray[stationsIndex];
-							}
-						}
+						this.makeOn100();
 
 						console.log('::PlayerData:$emit:dataTransfer:xhr');
-						// здесь Player хоть и успевает создаться, пусть тоже стоит маленькая задержка
-						setTimeout(() => {
-							this.$emit('dataTransfer', this.stationsArray, this.stationsArrayOn100);
-						}, 50);
+						this.dataTransfer(50);
 						this.xhrResponceRecieved = true;
 
 						localStorage.setItem('stations', JSON.stringify(this.stationsArray));
-						localStorage.setItem('stationsOn100', JSON.stringify(this.stationsArrayOn100));
 
 						this.logs('::Data from Database success and placed in localstorage');
 
@@ -105,7 +82,6 @@ export default new Vue({
 						console.log('::xhr:stop:fail');
 						console.log('Error::No response');
 						throw new Error(e);
-						$('#app').addClass('js-error error-no-response-data');
 						this.logs('::Data from Database failed');
 					}
 				})
@@ -116,6 +92,30 @@ export default new Vue({
 					$('#app').addClass('js-error error-ajax-query');
 					console.log(error)
 				});
+		},
+		makeOn100 () {
+			// массив имен станций
+			// нужен для правильного получения stationsIndex
+			// var this.stationKeys = [];
+			for (var key in this.stationsArray) {
+				this.stationKeys.push(key);
+			}
+			this.stTotal = this.stationKeys.length;
+
+			var totalArrays = Math.ceil(this.stTotal / 100);
+
+			for (var i = 0; i < totalArrays; i++) {
+				this.stationsArrayOn100[i] = [];
+				for (var j = 0; j < 100; j++) {
+					var stationsIndex = this.stationKeys[i * 100 + j];
+					
+					if(i == totalArrays - 1 && j == this.stTotal % 100) {
+						break;
+					}
+
+					this.stationsArrayOn100[i][j] = this.stationsArray[stationsIndex];
+				}
+			}
 		}
 	},
 	created () {
@@ -143,14 +143,11 @@ export default new Vue({
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');
 			this.stationsArray 		= JSON.parse(localStorage.getItem('stations'));
-			this.stationsArrayOn100 	= JSON.parse(localStorage.getItem('stationsOn100'));
+			this.makeOn100();
 			this.xhrResponceRecieved = true;
 
 			console.log('::PlayerData:$emit:dataTransfer:ls');
-			// передача с отсрочкой, потому что Player не успевает создаться, пусть тоже стоит задержка
-			setTimeout(() => {
-				this.$emit('dataTransfer', this.stationsArray, this.stationsArrayOn100);
-			}, 100);
-		}
+			this.dataTransfer(100);
+		}		
 	}
 });
