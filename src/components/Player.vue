@@ -13,6 +13,7 @@
 		<log></log>
 
 		<button @click="clearLocalStorage">Clear LS</button>
+		<button @click="locationReload">Reload</button>
 	</div>
 </template>
 
@@ -50,13 +51,23 @@ export default {
 				location.reload();
 			}, 1000);
 		},
+		locationReload () {
+			localStorage.clear();
+			console.log('::Player:method:locationReload');
+			setTimeout(() => {
+				location.reload();
+			}, 100);
+		},
 		dataTransfered () {
-			console.log('::Player:method:dataTransfered');
+			PlayerData.logs('::Player:method:dataTransfered');
 			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 			this.makeOn100();
 			this.random = this.stationKeys[PlayerData.getRandomInt(0, this.stTotal)];
 
 			this.xhrResponceRecieved = true;
+
+			console.log(this.stationsArray['2'].station_url);
+			PlayerData.logs(this.stationsArray['2'].station_url);
 		},
 		makeOn100 () {
 			// массив имен станций
@@ -86,7 +97,7 @@ export default {
 	created () {
 		console.log('::Player:hook:created');
 
-		PlayerData.$on('dataTransfer', (all, on100, rnd) => {
+		PlayerData.$on('dataTransfer', () => {
 			setTimeout(() => {
 				PlayerData.logs('::Player:$on:dataTransfer');
 				PlayerData.logs('::Data recieved');

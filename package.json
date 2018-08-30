@@ -9,7 +9,7 @@
     "cordova-build": "npm run build && cordova build",
     "cordova-run": "npm run build && cordova run browser",
     "cordova-serve": "npm run build && cordova serve",
-    "cordova-serve-android": "npm run build && cordova serve && cordova run android",
+    "cordova-serve-android": "npm run build && cordova run android && cordova serve",
     "cordova-android": "npm run build && cordova run android",
     "cordova-all": "npm run build && cordova run android && cordova run browser",
     "cordova-run-all": "npm run build && cordova run android && cordova run browser",

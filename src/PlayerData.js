@@ -82,33 +82,9 @@ export default new Vue({
 					console.log('Error::не удалось создать ajax-запрос');
 					this.logs('::Ajax failed');
 					// TODO: переделать на добавление класса объекту Vue
-					$('#app').addClass('js-error error-ajax-query');
+					// $('#app').addClass('js-error error-ajax-query');
 					console.log(error)
 				});
-		},
-		makeOn100 () {
-			// массив имен станций
-			// нужен для правильного получения stationsIndex
-			// var this.stationKeys = [];
-			for (var key in this.stationsArray) {
-				this.stationKeys.push(key);
-			}
-			this.stTotal = this.stationKeys.length;
-
-			var totalArrays = Math.ceil(this.stTotal / 100);
-
-			for (var i = 0; i < totalArrays; i++) {
-				this.stationsArrayOn100[i] = [];
-				for (var j = 0; j < 100; j++) {
-					var stationsIndex = this.stationKeys[i * 100 + j];
-					
-					if(i == totalArrays - 1 && j == this.stTotal % 100) {
-						break;
-					}
-
-					this.stationsArrayOn100[i][j] = this.stationsArray[stationsIndex];
-				}
-			}
 		}
 	},
 	created () {
@@ -119,7 +95,7 @@ export default new Vue({
 			console.log('::Need ajax for allStations list');
 			this.logs('::Data from local storage is empty, need ajax for data list');
 
-			let urlApi = this.apiPrefix + '/api/actions.php';
+			let urlApi = this.apiPrefix + '/actions.php';
 			
 			console.log('hostname=' + window.location.hostname);
 			console.log('host=' + window.location.host);
@@ -132,7 +108,7 @@ export default new Vue({
 				this.logs(urlApi);
 			}, 50);
 
-			this.getAllStations(this.apiPrefix + '/api/actions.php');
+			this.getAllStations(this.apiPrefix + '/actions.php');
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');
 			this.stationsArray 		= JSON.parse(localStorage.getItem('stations'));

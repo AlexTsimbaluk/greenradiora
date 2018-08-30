@@ -24,7 +24,6 @@
 		},
 		created () {
 			console.log('::Log:hook:created');
-			// this.log('::Player:$on:dataTransfer');
 
 			PlayerData.$on('log', (text) => {
 				this.logs.push(text);
