@@ -22,7 +22,7 @@ var cordova = {
 
 
 		if (device.platform.toLowerCase() == 'android') {
-			PlayerData.createdInfo();
+			// PlayerData.createdInfo();
 			PlayerData.apiPrefix = 'http://greenradiora.ru';
 			// PlayerData.apiPrefix = path.substring(0, path.lastIndexOf('/'));
 		} else if (device.platform.toLowerCase() == 'browser') {

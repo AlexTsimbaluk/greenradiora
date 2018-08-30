@@ -95,7 +95,7 @@ export default new Vue({
 			console.log('::Need ajax for allStations list');
 			this.logs('::Data from local storage is empty, need ajax for data list');
 
-			let urlApi = this.apiPrefix + '/actions.php';
+			let urlApi = this.apiPrefix + '/api/actions.php';
 			
 			console.log('hostname=' + window.location.hostname);
 			console.log('host=' + window.location.host);
@@ -108,7 +108,7 @@ export default new Vue({
 				this.logs(urlApi);
 			}, 50);
 
-			this.getAllStations(this.apiPrefix + '/actions.php');
+			this.getAllStations(this.apiPrefix + '/api/actions.php');
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');
 			this.stationsArray 		= JSON.parse(localStorage.getItem('stations'));

@@ -101,11 +101,10 @@ export default {
 			setTimeout(() => {
 				PlayerData.logs('::Player:$on:dataTransfer');
 				PlayerData.logs('::Data recieved');
-				PlayerData.createdInfo();
+				// PlayerData.createdInfo();
 			}, 50);
 
 			this.dataTransfered();
-
 		});
 	}
 }
