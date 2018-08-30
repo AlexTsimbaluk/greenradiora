@@ -52,7 +52,6 @@ export default {
 			}, 1000);
 		},
 		locationReload () {
-			localStorage.clear();
 			console.log('::Player:method:locationReload');
 			setTimeout(() => {
 				location.reload();
