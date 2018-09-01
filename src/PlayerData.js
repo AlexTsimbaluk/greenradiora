@@ -108,7 +108,9 @@ export default new Vue({
 				this.logs(urlApi);
 			}, 50);
 
-			this.getAllStations(this.apiPrefix + '/api/actions.php');
+			if(!cordova) {
+				this.getAllStations(this.apiPrefix + '/api/actions.php');
+			}
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');
 			this.stationsArray 		= JSON.parse(localStorage.getItem('stations'));
