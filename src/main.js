@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import router from './router';
 
-import $ from 'jquery';
 import PlayerData from '@/PlayerData.js';
 import App from './App';
 
@@ -16,6 +15,7 @@ var cordova = {
 	},
 	onDeviceReady: function () {
 		console.log('::Cordova:event::deviceready');
+		// PlayerData.cordovaReady = true;
 
 		let path = window.location.pathname;
 		console.log(path);
@@ -31,7 +31,6 @@ var cordova = {
 		} else {
 			// PlayerData.apiPrefix = '';
 		}
-		// PlayerData.getAllStations(PlayerData.apiPrefix + '/api/actions.php');
 		PlayerData.getAllStations(PlayerData.apiPrefix + '/actions.php');
 
 		// let deviceInfo = 'Device Model: ' + device.model + '<br />' + 'Device Manufacturer: ' + device.manufacturer + '<br />' + 'Device Platform: ' + device.platform + '<br />' + 'Device Version: ' + device.version + '<br />' + 'Device Serial number: ' + device.serial + '<br />' + 'Device UUID: ' + device.uuid + '<br />' + 'Device Cordova: ' + device.cordova + '<br />';

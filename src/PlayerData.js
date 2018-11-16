@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import axios from 'axios';
-import $ from 'jquery';
 import Player from '@/components/Player';
 
 export default new Vue({
 	data: {
+		// инициализировалась ли cordova
+		cordovaReady: false,
 		// Массив со всеми станциями
 		stationsArray: {},
 		// префикс для url API для android на cordova
@@ -30,7 +31,7 @@ export default new Vue({
 		clearLocalStorage () {
 			localStorage.clear();
 			console.log('Clear Local storage');
-			$('body').append('<div>Clear Local storage');
+			this.logs('Clear Local storage');
 		},
 		dataTransfer (msec) {
 			console.log('dataTransfer');
@@ -82,7 +83,6 @@ export default new Vue({
 					console.log('Error::не удалось создать ajax-запрос');
 					this.logs('::Ajax failed');
 					// TODO: переделать на добавление класса объекту Vue
-					// $('#app').addClass('js-error error-ajax-query');
 					console.log(error)
 				});
 		}
@@ -108,7 +108,7 @@ export default new Vue({
 				this.logs(urlApi);
 			}, 50);
 
-			if(!cordova) {
+			if(!this.cordovaReady) {
 				this.getAllStations(this.apiPrefix + '/api/actions.php');
 			}
 		} else {
