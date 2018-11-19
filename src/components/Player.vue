@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="player">
 		<div
 			v-if="xhrResponceRecieved"
 		>

@@ -2,7 +2,9 @@
 
 var gulp = require('gulp'),
     browserSync = require('browser-sync'),
-    exec = require('child_process').exec // для запуска команд в терминале
+    exec = require('child_process').exec,
+    less = require('gulp-less'),
+    autoprefixer = require('gulp-autoprefixer') // для запуска команд в терминале
 ;
 
 // при изменении файлов откладываем перезагрузку на это время,
@@ -17,12 +19,25 @@ gulp.task('browser-sync', function() {
                 baseDir: 'www'
             },*/
             // proxy: 'localhost:8000',
-            proxy: 'greenra',
+            // proxy: 'greenra',
+            proxy: 'localhost:8080',
             port:   9999,
             notify: false,
             ghostMode: false
         });
     }, RELOAD_TIMEOUT);
+});
+
+gulp.task('less', function() {
+    'use strict';
+    return gulp.src('./static/less/main.less')
+            .pipe(less())
+            .pipe(autoprefixer(
+                ['last 5 versions', '> 1%', 'ie 8', 'ie 7'],
+                { cascade: true })
+            )
+            .pipe(gulp.dest('./static/css/'))
+            .pipe(browserSync.reload({stream: true}));
 });
 
 /*gulp.task('webpack-deferred-reload', ['webpack-build'], function() {
@@ -87,6 +102,10 @@ gulp.task('cordova-run-android', function() {
 
 gulp.task('watch', ['browser-sync'], function() {
     // gulp.watch('src/**/*.*', ['webpack-build']);
+
+    gulp.watch([
+            './static/less/*.less'
+        ], ['less']);
 });
 
 gulp.task('default', ['watch']);
