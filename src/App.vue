@@ -1,11 +1,23 @@
 <template>
-  <div id="app">
-	<router-view/>
-	
-  </div>
+	<div id="app">
+		<router-view/>
+		
+		<log></log>
+	</div>
 </template>
 
+
+
 <script>
+
+import Vue from 'vue';
+import Utils from '@/Utils.js';
+import Log from '@/components/Log';
+
+
+Vue.component('Log', Log);
+
+
 export default {
 	name: 'App',
 	data () {
@@ -14,22 +26,15 @@ export default {
 		}
 	}
 }
+
 </script>
+
+
 
 <style lang="less">
 @import "../static/less/main.less";
+</style>
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #000;
-}
-
-#app.error-no-response-data {
-	color: #ff0;
-}
-#app.error-ajax-query {
-	color: #f00;
-}
+<style lang="sass">
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
 </style>
