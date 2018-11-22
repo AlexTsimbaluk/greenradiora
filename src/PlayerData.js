@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
-import Player from '@/components/Player';
+
+import Utils from '@/Utils.js';
 
 export default new Vue({
 	data: {
@@ -10,20 +11,18 @@ export default new Vue({
 		stationsArray: {},
 		// префикс для url API для android на cordova
 		apiPrefix: '',
-		xhrResponceRecieved: false
+		xhrResponceRecieved: false,
+		playerTag: null
 	},
 	methods: {
-		getRandomInt (min, max) {
-			return Math.floor(Math.random() * (max - min + 1)) + min;
-		},
 		createdInfo () {
-			this.logs('PlayerData.apiPrefix=' + this.apiPrefix);
-			this.logs('host=' + window.location.host);
-			this.logs('hostname=' + window.location.hostname);
-			this.logs('pathname=' + window.location.pathname);
-			this.logs('hash=' + window.location.hash);
-			this.logs('href=' + window.location.href);
-			this.logs('origin=' + window.location.origin);
+			console.log('PlayerData.apiPrefix=' + this.apiPrefix);
+			console.log('host=' + window.location.host);
+			console.log('hostname=' + window.location.hostname);
+			console.log('pathname=' + window.location.pathname);
+			console.log('hash=' + window.location.hash);
+			console.log('href=' + window.location.href);
+			console.log('origin=' + window.location.origin);
 		},
 		logs (text) {
 			this.$emit('log', text);
@@ -31,7 +30,7 @@ export default new Vue({
 		clearLocalStorage () {
 			localStorage.clear();
 			console.log('Clear Local storage');
-			this.logs('Clear Local storage');
+			console.log('Clear Local storage');
 		},
 		dataTransfer (msec) {
 			console.log('dataTransfer');
@@ -69,22 +68,26 @@ export default new Vue({
 						console.log('::PlayerData:$emit:dataTransfer:xhr');
 						this.dataTransfer(50);
 
-						this.logs('::Data from Database success and placed in localstorage');
+						console.log('::Data from Database success and placed in localstorage');
 
 						// location.reload();
 					} catch(e) {
 						console.log('::xhr:stop:fail');
 						console.log('Error::No response');
 						throw new Error(e);
-						this.logs('::Data from Database failed');
+						console.log('::Data from Database failed');
 					}
 				})
 				.catch((error) => {
 					console.log('Error::не удалось создать ajax-запрос');
-					this.logs('::Ajax failed');
+					console.log('::Ajax failed');
 					// TODO: переделать на добавление класса объекту Vue
 					console.log(error)
 				});
+		},
+		getAudioTag(id) {
+			this.playerTag = document.getElementById(id);
+			console.log(this.playerTag);
 		}
 	},
 	created () {
@@ -93,7 +96,7 @@ export default new Vue({
 
 		if(localStorage.getItem('stations') == undefined) {
 			console.log('::Need ajax for allStations list');
-			this.logs('::Data from local storage is empty, need ajax for data list');
+			console.log('::Data from local storage is empty, need ajax for data list');
 
 			let urlApi = this.apiPrefix + '/api/actions.php';
 			
@@ -105,7 +108,7 @@ export default new Vue({
 			console.log('urlApi=' + urlApi);
 
 			setTimeout(() => {
-				this.logs(urlApi);
+				console.log(urlApi);
 			}, 50);
 
 			if(!this.cordovaReady) {
