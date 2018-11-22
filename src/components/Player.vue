@@ -117,7 +117,6 @@ export default {
 			setTimeout(() => {
 				Utils.logs('::Player:$on:dataTransfer');
 				Utils.logs('::Data recieved');
-				// PlayerData.createdInfo();
 			}, 50);
 
 			PlayerData.getAudioTag('playerTag');

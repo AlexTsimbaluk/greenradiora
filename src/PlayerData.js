@@ -15,22 +15,8 @@ export default new Vue({
 		playerTag: null
 	},
 	methods: {
-		createdInfo () {
-			console.log('PlayerData.apiPrefix=' + this.apiPrefix);
-			console.log('host=' + window.location.host);
-			console.log('hostname=' + window.location.hostname);
-			console.log('pathname=' + window.location.pathname);
-			console.log('hash=' + window.location.hash);
-			console.log('href=' + window.location.href);
-			console.log('origin=' + window.location.origin);
-		},
 		logs (text) {
 			this.$emit('log', text);
-		},
-		clearLocalStorage () {
-			localStorage.clear();
-			console.log('Clear Local storage');
-			console.log('Clear Local storage');
 		},
 		dataTransfer (msec) {
 			console.log('dataTransfer');
@@ -91,6 +77,7 @@ export default new Vue({
 		}
 	},
 	created () {
+		// console.log('PlayerData.apiPrefix=' + this.apiPrefix);
 		console.log('::PlayerData:hook:created');
 		console.log('::PlayerData:method:getAllStations');
 
