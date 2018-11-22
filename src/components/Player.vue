@@ -7,13 +7,17 @@
 				:station="stationsArray[random]"
 			></station>
 
+			<div @click="togglePlaying">Play</div>
+
 			<hr>
 		</div>
 
-		<log></log>
+		
 
 		<button @click="clearLocalStorage">Clear LS</button>
 		<button @click="locationReload">Reload</button>
+
+		<audio id="playerTag" data-audio-api></audio>
 	</div>
 </template>
 
@@ -22,31 +26,35 @@ import Vue from 'vue';
 import $ from 'jquery';
 
 import PlayerData from '@/PlayerData.js';
+import Utils from '@/Utils.js';
 
-import Log from '@/components/Log'
-import Station from '@/components/Station'
+import Log from '@/components/Log';
+import Station from '@/components/Station';
 
-Vue.component('Log', Log);
+
 Vue.component('Station', Station);
+
 
 export default {
 	name: 'Player',
 	data () {
 		return {
-			logs: [],
 			xhrResponceRecieved: false,
 			stationsArray: {},
 			stationsArrayOn100: [],
 			stationKeys: [],
 			stTotal: 0,
-			random: null
+			random: null,
+
+			player: null,
+			playing: false
 		}
 	},
 	methods: {
 		clearLocalStorage () {
 			localStorage.clear();
 			console.log('::Player:method:clearLocalStorage');
-			PlayerData.logs('::Clear Local storage');
+			Utils.logs('::Clear Local storage');
 			setTimeout(() => {
 				location.reload();
 			}, 1000);
@@ -58,15 +66,13 @@ export default {
 			}, 100);
 		},
 		dataTransfered () {
-			PlayerData.logs('::Player:method:dataTransfered');
+			Utils.logs('::Player:method:dataTransfered');
+
 			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 			this.makeOn100();
-			this.random = this.stationKeys[PlayerData.getRandomInt(0, this.stTotal)];
+			this.random = this.stationKeys[Utils.getRandomInt(0, this.stTotal)];
 
 			this.xhrResponceRecieved = true;
-
-			console.log(this.stationsArray['2'].station_url);
-			PlayerData.logs(this.stationsArray['2'].station_url);
 		},
 		makeOn100 () {
 			// массив имен станций
@@ -91,6 +97,17 @@ export default {
 					this.stationsArrayOn100[i][j] = this.stationsArray[stationsIndex];
 				}
 			}
+		},
+		togglePlaying() {
+			console.log('Player::togglePlaying');
+			this.player.src = this.stationsArray[this.random].station_url;
+			if(!this.playing) {
+				this.player.play();
+				this.playing = !this.playing;
+			} else {
+				this.player.pause();
+				this.playing = !this.playing;
+			}
 		}
 	},
 	created () {
@@ -98,10 +115,14 @@ export default {
 
 		PlayerData.$on('dataTransfer', () => {
 			setTimeout(() => {
-				PlayerData.logs('::Player:$on:dataTransfer');
-				PlayerData.logs('::Data recieved');
+				Utils.logs('::Player:$on:dataTransfer');
+				Utils.logs('::Data recieved');
 				// PlayerData.createdInfo();
 			}, 50);
+
+			PlayerData.getAudioTag('playerTag');
+			this.player = PlayerData.playerTag;
+			console.log(this.player);
 
 			this.dataTransfered();
 		});
