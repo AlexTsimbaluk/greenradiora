@@ -1,5 +1,8 @@
 <template>
-	<div class="station">
+	<div
+		class="station"
+		@click="togglePlaying"		
+	>
 		<div class="title">
 			{{ station.station_title }}
 		</div>
@@ -23,7 +26,24 @@
 		},
 		data () {
 			return {
-				
+				playing: false
+			}
+		},
+		methods: {
+			togglePlaying() {
+				console.log('Station::togglePlaying');
+				// console.log(PlayerData.playerTag.src);
+				PlayerData.playerTag.volume = 1;
+				// PlayerData.playerTag.src = this.station.station_url;
+				// PlayerData.playerTag.src = 'http://serv02.streamsfortheworld.com:8000/radiosama_low';
+				PlayerData.playerTag.src = 'http://icecast.norecords.org:8000/nrc-320.mp3';
+				if(!this.playing) {
+					PlayerData.playerTag.play();
+					this.playing = !this.playing;
+				} else {
+					PlayerData.playerTag.pause();
+					this.playing = !this.playing;
+				}
 			}
 		},
 		created () {
