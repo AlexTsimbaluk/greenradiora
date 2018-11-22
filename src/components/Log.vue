@@ -9,8 +9,11 @@
 	</div>
 </template>
 
+
+
 <script>
-	import PlayerData from '@/PlayerData.js';
+
+	import Utils from '@/Utils.js';
 
 	export default {
 		name: 'Log',
@@ -25,14 +28,22 @@
 		created () {
 			console.log('::Log:hook:created');
 
-			PlayerData.$on('log', (text) => {
+			Utils.$on('log', (text) => {
 				this.logs.push(text);
+				console.log(text);
 			});
 		}
 	}
+
 </script>
 
+
+
 <style lang="less">
+.log {
+	position: absolute;
+	top: 0;
+}
 	.log-item {
 		color: #00f;
 		font-family: monospace;
