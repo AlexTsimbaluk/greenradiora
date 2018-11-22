@@ -89,6 +89,17 @@ module.exports = {
         }, {
           loader: 'less-loader' // compiles Less to CSS
         }]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader'
+          }
+        ]
       }
     ]
   },
