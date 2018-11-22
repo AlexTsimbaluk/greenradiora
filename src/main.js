@@ -2,6 +2,10 @@ import Vue from 'vue';
 import router from './router';
 
 import PlayerData from '@/PlayerData.js';
+import PlayerState from '@/PlayerState.js';
+
+import Utils from '@/Utils.js';
+
 import App from './App';
 
 Vue.config.productionTip = false;
