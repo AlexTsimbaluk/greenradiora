@@ -1,4 +1,5 @@
 import Vue from 'vue';
+// import Utils from '@/Utils.js';
 
 export default new Vue({
 	data () {
@@ -17,11 +18,18 @@ export default new Vue({
 		},
 		clearLocalStorage () {
 			localStorage.clear();
-			console.log('Clear Local storage');
-			console.log('Clear Local storage');
+			this.logs('::Clear Local storage');
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
 		},
 		getRandomInt (min, max) {
 			return Math.floor(Math.random() * (max - min + 1)) + min;
+		},
+		locationReload () {
+			setTimeout(() => {
+				location.reload();
+			}, 100);
 		},
 		logs (text) {
 			this.$emit('log', text);

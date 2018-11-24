@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
 
-import Utils from '@/Utils.js';
-
 export default new Vue({
 	data: {
 		// инициализировалась ли cordova
@@ -11,13 +9,9 @@ export default new Vue({
 		stationsArray: {},
 		// префикс для url API для android на cordova
 		apiPrefix: '',
-		xhrResponceRecieved: false,
-		playerTag: null
+		xhrResponceRecieved: false
 	},
 	methods: {
-		logs (text) {
-			this.$emit('log', text);
-		},
 		dataTransfer (msec) {
 			console.log('dataTransfer');
 			// передача с отсрочкой, потому что Player не успевает создаться
@@ -70,10 +64,6 @@ export default new Vue({
 					// TODO: переделать на добавление класса объекту Vue
 					console.log(error)
 				});
-		},
-		getAudioTag(id) {
-			this.playerTag = document.getElementById(id);
-			console.log(this.playerTag);
 		}
 	},
 	created () {

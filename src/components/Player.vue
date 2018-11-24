@@ -7,7 +7,13 @@
 				:station="stationsArray[random]"
 			></station>
 
-			<div @click="togglePlaying">Play</div>
+			<div>
+				{{stTotal}}
+			</div>
+			
+			<div>
+				{{maxId}}
+			</div>
 
 			<hr>
 		</div>
@@ -17,7 +23,15 @@
 		<button @click="clearLocalStorage">Clear LS</button>
 		<button @click="locationReload">Reload</button>
 
-		<audio id="playerTag" data-audio-api></audio>
+		<!-- <button @click="random = getRandomInt(0, stTotal)"> -->
+		<button @click="getRandomStation">
+			Random
+			{{random}}
+		</button>
+
+		<button @click="togglePlaying">Play</button>
+
+		<audio id="playerTag"></audio>
 	</div>
 </template>
 
@@ -26,6 +40,7 @@ import Vue from 'vue';
 import $ from 'jquery';
 
 import PlayerData from '@/PlayerData.js';
+import PlayerState from '@/PlayerState.js';
 import Utils from '@/Utils.js';
 
 import Log from '@/components/Log';
@@ -44,14 +59,27 @@ export default {
 			stationsArrayOn100: [],
 			stationKeys: [],
 			stTotal: 0,
+			maxId: 9199,
 			random: null,
+
+			getRandomInt: Utils.getRandomInt,
+			locationReload: Utils.locationReload,
+			clearLocalStorage: Utils.clearLocalStorage,
 
 			player: null,
 			playing: false
 		}
 	},
 	methods: {
-		clearLocalStorage () {
+		getRandomStation () {
+			/*let _r = this.getRandomInt(0, this.maxId);
+			
+			if(this.stationsArray[_r]) {
+				this.random = _r;
+			}*/
+			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
+		},
+		/*clearLocalStorage () {
 			localStorage.clear();
 			console.log('::Player:method:clearLocalStorage');
 			Utils.logs('::Clear Local storage');
@@ -64,13 +92,13 @@ export default {
 			setTimeout(() => {
 				location.reload();
 			}, 100);
-		},
+		},*/
 		dataTransfered () {
 			Utils.logs('::Player:method:dataTransfered');
 
 			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 			this.makeOn100();
-			this.random = this.stationKeys[Utils.getRandomInt(0, this.stTotal)];
+			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
 
 			this.xhrResponceRecieved = true;
 		},
@@ -119,8 +147,8 @@ export default {
 				Utils.logs('::Data recieved');
 			}, 50);
 
-			PlayerData.getAudioTag('playerTag');
-			this.player = PlayerData.playerTag;
+			PlayerState.getAudioTag('playerTag');
+			this.player = PlayerState.playerTag;
 			console.log(this.player);
 
 			this.dataTransfered();
