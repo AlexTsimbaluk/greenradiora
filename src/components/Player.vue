@@ -7,29 +7,43 @@
 				:station="stationsArray[random]"
 			></station>
 
-			<div>
-				{{stTotal}}
-			</div>
-			
-			<div>
-				{{maxId}}
-			</div>
-
 			<hr>
 		</div>
 
 		
 
-		<button @click="clearLocalStorage">Clear LS</button>
-		<button @click="locationReload">Reload</button>
-
-		<!-- <button @click="random = getRandomInt(0, stTotal)"> -->
-		<button @click="getRandomStation">
-			Random
-			{{random}}
+		<button
+			class="btn btn-primary"
+			@click="clearLocalStorage"
+		>
+			Clear LS
+			<ripple></ripple>
 		</button>
 
-		<button @click="togglePlaying">Play</button>
+		<button
+			class="btn btn-primary"
+			@click="locationReload"
+		>
+			Reload
+			<ripple></ripple>
+		</button>
+
+		<button
+			class="btn btn-primary"
+			@click="getRandomStation"
+		>
+			Random
+			{{random}}
+			<ripple></ripple>
+		</button>
+
+		<button
+			class="btn btn-primary"
+			@click="togglePlaying"
+		>
+			Play
+			<ripple></ripple>
+		</button>
 
 		<audio id="playerTag"></audio>
 	</div>
@@ -37,7 +51,6 @@
 
 <script>
 import Vue from 'vue';
-import $ from 'jquery';
 
 import PlayerData from '@/PlayerData.js';
 import PlayerState from '@/PlayerState.js';
@@ -59,7 +72,6 @@ export default {
 			stationsArrayOn100: [],
 			stationKeys: [],
 			stTotal: 0,
-			maxId: 9199,
 			random: null,
 
 			getRandomInt: Utils.getRandomInt,
@@ -72,11 +84,6 @@ export default {
 	},
 	methods: {
 		getRandomStation () {
-			/*let _r = this.getRandomInt(0, this.maxId);
-			
-			if(this.stationsArray[_r]) {
-				this.random = _r;
-			}*/
 			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
 		},
 		/*clearLocalStorage () {
@@ -105,7 +112,6 @@ export default {
 		makeOn100 () {
 			// массив имен станций
 			// нужен для правильного получения stationsIndex
-			// var this.stationKeys = [];
 			for (var key in this.stationsArray) {
 				this.stationKeys.push(key);
 			}
@@ -127,14 +133,12 @@ export default {
 			}
 		},
 		togglePlaying() {
-			console.log('Player::togglePlaying');
-			this.player.src = this.stationsArray[this.random].station_url;
-			if(!this.playing) {
-				this.player.play();
-				this.playing = !this.playing;
+			if(PlayerState.paused) {
+				console.log('Player::Play');
+				PlayerState.playStream(this.stationsArray[this.random].station_url);
 			} else {
-				this.player.pause();
-				this.playing = !this.playing;
+				console.log('Player::Stop');
+				PlayerState.stopStream();
 			}
 		}
 	},
@@ -142,14 +146,10 @@ export default {
 		console.log('::Player:hook:created');
 
 		PlayerData.$on('dataTransfer', () => {
-			setTimeout(() => {
-				Utils.logs('::Player:$on:dataTransfer');
-				Utils.logs('::Data recieved');
-			}, 50);
+			Utils.logs('::Player:$on:dataTransfer');
+			Utils.logs('::Data recieved');
 
 			PlayerState.getAudioTag('playerTag');
-			this.player = PlayerState.playerTag;
-			console.log(this.player);
 
 			this.dataTransfered();
 		});

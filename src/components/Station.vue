@@ -3,11 +3,11 @@
 		class="station"
 		@click="togglePlaying"		
 	>
-		<div class="title">
+		<div class="station-title">
 			{{ station.station_title }}
 		</div>
 
-		<div class="url">
+		<div class="station-url">
 			{{ station.station_url }}
 		</div>
 	</div>
@@ -15,6 +15,7 @@
 
 <script>
 	import PlayerData from '@/PlayerData.js';
+	import PlayerState from '@/PlayerState.js';
 
 	export default {
 		name: 'Station',
@@ -26,28 +27,30 @@
 		},
 		data () {
 			return {
-				playing: false
+				
 			}
 		},
 		methods: {
 			togglePlaying() {
-				console.log('Station::togglePlaying');
-				// console.log(PlayerData.playerTag.src);
-				PlayerData.playerTag.volume = 1;
-				// PlayerData.playerTag.src = this.station.station_url;
-				// PlayerData.playerTag.src = 'http://serv02.streamsfortheworld.com:8000/radiosama_low';
-				PlayerData.playerTag.src = 'http://icecast.norecords.org:8000/nrc-320.mp3';
-				if(!this.playing) {
-					PlayerData.playerTag.play();
-					this.playing = !this.playing;
+				// console.log(PlayerState.playerTag.src);
+				// PlayerState.playerTag.volume = 1;
+				// PlayerState.playerTag.src = this.station.station_url;
+				// PlayerState.playerTag.src = 'http://serv02.streamsfortheworld.com:8000/radiosama_low';
+				// PlayerState.playerTag.src = 'http://icecast.norecords.org:8000/nrc-320.mp3';
+				// PlayerState.playerTag.src = 'http://manehattan.bronytunes.com:80/stream-32.btr';
+				if(PlayerState.paused) {
+					console.log('Station::Play');
+					PlayerState.playStream(this.station.station_url);
 				} else {
-					PlayerData.playerTag.pause();
-					this.playing = !this.playing;
+					console.log('Station::Stop');
+					PlayerState.stopStream();
 				}
 			}
 		},
 		created () {
 			console.log('::Station:hook:created');
+			// this.player = PlayerState.getAudioTag('playerTag');
+			// console.log(this.player);
 		}
 	}
 </script>

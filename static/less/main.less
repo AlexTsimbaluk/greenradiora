@@ -119,4 +119,128 @@ body {
 	@media screen and (max-width: 480px) {
 		width: 100%;
 	}
+
+	.track,
+	.station {
+		border-radius: 2px;
+		cursor: default;
+		height: 50px;
+		margin: 0;
+		padding: 6px;
+		tansition: all .3s;
+		position: relative;
+		user-select: none;
+		&.waiting {
+			// background: rgba(0, 0, 0, .5);
+			animation: trackWaiting 3s ease-in-out infinite;
+		}
+		&.error-playing {
+			// background: rgba(0, 0, 0, .3);
+			// color: #7a7a7a;
+			// .title,
+			.url {
+				filter: blur(1px);
+			}
+		}
+		.station-title {
+			// font-family: @font-sfuidisplaymedium;
+			font-size: 1.1em;
+			max-height: 20px;
+			overflow: hidden;
+			// max-width: 250px;
+			width: ~"calc(100% - 26px)";
+			word-break: break-all;
+		}
+		.station-url {
+			// font-family: @font-robotoregular;
+			font-style: italic;
+			max-height: 20px;
+			overflow: hidden;
+			width: 100%;
+			word-break: break-all;
+			position: absolute;
+			// bottom: 0;
+			top: 60%;
+			&.runningString {
+				animation: runningStringReverse linear infinite 14s;
+			}
+		}
+		.track-icon {
+			// background-color: rgba(0, 255, 225, .6);
+			background: transparent;
+			border-radius: 100%;
+			cursor: pointer;
+			display: none;
+			height: 26px;
+			width: 26px;
+			position: absolute;
+			// right: 2px;
+			right: 0;
+			top: 10px;
+			transition: all .3s;
+			@media only screen and (max-width : 700px) {
+				// .flex-container;
+			}
+			// @media (max-height : 640px) and (max-width: 360px) {
+			@media (max-width: 380px) and (orientation: portrait) {
+				left: 82vw;
+			}
+			i {
+				font-size: 1.7em;
+				font-weight: 100;
+				margin-top: 2px;
+			}
+			&:hover {
+				background-color: rgba(0, 0, 0, .6);
+			}
+		}
+
+		// иконки на треке
+		.add,
+		.delete,
+		.canplaytest {
+			.track-icon;
+		}
+		.delete {
+			// left: 252px;
+		}
+		.canplaytest {
+			right: 30px;
+			// .hidden;
+		}
+		&:hover {
+			.add,
+			.delete,
+			.canplaytest {
+				// .flex-container;
+			}
+		}
+		&.selected {
+			// .gradient-horizontal(#555, #777);
+		}
+		/* &.visualisation {
+			background-image: linear-gradient(to right, hsl(0, 60%, 50%) 0%, hsl(180, 60%, 50%) 100%);
+			animation: changeColor linear 9s infinite;
+		}
+		@keyframes changeColor {
+			0% { background-color: #33cccc; }   
+			// 0% { color: #0f0; }   
+			100% { background-color: #cc33cc; }
+			// 100% { color: #00f; }
+		} */
+		&.visualisation:before {
+			box-shadow: 0px 0px 10px 12px rgba(255, 255, 255, .4);
+			content: "";
+			height: 14px;
+			width: 0;
+			position: absolute;
+			left: -20px;
+			top: 14px;
+			animation: moveShadow linear 5s infinite;
+		}
+		@keyframes moveShadow {
+			80% { left: -20px; }   
+			100% { left: 104%; }
+		}
+	}
 }
