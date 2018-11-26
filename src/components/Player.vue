@@ -86,20 +86,6 @@ export default {
 		getRandomStation () {
 			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
 		},
-		/*clearLocalStorage () {
-			localStorage.clear();
-			console.log('::Player:method:clearLocalStorage');
-			Utils.logs('::Clear Local storage');
-			setTimeout(() => {
-				location.reload();
-			}, 1000);
-		},
-		locationReload () {
-			console.log('::Player:method:locationReload');
-			setTimeout(() => {
-				location.reload();
-			}, 100);
-		},*/
 		dataTransfered () {
 			Utils.logs('::Player:method:dataTransfered');
 

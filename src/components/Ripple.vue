@@ -20,13 +20,10 @@
 		},
 		methods: {
 			ripple (event) {
-				// var $this = $(this);
 				var $ripple = event.target;
 				var $btn = $ripple.parentElement;
 				var offset = $btn.getBoundingClientRect();
 				var $circle = $ripple.children[0];
-				console.log($circle);
-				console.log(event);
 
 				var x = event.pageX - offset.left;
 				var y = event.pageY - offset.top;
@@ -44,11 +41,6 @@
 				$ripple.addEventListener('webkitAnimationEnd', animationEnd);
 				$ripple.addEventListener('oanimationend', animationEnd);
 				$ripple.addEventListener('MSAnimationEnd', animationEnd);
-
-
-				/*$ripple.addEventListener('animationend webkitAnimationEnd oanimationend MSAnimationEnd', function() {
-						$ripple.classList.remove('is-active');
-					});*/
 			}
 		},
 		created () {
