@@ -3,6 +3,7 @@
 		<div
 			v-if="xhrResponceRecieved"
 		>
+			{{playingTime}}
 			<station
 				:station="stationsArray[random]"
 			></station>
@@ -79,7 +80,8 @@ export default {
 			clearLocalStorage: Utils.clearLocalStorage,
 
 			player: null,
-			playing: false
+			playing: false,
+			playingTime: null
 		}
 	},
 	methods: {
@@ -136,6 +138,15 @@ export default {
 			Utils.logs('::Data recieved');
 
 			PlayerState.getAudioTag('playerTag');
+
+			PlayerState.playerTag.addEventListener('timeupdate', (e)=> {
+				var time = Math.ceil(PlayerState.playerTag.currentTime);
+
+				var sec = ('0' + parseInt(Math.floor(time % 60))).slice(-2);
+				var min = ('0' + parseInt((Math.floor(time / 60)) % 60)).slice(-2);
+
+				this.playingTime = min + ':' + sec;
+			});
 
 			this.dataTransfered();
 		});
