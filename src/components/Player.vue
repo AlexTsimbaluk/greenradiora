@@ -3,7 +3,17 @@
 		<div
 			v-if="xhrResponceRecieved"
 		>
-			{{playingTime}}
+			<div
+				v-if="state.status == 'playing' || state.status == 'canplaythrough'"
+				class="time"
+			>
+				{{playingTime}}
+			</div>
+
+			<div>
+				{{state.status}}
+			</div>
+
 			<station
 				:station="stationsArray[random]"
 			></station>
@@ -13,21 +23,21 @@
 
 		
 
-		<button
+		<!-- <button
 			class="btn btn-primary"
 			@click="clearLocalStorage"
 		>
 			Clear LS
 			<ripple></ripple>
 		</button>
-
+		
 		<button
 			class="btn btn-primary"
 			@click="locationReload"
 		>
 			Reload
 			<ripple></ripple>
-		</button>
+		</button> -->
 
 		<button
 			class="btn btn-primary"
@@ -46,7 +56,7 @@
 			<ripple></ripple>
 		</button>
 
-		<audio id="playerTag"></audio>
+		<audio id="playerTag" dynamicmetadata></audio>
 	</div>
 </template>
 
@@ -79,9 +89,11 @@ export default {
 			locationReload: Utils.locationReload,
 			clearLocalStorage: Utils.clearLocalStorage,
 
-			player: null,
 			playing: false,
-			playingTime: null
+			playingTime: null,
+			status: '',
+
+			state: {}
 		}
 	},
 	methods: {
@@ -149,6 +161,12 @@ export default {
 			});
 
 			this.dataTransfered();
+		});
+
+		PlayerState.$on('stateChanged', (state) => {
+			// console.log(state);
+
+			this.state = state;
 		});
 	}
 }
