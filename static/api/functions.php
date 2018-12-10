@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db_connection.php';
+require_once './db_connection.php';
 
 function d($value = null, $stop = true) {
 	echo "<br><br>Debug:<br><br><pre>";
@@ -425,7 +425,7 @@ function logout() {
 }*/
 
 
-// сохраняем все сосояние в файл
+// сохраняем все состояние в файл
 function configToFile($config) {
 	global $link;
 
@@ -459,4 +459,57 @@ function configToFile($config) {
 	}*/
 
 	mysqli_close($link);
+}
+
+function getMp3StreamTitle($streamingUrl, $interval, $offset = 0, $headers = true) {
+	// global $link;
+
+	echo 'getMp3StreamTitle';
+
+    $needle = 'StreamTitle=';
+    $ua = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36';
+
+    $opts = [
+        'http' => [
+            'method' => 'GET',
+            'header' => 'Icy-MetaData: 1',
+            'user_agent' => $ua
+        ]
+    ];
+
+    $data = array();
+
+    if(($headers = get_headers($streamingUrl))) {
+        foreach ($headers as $h) {
+            if (strpos(strtolower($h), 'icy-metaint') !== false && ($interval = explode(':', $h)[1])) {
+                break;
+            }
+        }
+    }
+
+    $context = stream_context_create($opts);
+
+    if($stream = fopen($streamingUrl, 'r', false, $context)) {
+        $buffer = stream_get_contents($stream, $interval, $offset);
+        fclose($stream);
+
+        if(strpos($buffer, $needle) !== false) {
+            $title = explode($needle, $buffer)[1];
+            // return substr($title, 1, strpos($title, ';') - 2);
+            $data[0] = substr($title, 1, strpos($title, ';') - 2);
+        } else {
+            // return getMp3StreamTitle($streamingUrl, $interval, $offset + $interval, false);
+            $data[0] = getMp3StreamTitle($streamingUrl, $interval, $offset + $interval, false);
+        }
+
+        var_dump($data);
+    }
+    else {
+        throw new Exception("Unable to open stream [{$streamingUrl}]");
+    }
+
+    echo json_encode($data);
+    // echo ($data);
+
+    // mysqli_close($link);
 }

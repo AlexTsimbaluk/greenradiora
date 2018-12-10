@@ -19,8 +19,8 @@ gulp.task('browser-sync', function() {
                 baseDir: 'www'
             },*/
             // proxy: 'localhost:8000',
-            // proxy: 'greenra',
-            proxy: 'localhost:8080',
+            proxy: 'greenra',
+            // proxy: 'localhost:8080',
             port:   9999,
             notify: false,
             ghostMode: false

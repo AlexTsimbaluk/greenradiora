@@ -2,17 +2,24 @@
 
 session_start();
 
-/*For home*/
+/*if($_SERVER['HTTP_ORIGIN'] == "http://greenra" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:8080" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:9999") {
+	// For home
+	$host = "localhost";
+	$user = "root";
+	$password = "9";
+	$database = "radio_ra";
+} elseif($_SERVER['HTTP_ORIGIN'] == "http://radiora.ru") {
+	// For remote server
+	$host = "localhost";
+	$user = "radiorar";
+	$password = "39at6F6dEp";
+	$database = "radiora";
+}*/
+
 $host = "localhost";
 $user = "root";
 $password = "9";
 $database = "radio_ra";
-
-/*For remote server*/
-/*$host = "nowtaxi.mysql";
-$user = "nowtaxi_sanek";
-$password = "h347bH12";
-$database = "nowtaxi_radiora";*/
 
 $link = mysqli_connect($host, $user, $password, $database);
 if(!$link) {

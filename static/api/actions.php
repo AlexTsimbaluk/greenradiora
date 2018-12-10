@@ -3,6 +3,17 @@
 require_once './db_connection.php';
 require_once './functions.php';
 
+header("Access-Control-Allow-Origin: http://greenra, http://localhost:8080");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
+
+// header('Content-type: application/json');
+// header("Content-Type: text/plain");
+
+if ($_POST['name'] == 'AAA') {
+	echo 'axios test success!!!';
+}
+
 /*
 * Registraiton & Authorization
 */
@@ -95,4 +106,20 @@ if ($_POST['admin'] == 1) {
 // сохраняем все состояние в файл
 if ($_POST['action'] == 'configToFile' && !empty($_POST['config'])) {
 	configToFile($_POST['config']);
+}
+
+
+if ($_POST['action'] == 'getMetaData' && !empty($_POST['url'])) {
+// if ($_POST['action'] == 'getMetaData') {
+	getMp3StreamTitle($_POST['url'], 19200);
+	// echo (getMp3StreamTitle('http://graalradio.com:8123/future', 19200));
+	// var_dump(getMp3StreamTitle($_POST['url'], 19200));
+}
+
+if (!empty($_GET['url'])) {
+// if ($_GET['action'] == 'getMetaData') {
+	// echo 'ddddd';
+	getMp3StreamTitle($_GET['url'], 19200);
+	// echo (getMp3StreamTitle('http://graalradio.com:8123/future', 19200));
+	// var_dump(getMp3StreamTitle($_GET['url'], 19200));
 }

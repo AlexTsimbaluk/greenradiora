@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import axios from 'axios';
+
 import Utils from '@/Utils.js';
 
 export default new Vue({
@@ -49,9 +51,32 @@ export default new Vue({
 			this.paused = this.playerTag.paused;
 		},
 
-		setStatus(status) {
+		setStatus (status) {
 			this.status = status;
 			this.stateChanged();
+		},
+
+		getMetaData (streamingUrl) {
+			console.log('getMetaData');
+
+			/*axios
+				.post(
+					'/api/actions.php',
+					{
+						actions: 'getMetaData',
+						url: streamingUrl
+					}
+				)
+				// .get('/api/actions.php?url=' + streamingUrl)
+				.then((response) => {
+					console.log(response);
+				})
+				.catch((error) => {
+					console.log('Error::не удалось создать ajax-запрос');
+					console.log('::Ajax failed');
+					// TODO: переделать на добавление класса объекту Vue
+					console.log(error)
+				});*/
 		},
 
 	    audioBindAll (player) {
@@ -128,17 +153,13 @@ export default new Vue({
 
 	     		this.setStatus('loadedmetadata');
 	     		console.log(player.mozGetMetadata());
-	        });
 
-	        player.addEventListener('metadatachange', (e)=> {
-	     		console.log('::Event.type::' + e.type);
-
-	     		this.setStatus('metadatachange');
-	     		console.log(player.mozGetMetadata());
+	     		this.getMetaData(this.playerTag.src);
 	        });
 	        player.addEventListener('loadstart', (e)=> {
 	     		console.log('::Event.type::' + e.type);
 
+	     		this.getMetaData(this.playerTag.src);
 	     		this.setStatus('loadstart');
 	        });
 	        player.addEventListener('mozaudioavailable', (e)=> {
@@ -215,6 +236,6 @@ export default new Vue({
 	    }
 	},
 	created () {
-		console.log('::PlayerState:hook:created');
+		console.log('::PlayerState:hook:created');		
 	}
 });
