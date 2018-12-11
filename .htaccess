@@ -53,3 +53,6 @@ AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-opentype
 <IfModule mod_expires.c>
         ExpiresActive On ExpiresDefault "now"
 </IfModule>
+
+# php_value post_max_size 40M
+# php_value upload_max_filesize 30M

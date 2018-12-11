@@ -23,17 +23,18 @@ export default new Vue({
 		},
 		getAllStations (urlApi) {
 			console.log('::xhr:start');
-			if(!true) {
+			if(true) {
 				axios
 					.post(
 						// urlApi,
-						'http://greenra/api/actions.php',
+						// 'http://greenra/api/actions.php',
+						'/api/actions.php',
 						{
 							actions: 'getAllStations'
-						},
-						{
-							headers: {'X-Requested-With': 'XMLHttpRequest'}
 						}
+						/*{
+							headers: {'X-Requested-With': 'XMLHttpRequest'}
+						}*/
 						/*{
 							transformRequest: [
 								function (data, headers) {
@@ -72,7 +73,6 @@ export default new Vue({
 						// TODO: переделать на добавление класса объекту Vue
 						console.log(error);
 						console.log(error.message);
-						console.log(error.response);
 					});
 			} else {
 				let xhr = new XMLHttpRequest();
@@ -115,12 +115,27 @@ export default new Vue({
 
 
 		console.log('axios test');
-		axios.post('/api/actions.php', {
-				name: 'AAA'
+
+		axios.post('/api/test-axios.php', {
+				name: 'testPOST'
 			})
 			.then(function (response) {
 				console.log('success');
 				console.log(response.data);
+				
+				axios.get(
+					'/api/test-axios.php?name=testGET')
+					.then(function (response) {
+						console.log('success');
+						console.log(response.data);
+					})
+					.catch(function (error) {
+						console.log('error');
+						console.log(error);
+					})
+					.then(function () {
+						console.log('always');
+					});	
 			})
 			.catch(function (error) {
 				console.log('error');
