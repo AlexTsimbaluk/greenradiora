@@ -22,128 +22,47 @@ export default new Vue({
 			}, msec);
 		},
 		getAllStations (urlApi) {
-			console.log('::xhr:start');
-			if(true) {
-				axios
-					.post(
-						// urlApi,
-						// 'http://greenra/api/actions.php',
-						'/api/actions.php',
-						{
-							actions: 'getAllStations'
-						}
-						/*{
-							headers: {'X-Requested-With': 'XMLHttpRequest'}
-						}*/
-						/*{
-							transformRequest: [
-								function (data, headers) {
-									let formdata = new FormData();
-									formdata.append('action', 'getAllStations');
-									console.log(formdata);
-									return formdata;
-								}
-							]
-						}*/
-					)
-					.then((response) => {
-						try {
-							console.log('::xhr:stop:succecc');
-							this.stationsArray = (response.data);
+			console.log('::getAllStations:start');
+			
+			axios
+				.get('/api/actions.php?action=getAllStations')
+				.then((response) => {
+					try {
+						console.log('::xhr:stop:succecc');
+						this.stationsArray = (response.data);
 
-							this.xhrResponceRecieved = true;
-							localStorage.setItem('stations', JSON.stringify(this.stationsArray));
+						this.xhrResponceRecieved = true;
+						localStorage.setItem('stations', JSON.stringify(this.stationsArray));
 
-							console.log('::PlayerData:$emit:dataTransfer:xhr');
-							this.dataTransfer(50);
+						console.log('::PlayerData:$emit:dataTransfer:xhr');
+						this.dataTransfer(50);
 
-							console.log('::Data from Database success and placed in localstorage');
+						console.log('::Data from Database success and placed in localstorage');
 
-							// location.reload();
-						} catch(e) {
-							console.log('::xhr:stop:fail');
-							console.log('Error::No response');
-							throw new Error(e);
-							console.log('::Data from Database failed');
-						}
-					})
-					.catch((error) => {
-						console.log('Error::не удалось создать ajax-запрос');
-						console.log('::Ajax failed');
-						// TODO: переделать на добавление класса объекту Vue
-						console.log(error);
-						console.log(error.message);
-					});
-			} else {
-				let xhr = new XMLHttpRequest();
-
-				xhr.open("POST", 'http://greenra/api/actions.php', true);
-				// xhr.open("POST", 'http://radiora.ru/actions.php', true);
-				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				xhr.setRequestHeader('Requested-With', 'XMLHttpRequest');
-
-				xhr.onload = function(ev) {
-					if (this.status == 200) {
-						console.log('==========xhr:onload:200==========');
-						console.log(ev);
-						console.log(this.response);
-						console.log(this.status);
-
-						var data = JSON.parse(this.response);
-						console.log(data);
+						// location.reload();
+					} catch(e) {
+						console.log('::xhr:stop:fail');
+						console.log('Error::No response');
+						throw new Error(e);
+						console.log('::Data from Database failed');
 					}
-				};
-
-				xhr.onerror = (err) => {
-					console.log(err);
-					console.log('==========xhr::onerror==========');
-				};
-
-				xhr.onreadystatechange = (st) => {
-					console.log(st);
-				};
-
-				xhr.send('actions=getAllStations');
-			}
-
+				})
+				.catch((error) => {
+					console.log('Error::не удалось создать ajax-запрос');
+					console.log('::Ajax failed');
+					// TODO: переделать на добавление класса объекту Vue
+					console.log(error);
+					console.log(error.message);
+				})
+				.then(function () {
+					
+				});
 		}
 	},
 	created () {
 		// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 		console.log('::PlayerData:hook:created');
 		console.log('::PlayerData:method:getAllStations');
-
-
-		console.log('axios test');
-
-		axios.post('/api/test-axios.php', {
-				name: 'testPOST'
-			})
-			.then(function (response) {
-				console.log('success');
-				console.log(response.data);
-				
-				axios.get(
-					'/api/test-axios.php?name=testGET')
-					.then(function (response) {
-						console.log('success');
-						console.log(response.data);
-					})
-					.catch(function (error) {
-						console.log('error');
-						console.log(error);
-					})
-					.then(function () {
-						console.log('always');
-					});	
-			})
-			.catch(function (error) {
-				console.log('error');
-				console.log(error);
-			})
-			.then(function () {
-				console.log('always');
-			});
 
 		if(localStorage.getItem('stations') == undefined) {
 			console.log('::Need ajax for allStations list');
@@ -160,7 +79,6 @@ export default new Vue({
 
 			if(!this.cordovaReady) {
 				this.getAllStations(this.apiPrefix + '/api/actions.php');
-				// this.getAllStations(this.apiPrefix + '/actions.php');
 			}
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');

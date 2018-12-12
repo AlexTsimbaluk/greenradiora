@@ -2,6 +2,9 @@
 
 session_start();
 
+header("Content-Type: text/html; charset=utf-8");
+mb_internal_encoding("UTF-8");
+
 /*if($_SERVER['HTTP_ORIGIN'] == "http://greenra" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:8080" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:9999") {
 	// For home
 	$host = "localhost";

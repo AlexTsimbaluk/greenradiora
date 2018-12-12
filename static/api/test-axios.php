@@ -1,5 +1,8 @@
 <?php
 
+header("Content-Type: text/html; charset=utf-8");
+mb_internal_encoding("UTF-8");
+
 /*if ($_POST['name'] == 'testPOST') {
 	echo 'GET принят::' . $_POST['name'] . ' ';
 }*/

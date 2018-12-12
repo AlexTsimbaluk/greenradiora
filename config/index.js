@@ -12,8 +12,6 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '**/*.php': {
-        // '/api': {
-            // target: 'http://radiora.ru',
             target: 'http://greenra',
             changeOrigin: true
         }

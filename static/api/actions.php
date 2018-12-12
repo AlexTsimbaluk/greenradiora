@@ -50,7 +50,7 @@ if ($_POST['action'] == 'search' && !empty($_POST['target'])) {
 }
 
 // Получение всех станций и показ результатов
-if ($_POST['action'] == 'getAllStations') {
+if ($_GET['action'] == 'getAllStations') {
 	getAllStations();
 }
 
