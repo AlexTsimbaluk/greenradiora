@@ -65,6 +65,7 @@ import Vue from 'vue';
 
 import PlayerData from '@/PlayerData.js';
 import PlayerState from '@/PlayerState.js';
+import P_Config from '@/P_Config.js';
 import Utils from '@/Utils.js';
 
 import Log from '@/components/Log';

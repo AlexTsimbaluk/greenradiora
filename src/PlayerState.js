@@ -9,7 +9,20 @@ export default new Vue({
 			playerTag: null,
 			paused: true,
 			playingTime: null,
-			status: ''
+			status: '',
+
+
+
+			playlists: {},
+			volume: .27,
+			// nowPlaying: {},
+			// playlistsOrder: [],
+			// currentPlaylist: '',
+			// paused: player.paused,
+			// search: {
+			// 	stationsOpened: []
+			// },
+			// translated: false
 		}
 	},
 	methods: {
@@ -49,6 +62,14 @@ export default new Vue({
 			Utils.logs('::PlayerState::stopStream::');
 			this.playerTag.pause();
 			this.paused = this.playerTag.paused;
+		},
+
+		setVolume (volume) {
+			this.playerTag.volume = this.volume = volume;
+		},
+
+		getVolume () {
+			return this.volume;
 		},
 
 		setStatus (status) {
