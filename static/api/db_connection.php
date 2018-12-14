@@ -5,24 +5,20 @@ session_start();
 header("Content-Type: text/html; charset=utf-8");
 mb_internal_encoding("UTF-8");
 
-/*if($_SERVER['HTTP_ORIGIN'] == "http://greenra" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:8080" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:9999") {
+if($_SERVER['HTTP_ORIGIN'] == "http://vuea.radiora.ru") {
+	// For remote server
+	$host = "localhost";
+	$user = "vuearadiorar";
+	$password = "39at6F6dEp";
+	$database = "vuearadiora";
+// } else($_SERVER['HTTP_ORIGIN'] == "http://greenra" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:8080" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:9999") {
+} else {
 	// For home
 	$host = "localhost";
 	$user = "root";
 	$password = "9";
 	$database = "radio_ra";
-} elseif($_SERVER['HTTP_ORIGIN'] == "http://radiora.ru") {
-	// For remote server
-	$host = "localhost";
-	$user = "radiorar";
-	$password = "39at6F6dEp";
-	$database = "radiora";
-}*/
-
-$host = "localhost";
-$user = "root";
-$password = "9";
-$database = "radio_ra";
+}
 
 $link = mysqli_connect($host, $user, $password, $database);
 if(!$link) {

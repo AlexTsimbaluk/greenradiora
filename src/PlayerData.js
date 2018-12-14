@@ -29,6 +29,11 @@ export default new Vue({
 				.then((response) => {
 					try {
 						console.log('::xhr:stop:succecc');
+
+						if(typeof response.data != 'object') {
+							return;
+						}
+						
 						this.stationsArray = (response.data);
 
 						this.xhrResponceRecieved = true;
