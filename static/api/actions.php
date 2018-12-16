@@ -3,12 +3,15 @@
 require_once './db_connection.php';
 require_once './functions.php';
 
-/*header("Access-Control-Allow-Origin: http://greenra, http://localhost:8080");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");*/
+/*
+header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
 
-// header('Content-type: application/json');
-// header("Content-Type: text/plain");
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Credentials: true');
+*/
 
 
 /*

@@ -5,13 +5,13 @@ session_start();
 header("Content-Type: text/html; charset=utf-8");
 mb_internal_encoding("UTF-8");
 
-if($_SERVER['HTTP_ORIGIN'] == "http://vuea.radiora.ru") {
+if($_SERVER['HTTP_REFERER'] == "http://vuea.radiora.ru/") {
 	// For remote server
 	$host = "localhost";
-	$user = "vuearadiorar";
+	$user = "radiorar";
 	$password = "39at6F6dEp";
-	$database = "vuearadiora";
-// } else($_SERVER['HTTP_ORIGIN'] == "http://greenra" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:8080" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:9999") {
+	$database = "radiora";
+// } else($_SERVER['HTTP_ORIGIN'] == "http://greenra/" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:8080/" || $_SERVER['HTTP_ORIGIN'] == "http://localhost:9999/") {
 } else {
 	// For home
 	$host = "localhost";

@@ -69,6 +69,12 @@ export default new Vue({
 		console.log('::PlayerData:hook:created');
 		console.log('::PlayerData:method:getAllStations');
 
+		/*axios
+			.get('/api/test-axios.php?name=testGET')
+			.then((response) => {
+				console.log(response.data);
+			});*/
+
 		if(localStorage.getItem('stations') == undefined) {
 			console.log('::Need ajax for allStations list');
 			console.log('::Data from local storage is empty, need ajax for data list');
