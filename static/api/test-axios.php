@@ -3,9 +3,12 @@
 header("Content-Type: text/html; charset=utf-8");
 mb_internal_encoding("UTF-8");
 
-/*if ($_POST['name'] == 'testPOST') {
-	echo 'GET принят::' . $_POST['name'] . ' ';
-}*/
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Credentials: true');
+
 
 if($_SERVER['HTTP_REFERER'] === "http://vuea.radiora.ru") {
 	echo 'ref' . $_SERVER['HTTP_REFERER'];

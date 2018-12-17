@@ -22,8 +22,8 @@
 		</div>
 
 		
-
-		<!-- <button
+	
+		<button
 			class="btn btn-primary"
 			@click="clearLocalStorage"
 		>
@@ -37,7 +37,7 @@
 		>
 			Reload
 			<ripple></ripple>
-		</button> -->
+		</button>
 
 		<button
 			class="btn btn-primary"

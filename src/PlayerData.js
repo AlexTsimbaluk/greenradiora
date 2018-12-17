@@ -10,7 +10,7 @@ export default new Vue({
 		// префикс для url API для android на cordova
 		// apiPrefix: 'https://cors-anywhere.herokuapp.com/http://radiora.ru',
 		// apiPrefix: 'http://radiora.ru',
-		apiPrefix: '',
+		apiPrefix: 'http://vuea.radiora.ru',
 		xhrResponceRecieved: false
 	},
 	methods: {
@@ -21,11 +21,37 @@ export default new Vue({
 				this.$emit('dataTransfer');
 			}, msec);
 		},
+		init () {
+			if(localStorage.getItem('stations') == undefined) {
+				console.log('::Data from local storage is empty, need ajax for Stations list');
+
+				let urlApi = this.apiPrefix + '/api/actions.php?action=getAllStations';
+				
+				console.log('hostname=' + window.location.hostname);
+				console.log('host=' + window.location.host);
+				console.log('path=' + window.location.pathname);
+				console.log('href=' + window.location.href);
+				console.log('origin=' + window.location.origin);
+				console.log('urlApi=' + urlApi);
+
+				if(!this.cordovaReady) {
+					this.getAllStations(urlApi);
+				}
+			} else {
+				console.log('::PlayerData:Get stations from Local storage');
+				this.stationsArray 		= JSON.parse(localStorage.getItem('stations'));
+				this.xhrResponceRecieved = true;
+
+				console.log('::PlayerData:$emit:dataTransfer:ls');
+				this.dataTransfer(100);
+			}
+		},
 		getAllStations (urlApi) {
-			console.log('::getAllStations:start');
+			console.log('PlayerData::getAllStations:start');
 			
 			axios
-				.get('/api/actions.php?action=getAllStations')
+				// .get('/api/actions.php?action=getAllStations', withCredentials: true)
+				.get(urlApi)
 				.then((response) => {
 					try {
 						console.log('::xhr:stop:succecc');
@@ -65,21 +91,21 @@ export default new Vue({
 		}
 	},
 	created () {
-		// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 		console.log('::PlayerData:hook:created');
-		console.log('::PlayerData:method:getAllStations');
+
+		this.init();
 
 		/*axios
-			.get('/api/test-axios.php?name=testGET')
+			.get('http://vuea.radiora.ru/api/test-axios.php?name=testGET')
 			.then((response) => {
 				console.log(response.data);
 			});*/
 
-		if(localStorage.getItem('stations') == undefined) {
+		/*if(localStorage.getItem('stations') == undefined) {
 			console.log('::Need ajax for allStations list');
 			console.log('::Data from local storage is empty, need ajax for data list');
 
-			let urlApi = this.apiPrefix + '/api/actions.php';
+			let urlApi = this.apiPrefix + '/api/actions.php?action=getAllStations';
 			
 			console.log('hostname=' + window.location.hostname);
 			console.log('host=' + window.location.host);
@@ -89,7 +115,7 @@ export default new Vue({
 			console.log('urlApi=' + urlApi);
 
 			if(!this.cordovaReady) {
-				this.getAllStations(this.apiPrefix + '/api/actions.php');
+				this.getAllStations(urlApi);
 			}
 		} else {
 			console.log('::PlayerData:Get stations from Local storage');
@@ -98,6 +124,6 @@ export default new Vue({
 
 			console.log('::PlayerData:$emit:dataTransfer:ls');
 			this.dataTransfer(100);
-		}		
+		}*/
 	}
 });
