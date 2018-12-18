@@ -5,7 +5,7 @@ session_start();
 header("Content-Type: text/html; charset=utf-8");
 mb_internal_encoding("UTF-8");
 
-if($_SERVER['HTTP_REFERER'] == "http://vuea.radiora.ru/"
+/*if($_SERVER['HTTP_REFERER'] == "http://vuea.radiora.ru/"
 	|| $_SERVER['HTTP_REFERER'] == "http://greenra/"
 	|| $_SERVER['HTTP_REFERER'] == "http://localhost:8000/index.html"
 	|| $_SERVER['HTTP_REFERER'] == "http://localhost:8000/"
@@ -22,7 +22,12 @@ if($_SERVER['HTTP_REFERER'] == "http://vuea.radiora.ru/"
 	$user = "root";
 	$password = "9";
 	$database = "radio_ra";
-}
+}*/
+
+$host = "localhost";
+$user = "radiorar";
+$password = "39at6F6dEp";
+$database = "radiora";
 
 $link = mysqli_connect($host, $user, $password, $database);
 if(!$link) {
