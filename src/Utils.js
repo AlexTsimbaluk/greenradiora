@@ -8,13 +8,12 @@ export default new Vue({
 		}
 	},
 	methods: {
-		createdInfo () {
-			console.log('host=' + window.location.host);
-			console.log('hostname=' + window.location.hostname);
-			console.log('pathname=' + window.location.pathname);
-			console.log('hash=' + window.location.hash);
-			console.log('href=' + window.location.href);
-			console.log('origin=' + window.location.origin);
+		locationInfo () {
+			console.log('');
+
+			for(let key in location) if(typeof location[key] == 'string') console.log(key + '::' + location[key]);
+
+			console.log('');
 		},
 		clearLocalStorage () {
 			localStorage.clear();
@@ -37,5 +36,7 @@ export default new Vue({
 	},
 	created () {
 		console.log('::Utils:hook:created');
+
+		this.locationInfo()
 	}
 });

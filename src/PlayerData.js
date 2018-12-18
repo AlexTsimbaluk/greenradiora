@@ -11,6 +11,7 @@ export default new Vue({
 		// apiPrefix: 'https://cors-anywhere.herokuapp.com/http://radiora.ru',
 		// apiPrefix: 'http://radiora.ru',
 		apiPrefix: 'http://vuea.radiora.ru',
+		apiUrl: 'http://vuea.radiora.ru/api/actions.php?action=getAllStations',
 		xhrResponceRecieved: false
 	},
 	methods: {
@@ -25,17 +26,17 @@ export default new Vue({
 			if(localStorage.getItem('stations') == undefined) {
 				console.log('::Data from local storage is empty, need ajax for Stations list');
 
-				let urlApi = this.apiPrefix + '/api/actions.php?action=getAllStations';
+				// let urlApi = this.apiPrefix + '/api/actions.php?action=getAllStations';
 				
 				console.log('hostname=' + window.location.hostname);
 				console.log('host=' + window.location.host);
 				console.log('path=' + window.location.pathname);
 				console.log('href=' + window.location.href);
 				console.log('origin=' + window.location.origin);
-				console.log('urlApi=' + urlApi);
+				console.log('apiUrl=' + this.apiUrl);
 
 				if(!this.cordovaReady) {
-					this.getAllStations(urlApi);
+					this.getAllStations(this.apiUrl);
 				}
 			} else {
 				console.log('::PlayerData:Get stations from Local storage');
@@ -46,12 +47,12 @@ export default new Vue({
 				this.dataTransfer(100);
 			}
 		},
-		getAllStations (urlApi) {
+		getAllStations (apiUrl) {
 			console.log('PlayerData::getAllStations:start');
 			
 			axios
 				// .get('/api/actions.php?action=getAllStations', withCredentials: true)
-				.get(urlApi)
+				.get(apiUrl)
 				.then((response) => {
 					try {
 						console.log('::xhr:stop:succecc');
