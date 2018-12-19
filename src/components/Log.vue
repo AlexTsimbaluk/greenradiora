@@ -1,17 +1,26 @@
 <template>
 	<div class="log w-100">
-		<div
-			class="log-item"
-			v-for="log in logs"
-		>
-			{{ log }}
-		</div>
-
-		<div 
-			class="clear"
+		<button 
+			class="btn btn-info btn-fab clear"
 			@click="clear"
 		>
-			X
+			<i class="material-icons">not_interested</i>
+		</button>
+
+		<button
+			class="btn btn-info btn-fab showLog"
+			@click="logVisible = !logVisible"
+		>
+			<i class="material-icons">bug_report</i>
+		</button>
+		
+		<div v-if="logVisible">
+			<div
+				class="log-item"
+				v-for="log in logs"
+			>
+				{{ log }}
+			</div>
 		</div>
 	</div>
 </template>
@@ -26,7 +35,8 @@
 		name: 'Log',
 		data () {
 			return {
-				logs: []
+				logs: [],
+				logVisible: false
 			}
 		},
 		methods: {
@@ -54,7 +64,7 @@
 	overflow-y: auto;
 	padding: 8px;
 	position: absolute;
-	top: 0;
+	bottom: 0;
 }
 .log-item {
 	color: #00f;
