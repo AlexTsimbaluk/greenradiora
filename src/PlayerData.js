@@ -5,13 +5,12 @@ export default new Vue({
 	data: {
 		// инициализировалась ли cordova
 		cordovaReady: false,
+		device: '',
 		// Массив со всеми станциями
 		stationsArray: {},
-		// префикс для url API для android на cordova
-		// apiPrefix: 'https://cors-anywhere.herokuapp.com/http://radiora.ru',
-		// apiPrefix: 'http://radiora.ru',
 		apiPrefix: 'http://vuea.radiora.ru',
-		apiUrl: 'http://vuea.radiora.ru/api/actions.php?action=getAllStations',
+		apiAction: '/api/actions.php?action=getAllStations',
+		apiUrl: '',
 		xhrResponceRecieved: false
 	},
 	methods: {
@@ -25,15 +24,6 @@ export default new Vue({
 		init () {
 			if(localStorage.getItem('stations') == undefined) {
 				console.log('::Data from local storage is empty, need ajax for Stations list');
-
-				// let urlApi = this.apiPrefix + '/api/actions.php?action=getAllStations';
-				
-				console.log('hostname=' + window.location.hostname);
-				console.log('host=' + window.location.host);
-				console.log('path=' + window.location.pathname);
-				console.log('href=' + window.location.href);
-				console.log('origin=' + window.location.origin);
-				console.log('apiUrl=' + this.apiUrl);
 
 				if(!this.cordovaReady) {
 					this.getAllStations(this.apiUrl);
@@ -51,7 +41,6 @@ export default new Vue({
 			console.log('PlayerData::getAllStations:start');
 			
 			axios
-				// .get('/api/actions.php?action=getAllStations', withCredentials: true)
 				.get(apiUrl)
 				.then((response) => {
 					try {
@@ -70,8 +59,6 @@ export default new Vue({
 						this.dataTransfer(50);
 
 						console.log('::Data from Database success and placed in localstorage');
-
-						// location.reload();
 					} catch(e) {
 						console.log('::xhr:stop:fail');
 						console.log('Error::No response');
@@ -93,6 +80,8 @@ export default new Vue({
 	},
 	created () {
 		console.log('::PlayerData:hook:created');
+
+		this.apiUrl = this.apiPrefix + this.apiAction;
 
 		this.init();
 
