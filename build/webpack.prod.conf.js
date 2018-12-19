@@ -48,6 +48,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       // потому что в css url() для билда должен быть ../../ , 
       // а для webpack-dev-server - ../
       // поэтому css в билде складываем не в /css/ , а в корень / от index.html
+      // https://github.com/vuejs-templates/webpack/issues/208#issuecomment-399110409
       // filename: utils.assetsPath('css/[name].[contenthash].css'),
       filename: utils.assetsPath('./[name].[contenthash].css'),
 
