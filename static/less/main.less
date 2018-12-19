@@ -90,6 +90,7 @@ body {
 }
 
 #app {
+	background: rgba(0, 0, 0, 0.5) url(../img/bg4.jpg) center no-repeat / cover;
 	height: 100%;
 }
 #app.error-no-response-data {
@@ -100,10 +101,9 @@ body {
 }
 
 .player {
-	// background: rgba(17, 17, 17, .7);
 	border: 4px solid #f0f;
 	border-radius: 5px;
-	// color: #eee;
+	color: #eee;
 	overflow: hidden;
 	padding: 12px;
 	height: 380px;
@@ -117,6 +117,13 @@ body {
 	z-index: 2;
 
 	@media screen and (max-width: 480px) {
+		width: 100%;
+	}
+
+	.device-android & {
+		border: 0;
+		border-radius: 0;
+		height: 100%;
 		width: 100%;
 	}
 
