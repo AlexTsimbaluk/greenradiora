@@ -14,10 +14,12 @@ import Vue from 'vue';
 import Utils from '@/Utils.js';
 import Log from '@/components/Log';
 import Ripple from '@/components/Ripple';
+import MIcon from '@/components/MIcon';
 
 
 Vue.component('Log', Log);
 Vue.component('Ripple', Ripple);
+Vue.component('MIcon', MIcon);
 
 
 export default {
