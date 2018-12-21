@@ -1,22 +1,32 @@
 <template>
-	<div class="log w-100">
-		<button 
-			class="btn btn-info btn-fab clear"
-			@click="clear"
-		>
-			<i class="material-icons">not_interested</i>
-		</button>
+	<div class="log w-100 d-flex flex-column-reverse">
+		<div class="controls d-flex flex-row-reverse flex-shrink-0">
+			<button 
+				class="btn btn-default btn-fab btn-round clear"
+				@click="clear"
+			>
+				<m-icon
+					:i="'not_interested'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
+			<button
+				class="btn btn-default btn-fab btn-round showLog"
+				@click="logVisible = !logVisible"
+			>
+				<m-icon
+					:i="'bug_report'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
+		</div>
 
-		<button
-			class="btn btn-info btn-fab showLog"
-			@click="logVisible = !logVisible"
+		<div
+			v-if="logVisible"
+			class="log-list"
 		>
-			<i class="material-icons">bug_report</i>
-		</button>
-		
-		<div v-if="logVisible">
 			<div
-				class="log-item"
+				class="log-item && logs.length"
 				v-for="log in logs"
 			>
 				{{ log }}
@@ -57,23 +67,28 @@
 </script>
 
 
- lang="less"
 <style>
 .log {
 	height: 160px;
-	overflow-y: auto;
-	padding: 8px;
+	padding: 0 8px;
 	position: absolute;
 	bottom: 0;
+	overflow-y: hidden;
+}
+.log-list {
+	overflow-y: auto;
 }
 .log-item {
 	color: #00f;
 	font-family: monospace;
 }
-.clear {
+
+.controls {
+	padding: 5px 0;
+}
+.clear,
+.showLog {
 	cursor: pointer;
-	position: absolute;
-	right: 10px;
-	top: 10px;
+	margin: 0 5px;
 }
 </style>
