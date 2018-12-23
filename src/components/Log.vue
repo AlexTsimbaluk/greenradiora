@@ -53,9 +53,9 @@
 		>
 			<div
 				class="log-item && logs.length"
-				v-for="log in logs"
+				v-for="(log, index) in logs"
 			>
-				{{ log }}
+				#{{logs.length - index}} {{ log }}
 			</div>
 		</div>
 	</div>
@@ -115,13 +115,5 @@
 
 .controls {
 	padding: 5px 0;
-}
-.btn {
-	&.btn-control {
-		margin: 0;
-		+ .btn-control {
-			margin: 0 0 0 8px;
-		}
-	}
 }
 </style>
