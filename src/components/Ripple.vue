@@ -61,6 +61,9 @@
 	  height: 100%;
 	  overflow: hidden;
 	  background: transparent;
+	  [disabled] & {
+	  	display: none;
+	  }
 	}
 
 	.ripple-c {

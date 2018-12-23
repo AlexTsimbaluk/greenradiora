@@ -21,38 +21,26 @@
 			<hr>
 		</div>
 
-		
-	
 		<button
-			class="btn btn-primary"
-			@click="clearLocalStorage"
-		>
-			Clear LS
-			<ripple></ripple>
-		</button>
-		
-		<button
-			class="btn btn-primary"
-			@click="locationReload"
-		>
-			Reload
-			<ripple></ripple>
-		</button>
-
-		<button
-			class="btn btn-primary"
+			class="btn btn-outline-info btn-fab btn-round"
 			@click="getRandomStation"
 		>
-			Random
-			{{random}}
+			<m-icon
+				:i="'call_split'"
+				:t="'light'"
+			></m-icon>
+			<!-- {{random}} -->
 			<ripple></ripple>
 		</button>
 
 		<button
-			class="btn btn-primary"
+			class="btn btn-outline-info btn-fab btn-round"
 			@click="togglePlaying"
 		>
-			Play
+			<m-icon
+				:i="'play_arrow'"
+				:t="'light'"
+			></m-icon>
 			<ripple></ripple>
 		</button>
 
@@ -87,8 +75,6 @@ export default {
 			random: null,
 
 			getRandomInt: Utils.getRandomInt,
-			locationReload: Utils.locationReload,
-			clearLocalStorage: Utils.clearLocalStorage,
 
 			playing: false,
 			playingTime: null,
@@ -100,6 +86,7 @@ export default {
 	methods: {
 		getRandomStation () {
 			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
+			Utils.logs(this.random);
 		},
 		dataTransfered () {
 			Utils.logs('::Player:method:dataTransfered');

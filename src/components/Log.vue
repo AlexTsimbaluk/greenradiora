@@ -1,24 +1,50 @@
 <template>
 	<div class="log w-100 d-flex flex-column-reverse">
-		<div class="controls d-flex flex-row-reverse flex-shrink-0">
-			<button 
-				class="btn btn-default btn-fab btn-round clear"
-				@click="clear"
-			>
-				<m-icon
-					:i="'not_interested'"
-				></m-icon>
-				<ripple></ripple>
-			</button>
-			<button
-				class="btn btn-default btn-fab btn-round showLog"
-				@click="logVisible = !logVisible"
-			>
-				<m-icon
-					:i="'bug_report'"
-				></m-icon>
-				<ripple></ripple>
-			</button>
+		<div class="d-flex flex-row-reverse flex-shrink-0">
+			<div class="controls d-flex">
+				<button
+					class="btn btn-default btn-fab btn-round btn-control"
+					@click="clearLocalStorage"
+				>
+					<m-icon
+						:i="'cached'"
+					></m-icon>
+					<ripple></ripple>
+				</button>
+				
+				<button
+					class="btn btn-default btn-fab btn-round btn-control"
+					@click="locationReload"
+				>
+					<m-icon
+						:i="'autorenew'"
+					></m-icon>
+					<ripple></ripple>
+				</button>
+
+				<button 
+					class="btn btn-default btn-fab btn-round btn-control clear"
+					@click="clear"
+					:disabled="!logs.length"
+				>
+					<m-icon
+						:class="[!!logs.length ? '' : 'md-inactive']"
+						:i="'not_interested'"
+					></m-icon>
+					<ripple></ripple>
+				</button>
+				
+				<button
+					class="btn btn-default btn-fab btn-round btn-control showLog"
+					@click="logVisible = !logVisible"
+				>
+					<m-icon
+						:i="'bug_report'"
+						:t="logVisible ? 'light' : ''"
+					></m-icon>
+					<ripple></ripple>
+				</button>
+			</div>
 		</div>
 
 		<div
@@ -46,7 +72,10 @@
 		data () {
 			return {
 				logs: [],
-				logVisible: false
+				logVisible: false,
+
+				locationReload: Utils.locationReload,
+				clearLocalStorage: Utils.clearLocalStorage
 			}
 		},
 		methods: {
@@ -64,10 +93,10 @@
 		}
 	}
 
+// <style>
 </script>
 
-
-<style>
+<style lang="less">
 .log {
 	height: 160px;
 	padding: 0 8px;
@@ -81,14 +110,18 @@
 .log-item {
 	color: #00f;
 	font-family: monospace;
+	line-height: 1.7;
 }
 
 .controls {
 	padding: 5px 0;
 }
-.clear,
-.showLog {
-	cursor: pointer;
-	margin: 0 5px;
+.btn {
+	&.btn-control {
+		margin: 0;
+		+ .btn-control {
+			margin: 0 0 0 8px;
+		}
+	}
 }
 </style>

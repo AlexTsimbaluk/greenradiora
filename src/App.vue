@@ -1,5 +1,8 @@
 <template>
-	<div id="app">
+	<div
+		id="app"
+		class="d-flex justify-content-center"
+	>
 		<router-view/>
 		
 		<log></log>
