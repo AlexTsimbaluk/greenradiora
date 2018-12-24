@@ -36,7 +36,7 @@
 				
 				<button
 					class="btn btn-default btn-fab btn-round btn-control showLog"
-					@click="logVisible = !logVisible"
+					@click="toggleLog"
 				>
 					<m-icon
 						:i="'bug_report'"
@@ -55,7 +55,7 @@
 				class="log-item && logs.length"
 				v-for="(log, index) in logs"
 			>
-				#{{logs.length - index}} {{ log }}
+				#{{index}} {{ log }}
 			</div>
 		</div>
 	</div>
@@ -73,6 +73,7 @@
 			return {
 				logs: [],
 				logVisible: false,
+				logEl: null,
 
 				locationReload: Utils.locationReload,
 				clearLocalStorage: Utils.clearLocalStorage
@@ -81,14 +82,29 @@
 		methods: {
 			clear () {
 				this.logs = [];
+			},
+			toggleLog () {
+				this.logVisible = !this.logVisible;
+
+				if(this.logVisible) {
+					setTimeout(() => {
+						this.logEl = document.querySelectorAll('.log-list')[0];
+						this.logEl.scrollTo(0, this.logEl.scrollHeight);
+						// this.logEl.scrollTo({top: this.logEl.scrollHeight, behavior: 'smooth'});
+					});
+				}
+			},
+			getLogScroll () {
+
 			}
 		},
 		created () {
 			console.log('::Log:hook:created');
 
 			Utils.$on('log', (text) => {
-				this.logs.unshift(text);
+				this.logs.push(text);
 				console.log(text);
+				// this.logEl && this.logEl.scrollTo(0, this.logEl.scrollHeight);
 			});
 		}
 	}
@@ -106,6 +122,7 @@
 }
 .log-list {
 	overflow-y: auto;
+	scroll-behavior: smooth;
 }
 .log-item {
 	color: #00f;

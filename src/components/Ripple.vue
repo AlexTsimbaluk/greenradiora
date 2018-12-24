@@ -19,6 +19,7 @@
 			}
 		},
 		methods: {
+			// TODO: переделать на vue
 			ripple (event) {
 				var $ripple = event.target;
 				var $btn = $ripple.parentElement;
@@ -28,8 +29,10 @@
 				var x = event.pageX - offset.left;
 				var y = event.pageY - offset.top;
 
-				$circle.style.top = y + 'px';
-				$circle.style.left = x + 'px';
+				if($circle) {
+					$circle.style.top = y + 'px';
+					$circle.style.left = x + 'px';
+				}
 
 				$ripple.classList.add('is-active');
 
