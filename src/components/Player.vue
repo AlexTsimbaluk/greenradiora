@@ -78,7 +78,6 @@ export default {
 
 			playing: false,
 			playingTime: null,
-			status: '',
 
 			state: {}
 		}
@@ -86,7 +85,7 @@ export default {
 	methods: {
 		getRandomStation () {
 			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
-			Utils.logs(this.random);
+			// Utils.logs(this.random);
 		},
 		dataTransfered () {
 			Utils.logs('::Player:method:dataTransfered');

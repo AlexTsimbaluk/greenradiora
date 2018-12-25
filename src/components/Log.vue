@@ -1,5 +1,5 @@
 <template>
-	<div class="log w-100 d-flex flex-column-reverse">
+	<div class="log w-100 d-flex flex-column-reverse justify-content-between">
 		<div class="d-flex flex-row-reverse flex-shrink-0">
 			<div class="controls d-flex">
 				<button
@@ -80,9 +80,6 @@
 			}
 		},
 		methods: {
-			clear () {
-				this.logs = [];
-			},
 			toggleLog () {
 				this.logVisible = !this.logVisible;
 
@@ -94,17 +91,26 @@
 					});
 				}
 			},
-			getLogScroll () {
+			add (text) {
+				this.logs.push(text);
+				console.log(text);
 
+				if(this.logVisible) {
+					setTimeout(() => {
+						this.logEl.scrollTo(0, this.logEl.scrollHeight);
+						// this.logEl.lastChild && this.logEl.lastChild.scrollIntoView(false);
+					});
+				}
+			},
+			clear () {
+				this.logs = [];
 			}
 		},
 		created () {
 			console.log('::Log:hook:created');
 
 			Utils.$on('log', (text) => {
-				this.logs.push(text);
-				console.log(text);
-				// this.logEl && this.logEl.scrollTo(0, this.logEl.scrollHeight);
+				this.add(text);
 			});
 		}
 	}
@@ -123,6 +129,7 @@
 .log-list {
 	overflow-y: auto;
 	scroll-behavior: smooth;
+	//scroll-behavior: instant;
 }
 .log-item {
 	color: #00f;
