@@ -5,7 +5,7 @@
 	>
 		<router-view/>
 		
-		<log></log>
+		<log></log>		
 	</div>
 </template>
 
@@ -16,6 +16,7 @@
 import Vue from 'vue';
 import Utils from '@/Utils.js';
 import Log from '@/components/Log';
+import Loader from '@/components/Loader';
 import Ripple from '@/components/Ripple';
 import MIcon from '@/components/MIcon';
 
@@ -23,6 +24,7 @@ import MIcon from '@/components/MIcon';
 Vue.component('Log', Log);
 Vue.component('Ripple', Ripple);
 Vue.component('MIcon', MIcon);
+Vue.component('Loader', Loader);
 
 
 export default {

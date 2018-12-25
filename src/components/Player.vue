@@ -1,5 +1,7 @@
 <template>
 	<div class="player">
+		<loader v-if="!xhrResponceRecieved"></loader>
+		
 		<div
 			v-if="xhrResponceRecieved"
 		>
