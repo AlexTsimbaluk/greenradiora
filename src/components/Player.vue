@@ -1,7 +1,7 @@
 <template>
 	<div class="player">
-		<loader v-if="!xhrResponceRecieved"></loader>
-		
+		<loader v-if="!xhrResponceRecieved || waiting"></loader>
+
 		<div
 			v-if="xhrResponceRecieved"
 		>
@@ -81,6 +81,8 @@ export default {
 			playing: false,
 			playingTime: null,
 
+			waiting: false,
+
 			state: {}
 		}
 	},
@@ -156,6 +158,10 @@ export default {
 			// console.log(state);
 
 			this.state = state;
+		});
+
+		PlayerState.$on('loader', (visible) => {
+			this.waiting = visible;
 		});
 	}
 }

@@ -30,6 +30,10 @@ export default new Vue({
 			// console.log('::PlayerState::stateChanged');
 			this.$emit('stateChanged', this.$data);
 		},
+		loader (visible) {
+			this.$emit('loader', visible);
+		},
+
 
 		getAudioTag (id) {
 			this.playerTag = document.getElementById(id);
@@ -39,12 +43,18 @@ export default new Vue({
 		playStream (streamUrl) {
 			Utils.logs('::PlayerState::playStream::');
 			
-			var self = this;
+			let self = this;
+
 			this.playerTag.src = streamUrl;
+
+		    /*this.playerTag.crossOrigin = 'anonymous';
+			setTimeout(function(){
+				this.playerTag.crossOrigin = 'anonymous';
+		    }, 3000);*/
 
 			this.audioBindAll(this.playerTag);
 
-			var playPromise = this.playerTag.play();
+			let playPromise = this.playerTag.play();
 
 	        if (playPromise !== undefined) {
 				playPromise.then(function() {
@@ -105,7 +115,7 @@ export default new Vue({
 	     		console.log('::Event.type::' + e.type);
 
 	     		this.setStatus('abort');
-	     		// $(".spinner").hide();
+	     		this.loader(false);
 	        });
 	        player.addEventListener('canplay', (e)=> {
 	     		console.log('::Event.type::' + e.type);
@@ -127,6 +137,7 @@ export default new Vue({
 
 	     		this.setStatus('emptied');
 	     		// $(".spinner").hide();
+	     		this.loader(false);
 	        });
 	        player.addEventListener('encrypted', (e)=> {
 	     		console.log('::Event.type::' + e.type);
@@ -146,6 +157,7 @@ export default new Vue({
 	     		// console.log(e);
 
 	     		// $(".spinner").hide();
+	     		this.loader(false);
 	     		
 	     		/*if(playerState.paused) {
 	     			console.log('paused');
@@ -201,7 +213,7 @@ export default new Vue({
 	     		console.log('::Event.type::' + e.type);
 
 	     		this.setStatus('play');	     		
-	     		// $(".spinner").show();
+	     		this.loader(true);
 	        });
 	        player.addEventListener('playing', (e)=> {
 	     		console.log('::Event.type::' + e.type);
@@ -211,7 +223,7 @@ export default new Vue({
 
 	     		// playerState.paused = player.paused;
 
-	     		// $(".spinner").hide();
+	     		this.loader(false);
 	        });
 	        player.addEventListener('ratechange', (e)=> {
 	     		console.log('::Event.type::' + e.type);
@@ -243,6 +255,7 @@ export default new Vue({
 
 	     		this.setStatus('stalled');
 	     		// $(".spinner").hide();
+	     		this.loader(false);
 	        });
 	        player.addEventListener('suspend', (e)=> {
 	     		console.log('::Event.type::' + e.type);
