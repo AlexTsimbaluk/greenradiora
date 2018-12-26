@@ -9,10 +9,12 @@
 	export default {
 		name: 'm-icon',
 		props: {
+			// icon content
 			i: {
 				type: String,
 				reqired: true
 			},
+			// icon theme
 			t: {
 				type: String,
 				reqired: false

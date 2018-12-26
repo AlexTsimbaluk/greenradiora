@@ -28,6 +28,7 @@
 			@click="getRandomStation"
 		>
 			<m-icon
+				class="md-24"
 				:i="'call_split'"
 				:t="'light'"
 			></m-icon>
@@ -40,6 +41,7 @@
 			@click="togglePlaying"
 		>
 			<m-icon
+				class="md-24"
 				:i="'play_arrow'"
 				:t="'light'"
 			></m-icon>
