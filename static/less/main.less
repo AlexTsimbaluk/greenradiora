@@ -145,14 +145,18 @@ body {
 }
 
 #app {
-	background: rgba(0, 0, 0, 0.5) url(../img/bg4.jpg) center no-repeat / cover;
+	background: rgba(0, 0, 0, 0.5) url(../img/bg4.jpg) no-repeat center / cover;
 	height: 100%;
-}
-#app.error-no-response-data {
-	color: #ff0;
-}
-#app.error-ajax-query {
-	color: #f00;
+
+	&.error-no-response-data {
+		color: #ff0;
+	}
+	&.error-ajax-query {
+		color: #f00;
+	}
+	&.error-ajax {
+		box-shadow: inset 0px 0px 20px 4px #f00;
+	}
 }
 
 .btn {

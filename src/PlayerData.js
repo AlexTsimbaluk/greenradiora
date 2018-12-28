@@ -41,7 +41,8 @@ export default new Vue({
 			console.log('PlayerData::getAllStations:start');
 			let self = this;
 			let xhrTimeout;
-			
+			let $app = document.getElementById('app');
+
 			axios
 				.get(apiUrl)
 				.then((response) => {
@@ -52,6 +53,10 @@ export default new Vue({
 							console.log('запрос не вернул станции, а вернул вот это:');
 							console.log(response.data);
 							return;
+						}
+
+						if($app.classList.contains('error-ajax')) {
+							$app.classList.remove('error-ajax');
 						}
 
 						clearInterval(xhrTimeout);
@@ -76,6 +81,10 @@ export default new Vue({
 					console.log('Error::не удалось создать ajax-запрос');
 					console.log(error);
 					console.log(error.message);
+
+					if(!$app.classList.contains('error-ajax')) {
+						$app.classList.add('error-ajax');
+					}
 
 					if(Object.keys(self.stationsArray).length  == 0) {
 						xhrTimeout = setTimeout(() => {
