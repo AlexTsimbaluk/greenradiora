@@ -2,6 +2,16 @@
 	<div class="log w-100 d-flex flex-column-reverse justify-content-between">
 		<div class="d-flex flex-row-reverse flex-shrink-0">
 			<div class="controls d-flex">
+				<!-- <button
+					class="btn btn-default btn-fab btn-round btn-control"
+					@click="playerDataInit"
+				>
+					<m-icon
+						:i="'signal_wifi_off'"
+					></m-icon>
+					<ripple></ripple>
+				</button> -->
+
 				<button
 					class="btn btn-default btn-fab btn-round btn-control"
 					@click="clearLocalStorage"
@@ -35,7 +45,7 @@
 				</button>
 				
 				<button
-					class="btn btn-default btn-fab btn-round btn-control showLog"
+					class="btn btn-default btn-fab btn-round btn-control"
 					@click="toggleLog"
 				>
 					<m-icon
@@ -66,6 +76,7 @@
 <script>
 
 	import Utils from '@/Utils.js';
+	import PlayerData from '@/PlayerData.js';
 
 	export default {
 		name: 'Log',
@@ -104,6 +115,9 @@
 			},
 			clear () {
 				this.logs = [];
+			},
+			playerDataInit () {
+				PlayerData.init();
 			}
 		},
 		created () {
