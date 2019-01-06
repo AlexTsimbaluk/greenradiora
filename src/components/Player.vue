@@ -46,7 +46,9 @@
 					@click="setCurrentPlaylist(playlist)"
 					v-for="playlist in state.playlistsOrder"
 					class="playlist"
+					:class="[state.currentPlaylist == playlist ? 'active' : '']"
 				>
+					<ripple></ripple>
 					{{playlist}}
 				</div>
 			</div>
@@ -152,7 +154,7 @@ export default {
 			}
 		},
 		setCurrentPlaylist (playlist) {
-			PlayerState.setCurrentPlaylist(playlist);
+			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
 		}
 	},
 	created () {
@@ -183,7 +185,6 @@ export default {
 			// console.log(state);
 
 			this.state = state;
-			console.log(this.state.status);
 		});
 
 		PlayerState.$on('loader', (visible) => {
@@ -222,5 +223,10 @@ a {
 	text-align: center;
 	overflow: hidden;
 	width: 80px;
+	position: relative;
+}
+
+.playlist.active {
+	box-shadow: inset 0 0 28px 2px #00afc5;
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-	<div class="log w-100 d-flex flex-column-reverse justify-content-between">
+	<div
+		class="log w-100 d-flex flex-column-reverse justify-content-between"
+		:class="{active: logVisible}"
+	>
 		<div class="d-flex flex-row-reverse flex-shrink-0">
 			<div class="controls d-flex">
 				<!-- <button
@@ -59,7 +62,7 @@
 
 		<div
 			v-if="logVisible"
-			class="log-list"
+			class="flex-grow-1 log-list"
 		>
 			<div
 				class="log-item && logs.length"
@@ -139,11 +142,18 @@
 	position: absolute;
 	bottom: 0;
 	overflow-y: hidden;
+	&.active {
+		background: #cfcfcf;
+	}
 }
 .log-list {
+	padding: 0 6px;
 	overflow-y: auto;
 	scroll-behavior: smooth;
 	//scroll-behavior: instant;
+	.log.active & {
+		
+	}
 }
 .log-item {
 	color: #00f;

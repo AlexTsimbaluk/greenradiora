@@ -116,7 +116,6 @@ export default new Vue({
 		},
 
 		setCurrentPlaylist (playlist) {
-			console.log('CurrentPlaylist - ' + playlist);
 			this.playerState.currentPlaylist = playlist;
 			this.stateChanged();
 		},
