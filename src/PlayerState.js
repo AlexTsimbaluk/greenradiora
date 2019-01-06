@@ -2,6 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 
 import Utils from '@/Utils.js';
+import P_Config from '@/P_Config.js';
 
 export default new Vue({
 	data () {
@@ -9,31 +10,35 @@ export default new Vue({
 			playerTag: null,
 			paused: true,
 			playingTime: null,
-			status: '',
 
-
-
-			playlists: {},
-			volume: .27,
-			// nowPlaying: {},
-			// playlistsOrder: [],
-			// currentPlaylist: '',
-			// paused: player.paused,
-			// search: {
-			// 	stationsOpened: []
-			// },
-			// translated: false
+			playerState: {
+				playlists: {},
+				playlistsOrder: [],
+				currentPlaylist: '',
+				nowPlaying: {},
+				volume: .27,
+				paused: true,
+				status: '',
+				// search: {
+				// 	stationsOpened: []
+				// },
+				translated: false
+			},
 		}
 	},
 	methods: {
 		stateChanged () {
 			// console.log('::PlayerState::stateChanged');
-			this.$emit('stateChanged', this.$data);
+			// console.log(this.playerState);
+
+			localStorage.setItem('playerState', JSON.stringify(this.playerState));
+
+			// this.$emit('stateChanged', this.$data);
+			this.$emit('stateChanged', this.playerState);
 		},
 		loader (visible) {
 			this.$emit('loader', visible);
 		},
-
 
 		getAudioTag (id) {
 			this.playerTag = document.getElementById(id);
@@ -75,15 +80,15 @@ export default new Vue({
 		},
 
 		setVolume (volume) {
-			this.playerTag.volume = this.volume = volume;
+			this.playerTag.volume = this.playerState.volume = volume;
 		},
 
 		getVolume () {
-			return this.volume;
+			return this.playerState.volume;
 		},
 
 		setStatus (status) {
-			this.status = status;
+			this.playerState.status = status;
 			this.stateChanged();
 		},
 
@@ -108,6 +113,12 @@ export default new Vue({
 					// TODO: переделать на добавление класса объекту Vue
 					console.log(error)
 				});*/
+		},
+
+		setCurrentPlaylist (playlist) {
+			console.log('CurrentPlaylist - ' + playlist);
+			this.playerState.currentPlaylist = playlist;
+			this.stateChanged();
 		},
 
 	    audioBindAll (player) {
@@ -270,6 +281,16 @@ export default new Vue({
 	    }
 	},
 	created () {
-		console.log('::PlayerState:hook:created');		
+		console.log('::PlayerState:hook:created');
+
+		if(localStorage.getItem('playerState') == undefined) {
+			P_Config.init();
+
+			this.playerState = Object.assign(this.playerState, P_Config.playerState);
+			localStorage.setItem('playerState', JSON.stringify(this.playerState));
+		} else {
+			this.playerState = JSON.parse(localStorage.getItem('playerState'));
+			this.stateChanged();
+		}
 	}
 });

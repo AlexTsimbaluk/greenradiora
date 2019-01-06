@@ -1,7 +1,7 @@
 <template>
 	<div
+		@click="togglePlaying($event)"
 		class="station"
-		@click="togglePlaying"		
 	>
 		<div class="station-title">
 			{{ station.station_title }}
@@ -31,7 +31,7 @@
 			}
 		},
 		methods: {
-			togglePlaying() {
+			togglePlaying(event) {
 				// console.log(PlayerState.playerTag.src);
 				// PlayerState.playerTag.volume = 1;
 				// PlayerState.playerTag.src = this.station.station_url;
@@ -48,7 +48,7 @@
 			}
 		},
 		created () {
-			console.log('::Station:hook:created');
+			// console.log('::Station:hook:created');
 			// this.player = PlayerState.getAudioTag('playerTag');
 			// console.log(this.player);
 		}

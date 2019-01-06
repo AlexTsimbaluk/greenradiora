@@ -7,35 +7,22 @@ export default new Vue({
 				playlists: {},
 				playlistsOrder: [],
 				currentPlaylist: '',
-				nowPlaying: {},
-				volume: .27,
-				// paused: player.paused,
-				search: {
-					stationsOpened: []
-				},
-				translated: false
-			},
-			__playlists: {}
+			}
 		}
 	},
 	methods: {
-		Playlist (name, opts) {
+		Playlist (name, dataObject) {
 			this.name = name;
 			this.tracks = [];
 			this.currentTrack = {};
 
-			playerState.currentPlaylist = this.name;
-			playerState.playlistsOrder.push(this.name);
-
-			__playlists[name] = this;
-
-			localStorage.setItem('playerState', JSON.stringify(playerState));
-			localStorage.setItem('__playlists', JSON.stringify(__playlists));
+			dataObject.playlistsOrder.push(this.name);
+			dataObject.playlists[name] = this;
 		},
 		init () {
-			let nirvanaPlaylist          	= new this.Playlist('~Nirvana~'); // ?? - нужен ??
-			let dubstepPlaylist          	= new this.Playlist('Dubstep');
-			let dubPlaylist 	         	= new this.Playlist('|_Dub_|');
+			let nirvanaPlaylist          	= new this.Playlist('~Nirvana~', this.playerState);
+			let dubstepPlaylist          	= new this.Playlist('Dubstep', this.playerState);
+			let dubPlaylist 	         	= new this.Playlist('|_Dub_|', this.playerState);
 
 			nirvanaPlaylist.tracks       	= [
 							1330,		// graal future
@@ -90,17 +77,20 @@ export default new Vue({
 					title 			:'Dub & Bass'
 			};
 
-			__playlists['~Nirvana~']       	= nirvanaPlaylist;
-			__playlists['Dubstep']       	= dubstepPlaylist;
-			__playlists['|_Dub_|']           	= dubPlaylist;
+			// this.playerState.playlists['~Nirvana~']       	= nirvanaPlaylist;
+			// this.playerState.playlists['Dubstep']       	= dubstepPlaylist;
+			// this.playerState.playlists['|_Dub_|']           	= dubPlaylist;
 
-			playerState.currentPlaylist = '~Nirvana~';
+			this.playerState.currentPlaylist = '~Nirvana~';
 			
-			playerState.volume = .27;
-			playerState.paused = true;
+			// this.playerState.volume = .27;
+			// this.playerState.paused = true;
 		}
 	},
 	created () {
-		
+		console.log('::P_Config:hook:created');
+
+		// this.init();
+		// console.log(this.playerState);
 	}
 });

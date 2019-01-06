@@ -1,5 +1,4 @@
 import Vue from 'vue';
-// import Utils from '@/Utils.js';
 
 export default new Vue({
 	data () {

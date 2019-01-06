@@ -14,7 +14,9 @@
 <script>
 
 import Vue from 'vue';
+
 import Utils from '@/Utils.js';
+
 import Log from '@/components/Log';
 import Loader from '@/components/Loader';
 import Ripple from '@/components/Ripple';
