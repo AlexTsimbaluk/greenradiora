@@ -214,6 +214,7 @@ export default new Vue({
 	     		console.log('::Event.type::' + e.type);
 
 	     		this.setStatus('pause');
+	     		this.loader(false);
 
 	     		console.log('pause::' +  player.paused);
 	     		player.currentTime = 0;

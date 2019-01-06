@@ -30,6 +30,18 @@
 				<ripple></ripple>
 			</button>
 
+			<button
+				class="btn btn-outline-info btn-fab btn-round"
+				@click="stopStream"
+			>
+				<m-icon
+					class="md-24"
+					:i="'stop'"
+					:t="'light'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
+
 			<div
 				v-if="state.status == 'playing' || state.status == 'canplaythrough'"
 				class="time"
@@ -153,6 +165,9 @@ export default {
 				PlayerState.stopStream();
 			}
 		},
+		stopStream () {
+			PlayerState.stopStream();
+		},
 		setCurrentPlaylist (playlist) {
 			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
 		}
@@ -228,5 +243,6 @@ a {
 
 .playlist.active {
 	box-shadow: inset 0 0 28px 2px #00afc5;
+	transition: all 1s;
 }
 </style>
