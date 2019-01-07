@@ -4,43 +4,46 @@
 
 		<div
 			v-if="xhrResponceRecieved"
+			class="d-flex flex-column h-100"
 		>
-			<button
-				class="btn btn-outline-info btn-fab btn-round"
-				@click="getRandomStation"
-			>
-				<m-icon
-					class="md-24"
-					:i="'call_split'"
-					:t="'light'"
-				></m-icon>
-				<!-- {{random}} -->
-				<ripple></ripple>
-			</button>
+			<div class="d-flex">
+				<button
+					class="btn btn-outline-info btn-fab btn-round"
+					@click="getRandomStation"
+				>
+					<m-icon
+						class="md-24"
+						:i="'call_split'"
+						:t="'light'"
+					></m-icon>
+					<!-- {{random}} -->
+					<ripple></ripple>
+				</button>
 
-			<button
-				class="btn btn-outline-info btn-fab btn-round"
-				@click="togglePlaying"
-			>
-				<m-icon
-					class="md-24"
-					:i="'play_arrow'"
-					:t="'light'"
-				></m-icon>
-				<ripple></ripple>
-			</button>
+				<button
+					class="btn btn-outline-info btn-fab btn-round"
+					@click="togglePlaying"
+				>
+					<m-icon
+						class="md-24"
+						:i="'play_arrow'"
+						:t="'light'"
+					></m-icon>
+					<ripple></ripple>
+				</button>
 
-			<button
-				class="btn btn-outline-info btn-fab btn-round"
-				@click="stopStream"
-			>
-				<m-icon
-					class="md-24"
-					:i="'stop'"
-					:t="'light'"
-				></m-icon>
-				<ripple></ripple>
-			</button>
+				<button
+					class="btn btn-outline-info btn-fab btn-round"
+					@click="stopStream"
+				>
+					<m-icon
+						class="md-24"
+						:i="'stop'"
+						:t="'light'"
+					></m-icon>
+					<ripple></ripple>
+				</button>
+			</div>
 
 			<div
 				v-if="state.status == 'playing' || state.status == 'canplaythrough'"
@@ -49,7 +52,9 @@
 				{{playingTime}}
 			</div>
 
-			<div>
+			<div
+				v-if="state.status != ''"
+			>
 				{{state.status}}
 			</div>
 
@@ -72,6 +77,7 @@
 					v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 					:station="stationsArray[track]"
 					:key="track.station_id"
+					:class="{playing: getPlayingStation(stationsArray[track])}"
 				></station>
 			</div>
 
@@ -170,6 +176,14 @@ export default {
 		},
 		setCurrentPlaylist (playlist) {
 			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
+		},
+		getPlayingStation(station) {
+			if(
+				(this.state.status == 'playing' || this.state.status == 'canplaythrough')
+				&& this.state.nowPlaying.track
+			) {
+				return true;
+			}
 		}
 	},
 	created () {
@@ -193,6 +207,7 @@ export default {
 			this.dataTransfered();
 
 			this.state = PlayerState.playerState;
+			this.state.status = '';
 		});
 
 		PlayerState.$on('stateChanged', (state) => {
@@ -227,6 +242,11 @@ a {
   color: #42b983;
 }
 
+.track-list {
+	flex: 0 1 100%;
+	overflow-y: auto;
+	padding-bottom: 6px;
+}
 .playlists {
 	padding: 2px 0;
 }

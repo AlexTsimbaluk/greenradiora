@@ -8,7 +8,6 @@ export default new Vue({
 	data () {
 		return {
 			playerTag: null,
-			paused: true,
 			playingTime: null,
 
 			playerState: {
@@ -64,23 +63,31 @@ export default new Vue({
 	        if (playPromise !== undefined) {
 				playPromise.then(function() {
 					console.log('::playPromise::Success::Begin');
+
+					// this.playerState.nowPlaying.playlist = this.playerState.currentPlaylist;
+					// this.playerState.nowPlaying.track = _currentTrack;
+
+					// this.stateChanged();
 				}).catch(function() {
 					console.log('::playPromise::Failed::Begin');
 					self.stopStream();
 				});
 	        }
 
-			this.paused = this.playerTag.paused;
+			this.playerState.paused = this.playerTag.paused;
+			this.stateChanged();
 		},
 
 		stopStream () {
 			Utils.logs('::PlayerState::stopStream::');
 			this.playerTag.pause();
-			this.paused = this.playerTag.paused;
+			this.playerState.paused = this.playerTag.paused;
+			this.stateChanged();
 		},
 
 		setVolume (volume) {
 			this.playerTag.volume = this.playerState.volume = volume;
+			this.stateChanged();
 		},
 
 		getVolume () {
@@ -89,7 +96,6 @@ export default new Vue({
 
 		setStatus (status) {
 			this.playerState.status = status;
-			this.stateChanged();
 		},
 
 		getMetaData (streamingUrl) {
@@ -290,6 +296,7 @@ export default new Vue({
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 		} else {
 			this.playerState = JSON.parse(localStorage.getItem('playerState'));
+			console.log(this.playerState.status);
 			this.stateChanged();
 		}
 	}

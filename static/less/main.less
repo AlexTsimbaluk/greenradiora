@@ -79,6 +79,12 @@
 	}
 }
 
+.d-flex {
+	// flex: 1 1 0;
+	> * {
+		flex: 0 0 auto;
+	}
+}
 
 
 /* сдвиг placeholder-а вправо при фокусе*/
@@ -218,8 +224,7 @@ body {
 		cursor: default;
 		height: 50px;
 		margin: 0;
-		padding: 6px 0;
-		tansition: all .3s;
+		transition: all .3s;
 		position: relative;
 		user-select: none;
 		&.waiting {
@@ -250,9 +255,9 @@ body {
 			overflow: hidden;
 			width: 100%;
 			word-break: break-all;
-			position: absolute;
+			// position: absolute;
 			// bottom: 0;
-			top: 60%;
+			// top: 60%;
 			&.runningString {
 				animation: runningStringReverse linear infinite 14s;
 			}

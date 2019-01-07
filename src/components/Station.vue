@@ -38,7 +38,7 @@
 				// PlayerState.playerTag.src = 'http://serv02.streamsfortheworld.com:8000/radiosama_low';
 				// PlayerState.playerTag.src = 'http://icecast.norecords.org:8000/nrc-320.mp3';
 				// PlayerState.playerTag.src = 'http://manehattan.bronytunes.com:80/stream-32.btr';
-				if(PlayerState.paused) {
+				if(PlayerState.playerState.paused) {
 					console.log('Station::Play');
 					PlayerState.playStream(this.station.station_url);
 				} else {
@@ -57,8 +57,9 @@
 
 <style lang="less">
 	.station {
-		.url {
-			
+		&.playing {
+			box-shadow: inset 0 0 28px 2px #00afc5;
+			transition: all 1s;
 		}
 	}
 </style>
