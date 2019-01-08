@@ -6,7 +6,7 @@
 			v-if="xhrResponceRecieved"
 			class="d-flex flex-column h-100"
 		>
-			<div class="d-flex">
+			<div class="d-flex pb-2">
 				<button
 					class="btn btn-outline-info btn-fab btn-round"
 					@click="getRandomStation"
@@ -43,6 +43,16 @@
 					></m-icon>
 					<ripple></ripple>
 				</button>
+
+				<transition name="flip" mode="out-in">
+					<div
+						v-if="state.status != ''"
+						@click="state.status = ''"
+						class="d-flex align-items-center ml-auto status"
+					>
+						{{state.status}}
+					</div>
+				</transition>
 			</div>
 
 			<div
@@ -50,13 +60,7 @@
 				class="time"
 			>
 				{{playingTime}}
-			</div>
-
-			<div
-				v-if="state.status != ''"
-			>
-				{{state.status}}
-			</div>
+			</div>			
 
 			<div class="playlists d-flex">
 				<div
@@ -240,6 +244,63 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.status {
+	cursor: default;
+	transition: all .3s;
+	position: relative;
+}
+
+.flip-enter-active {
+	animation: flip-in .3s;
+}
+.flip-leave-active {
+	/*animation: flip-in .3s reverse;*/
+	animation: flip-out .3s;
+}
+/* @keyframes flip-in {
+	0% {
+		transform: scale(0);
+	}
+	50% {
+		transform: scale(1.5);
+	}
+	100% {
+		transform: scale(1);
+	}
+} */
+
+@keyframes flip-in {
+	0% {
+		left: 50%;
+		opacity: 0;
+	}
+
+	80% {
+		opacity: 0.6;
+	}
+	
+	100% {
+		left: 0%;
+		opacity: 1;
+	}
+}
+
+@keyframes flip-out {
+	0% {
+		left: 0%;
+		opacity: 1;
+	}
+
+	30% {
+		opacity: 0.6;
+	}
+	
+	100% {
+		opacity: 0.3;
+		left: 50%;
+	}
 }
 
 .track-list {

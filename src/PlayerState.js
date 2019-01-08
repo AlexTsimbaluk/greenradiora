@@ -94,8 +94,20 @@ export default new Vue({
 			return this.playerState.volume;
 		},
 
+		checkStatus () {
+			let _s = this.playerState.status;
+
+			setTimeout(() => {
+				if(_s == this.playerState.status) {
+					this.playerState.status = '';
+				}
+			}, 1500);
+		},
+
 		setStatus (status) {
+			this.playerState.status = '';
 			this.playerState.status = status;
+			// this.checkStatus();
 		},
 
 		getMetaData (streamingUrl) {
