@@ -44,10 +44,17 @@
 					<ripple></ripple>
 				</button>
 
-				<!-- <transition name="flip" mode="out-in"> -->
-				<transition name="flip" mode="in-out">
+				<div
+					v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
+					class="d-flex align-items-center ml-auto time"
+				>
+					{{playingTime}}
+				</div>	
+
+				<transition name="flip" mode="out-in">
+				<!-- <transition name="flip" mode="in-out"> -->
 					<div
-						v-if="state.status && state.status.length"
+						v-show="state.status && state.status.length"
 						@click="state.status = []"
 						class="d-flex align-items-center ml-auto status"
 					>
@@ -59,28 +66,25 @@
 					</div>
 				</transition>
 			</div>
-			<div>
+
+			<div class="d-flex">
 				<input
 					@change="setVolume($event)"
 					v-model="state.volume"
-					class=""
+					class="d-flex align-items-center"
 					type="range"
 					min="0"
 					max="1"
 					step="0.01"
 				/>
 
-				<span class="ml-3">
-					{{state.volume * 100}}
+				<span class="ml-3 d-flex align-items-center">
+					<!-- TODO: округлить до целых -->
+					{{Math.round(state.volume * 100)}}
 				</span>
 			</div>
 
-			<div
-				v-if="state.status == 'playing' || state.status == 'canplaythrough'"
-				class="time"
-			>
-				{{playingTime}}
-			</div>			
+					
 
 			<div class="playlists d-flex">
 				<div
@@ -202,7 +206,7 @@ export default {
 			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
 		},
 		setVolume(event) {
-			let val = event.target.value;
+			let val = +event.target.value;
 			PlayerState.setVolume(val);
 		},
 		getPlayingStation(station) {
@@ -255,107 +259,107 @@ export default {
 </script>
 
 <style>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
-.status {
-	cursor: default;
-	/*transition: all .3s;*/
-	position: relative;
-}
-
-.flip-enter-active {
-	animation: flip-in .3s;
-}
-.flip-leave-active {
-	/*animation: flip-in .3s reverse;*/
-	animation: flip-out .3s;
-}
-/* @keyframes flip-in {
-	0% {
-		transform: scale(0);
+	h1, h2 {
+	  font-weight: normal;
 	}
-	50% {
-		transform: scale(1.5);
+	ul {
+	  list-style-type: none;
+	  padding: 0;
 	}
-	100% {
-		transform: scale(1);
+	li {
+	  display: inline-block;
+	  margin: 0 10px;
 	}
-} */
-
-@keyframes flip-in {
-	 0% {
-		transform: scale(0);
-	} 
-
-	50% {
-		/*left: 50%;*/
+	a {
+	  color: #42b983;
 	}
 
-	/* 80% {
-		opacity: 0.6;
+	.status {
+		cursor: default;
+		/*transition: all .3s;*/
+		position: relative;
+	}
+
+	.flip-enter-active {
+		animation: flip-in .3s;
+	}
+	.flip-leave-active {
+		/*animation: flip-in .3s reverse;*/
+		animation: flip-out .3s;
+	}
+	/* @keyframes flip-in {
+		0% {
+			transform: scale(0);
+		}
+		50% {
+			transform: scale(1.5);
+		}
+		100% {
+			transform: scale(1);
+		}
 	} */
-	
-	100% {
-		transform: scale(1);
-		/*left: 0%;*/
-		/*opacity: 1;*/
+
+	@keyframes flip-in {
+		 0% {
+			transform: scale(0);
+		} 
+
+		50% {
+			/*left: 50%;*/
+		}
+
+		/* 80% {
+			opacity: 0.6;
+		} */
+		
+		100% {
+			transform: scale(1);
+			/*left: 0%;*/
+			/*opacity: 1;*/
+		}
 	}
-}
 
-@keyframes flip-out {
-	0% {
-		transform: scale(1);
-		/*left: 0%;*/
-		/*opacity: 1;*/
+	@keyframes flip-out {
+		0% {
+			transform: scale(1);
+			/*left: 0%;*/
+			/*opacity: 1;*/
+		}
+
+		30% {
+			/*opacity: 0.6;*/
+		}
+
+		50% {}
+		
+		100% {
+			transform: scale(0);
+			/*opacity: 0;*/
+			/*left: 50%;*/
+		}
 	}
 
-	30% {
-		/*opacity: 0.6;*/
+	.track-list {
+		flex: 0 1 100%;
+		overflow-y: auto;
+		padding-bottom: 6px;
+	}
+	.playlists {
+		padding: 2px 0;
 	}
 
-	50% {}
-	
-	100% {
-		transform: scale(0);
-		/*opacity: 0;*/
-		/*left: 50%;*/
+	.playlist {
+		border-radius: 1px;
+		cursor: pointer;
+		padding: 0 4px;
+		text-align: center;
+		overflow: hidden;
+		width: 80px;
+		position: relative;
 	}
-}
 
-.track-list {
-	flex: 0 1 100%;
-	overflow-y: auto;
-	padding-bottom: 6px;
-}
-.playlists {
-	padding: 2px 0;
-}
-
-.playlist {
-	border-radius: 1px;
-	cursor: pointer;
-	padding: 0 4px;
-	text-align: center;
-	overflow: hidden;
-	width: 80px;
-	position: relative;
-}
-
-.playlist.active {
-	box-shadow: inset 0 0 28px 2px #00afc5;
-	transition: all 1s;
-}
+	.playlist.active {
+		box-shadow: inset 0 0 28px 2px #00afc5;
+		transition: all 1s;
+	}
 </style>

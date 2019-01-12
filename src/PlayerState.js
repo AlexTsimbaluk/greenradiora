@@ -42,6 +42,7 @@ export default new Vue({
 
 		getAudioTag (id) {
 			this.playerTag = document.getElementById(id);
+			this.playerTag.volume = this.playerState.volume;
 			return this.playerTag;
 		},
 
@@ -109,7 +110,8 @@ export default new Vue({
 			// this.playerState.status = '';
 			// this.playerState.status = status;
 			// this.checkStatus();
-			console.log(this.playerState.status);
+			
+			// console.log(this.playerState.status);
 
 			if(this.playerState.status.length > 1) {
 				this.playerState.status.shift();
@@ -223,7 +225,7 @@ export default new Vue({
 	     		console.log('::Event.type::' + e.type);
 
 	     		this.setStatus('loadedmetadata');
-	     		console.log(player.mozGetMetadata());
+	     		player.mozGetMetadata && console.log(player.mozGetMetadata());
 
 	     		this.getMetaData(this.playerTag.src);
 	        });
@@ -318,8 +320,9 @@ export default new Vue({
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 		} else {
 			this.playerState = JSON.parse(localStorage.getItem('playerState'));
-			console.log(this.playerState);
-			console.log(this.playerState.status);
+			// console.log(this.playerState);
+			// console.log(this.playerState.status);
+			this.playerState.paused = true;
 			this.stateChanged();
 		}
 	}
