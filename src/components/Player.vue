@@ -44,15 +44,35 @@
 					<ripple></ripple>
 				</button>
 
-				<transition name="flip" mode="out-in">
+				<!-- <transition name="flip" mode="out-in"> -->
+				<transition name="flip" mode="in-out">
 					<div
-						v-if="state.status != ''"
-						@click="state.status = ''"
+						v-if="state.status && state.status.length"
+						@click="state.status = []"
 						class="d-flex align-items-center ml-auto status"
 					>
-						{{state.status}}
+						<div
+							v-for="s in state.status"
+						>
+							{{s}}
+						</div>
 					</div>
 				</transition>
+			</div>
+			<div>
+				<input
+					@change="setVolume($event)"
+					v-model="state.volume"
+					class=""
+					type="range"
+					min="0"
+					max="1"
+					step="0.01"
+				/>
+
+				<span class="ml-3">
+					{{state.volume * 100}}
+				</span>
 			</div>
 
 			<div
@@ -181,6 +201,10 @@ export default {
 		setCurrentPlaylist (playlist) {
 			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
 		},
+		setVolume(event) {
+			let val = event.target.value;
+			PlayerState.setVolume(val);
+		},
 		getPlayingStation(station) {
 			if(
 				(this.state.status == 'playing' || this.state.status == 'canplaythrough')
@@ -211,7 +235,7 @@ export default {
 			this.dataTransfered();
 
 			this.state = PlayerState.playerState;
-			this.state.status = '';
+			this.state.status = [];
 		});
 
 		PlayerState.$on('stateChanged', (state) => {
@@ -248,7 +272,7 @@ a {
 
 .status {
 	cursor: default;
-	transition: all .3s;
+	/*transition: all .3s;*/
 	position: relative;
 }
 
@@ -272,34 +296,42 @@ a {
 } */
 
 @keyframes flip-in {
-	0% {
-		left: 50%;
-		opacity: 0;
+	 0% {
+		transform: scale(0);
+	} 
+
+	50% {
+		/*left: 50%;*/
 	}
 
-	80% {
+	/* 80% {
 		opacity: 0.6;
-	}
+	} */
 	
 	100% {
-		left: 0%;
-		opacity: 1;
+		transform: scale(1);
+		/*left: 0%;*/
+		/*opacity: 1;*/
 	}
 }
 
 @keyframes flip-out {
 	0% {
-		left: 0%;
-		opacity: 1;
+		transform: scale(1);
+		/*left: 0%;*/
+		/*opacity: 1;*/
 	}
 
 	30% {
-		opacity: 0.6;
+		/*opacity: 0.6;*/
 	}
+
+	50% {}
 	
 	100% {
-		opacity: 0.3;
-		left: 50%;
+		transform: scale(0);
+		/*opacity: 0;*/
+		/*left: 50%;*/
 	}
 }
 

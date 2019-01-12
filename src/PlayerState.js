@@ -17,7 +17,8 @@ export default new Vue({
 				nowPlaying: {},
 				volume: .27,
 				paused: true,
-				status: '',
+				// status: '',
+				status: [],
 				// search: {
 				// 	stationsOpened: []
 				// },
@@ -105,9 +106,18 @@ export default new Vue({
 		},
 
 		setStatus (status) {
-			this.playerState.status = '';
-			this.playerState.status = status;
+			// this.playerState.status = '';
+			// this.playerState.status = status;
 			// this.checkStatus();
+			console.log(this.playerState.status);
+
+			if(this.playerState.status.length > 1) {
+				this.playerState.status.shift();
+				this.playerState.status.push(status);
+			} else {
+				this.playerState.status.push(status);
+			}
+
 		},
 
 		getMetaData (streamingUrl) {
@@ -308,6 +318,7 @@ export default new Vue({
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 		} else {
 			this.playerState = JSON.parse(localStorage.getItem('playerState'));
+			console.log(this.playerState);
 			console.log(this.playerState.status);
 			this.stateChanged();
 		}
