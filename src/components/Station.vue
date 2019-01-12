@@ -13,7 +13,7 @@
 
 		<button
 			class="btn btn-info btn-link btn-fab btn-round deleteStation position-absolute"
-			@click.stop="deleteStation(station.station_id)"
+			@click.stop="deleteStation(station)"
 		>
 			<m-icon
 				class="md-24"
@@ -55,10 +55,11 @@
 					PlayerState.stopStream();
 				}
 			},
-			deleteStation (id) {
+			deleteStation (station) {
 				console.log('');
-				console.log('Station::DeleteSelf');
-				PlayerState.deleteStation(id);
+				console.log('::' + station.station_title + ' from ' + PlayerState.playerState.currentPlaylist + ' playlist deleted');
+				
+				PlayerState.deleteStation(station);
 			}
 		},
 		created () {

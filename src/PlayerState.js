@@ -119,7 +119,6 @@ export default new Vue({
 			} else {
 				this.playerState.status.push(status);
 			}
-
 		},
 
 		getMetaData (streamingUrl) {
@@ -150,10 +149,11 @@ export default new Vue({
 			this.stateChanged();
 		},
 
-		deleteStation (stationId) {
-			console.log(this.playerState.playlists);
+		deleteStation (station) {
+			console.log(station.station_id);
+
 			let plCur = this.playerState.playlists[this.playerState.currentPlaylist].tracks;
-			plCur.splice(plCur.indexOf(stationId), 1);
+			this.playerState.playlists[this.playerState.currentPlaylist].tracks.splice(plCur.indexOf(+station.station_id), 1);
 			this.stateChanged();
 		},
 

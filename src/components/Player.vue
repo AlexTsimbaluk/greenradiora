@@ -54,15 +54,16 @@
 				<transition name="flip" mode="out-in">
 				<!-- <transition name="flip" mode="in-out"> -->
 					<div
-						v-show="state.status && state.status.length"
+						v-if="state.status && state.status.length"
 						@click="state.status = []"
 						class="d-flex align-items-center ml-auto status"
 					>
-						<div
+						<!-- <div
 							v-for="s in state.status"
 						>
 							{{s}}
-						</div>
+						</div> -->
+						{{state.status[state.status.length - 1]}}
 					</div>
 				</transition>
 			</div>
@@ -101,12 +102,14 @@
 			<div
 				class="track-list"
 			>
-				<station
-					v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
-					:station="stationsArray[track]"
-					:key="track.station_id"
-					:class="{playing: getPlayingStation(stationsArray[track])}"
-				></station>
+				<transition-group name="station" mode="out-in">
+					<station
+						v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
+						:station="stationsArray[track]"
+						:key="track"
+						:class="{playing: getPlayingStation(stationsArray[track])}"
+					></station>
+				</transition-group>
 			</div>
 
 			<hr>
@@ -300,7 +303,7 @@ export default {
 	} */
 
 	@keyframes flip-in {
-		 0% {
+		0% {
 			transform: scale(0);
 		} 
 
@@ -339,8 +342,39 @@ export default {
 		}
 	}
 
+	.station-enter-active {
+		animation: station-in 0.3s;
+	}
+	.station-leave-active {
+		animation: station-out 0.3s ease-in;
+	}
+
+	@keyframes station-in {
+		0% {
+			transform: scale(0);
+		} 
+
+		100% {
+			transform: scale(1);
+			/*left: 0%;*/
+			/*opacity: 1;*/
+		}
+	}
+	@keyframes station-out {
+		0% {
+			right: 0;
+			transform: scale(1);
+		}
+		
+		100% {
+			right: -100%;
+			transform: scale(0);
+		}
+	}
+
 	.track-list {
 		flex: 0 1 100%;
+		overflow-x: hidden;
 		overflow-y: auto;
 		padding-bottom: 6px;
 	}
