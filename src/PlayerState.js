@@ -150,6 +150,13 @@ export default new Vue({
 			this.stateChanged();
 		},
 
+		deleteStation (stationId) {
+			console.log(this.playerState.playlists);
+			let plCur = this.playerState.playlists[this.playerState.currentPlaylist].tracks;
+			plCur.splice(plCur.indexOf(stationId), 1);
+			this.stateChanged();
+		},
+
 	    audioBindAll (player) {
 	    	player.addEventListener('abort', (e)=> {
 	     		console.log('::Event.type::' + e.type);
