@@ -102,7 +102,9 @@
 			<div
 				class="track-list"
 			>
-				<transition-group name="station" mode="out-in">
+				<!-- <transition-group name="flipinx" mode="out-in"> -->
+				<!-- <transition-group name="flipinx"> -->
+				<transition-group name="flipinx" mode="in-out">
 					<station
 						v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 						:station="stationsArray[track]"
@@ -342,26 +344,100 @@ export default {
 		}
 	}
 
-	.station-enter-active {
-		animation: station-in 0.3s;
+	.flipinx-enter-active,
+	.flipinx-leave-active {
+		animation-fill-mode: both;
 	}
-	.station-leave-active {
-		animation: station-out 0.3s ease-in;
+	.flipinx-enter-active {
+		animation-duration: .4s;
+		animation-name: flipinx-in;
+		backface-visibility: visible;
+	}
+	.flipinx-leave-active {
+		animation-duration: .6s;
+		animation-name: flipinx-out;
 	}
 
-	@keyframes station-in {
+	@keyframes flipinx-in {
 		0% {
 			transform: scale(0);
-		} 
+		}
 
 		100% {
 			transform: scale(1);
-			/*left: 0%;*/
-			/*opacity: 1;*/
 		}
+
+		/*flipInX*/
+		/* from {
+			transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+			animation-timing-function: ease-in;
+			opacity: 0;
+		}
+		
+		40% {
+			transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+			animation-timing-function: ease-in;
+		}
+		
+		60% {
+			transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+			opacity: 1;
+		}
+		
+		80% {
+			transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+		}
+		
+		to {
+			transform: perspective(400px);
+		} */
+
+		/*flipInY*/
+		/* from {
+		  -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+		  transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+		  -webkit-animation-timing-function: ease-in;
+		  animation-timing-function: ease-in;
+		  opacity: 0;
+		}
+		
+		40% {
+		  -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+		  transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+		  -webkit-animation-timing-function: ease-in;
+		  animation-timing-function: ease-in;
+		}
+		
+		60% {
+		  -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+		  transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+		  opacity: 1;
+		}
+		
+		80% {
+		  -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+		  transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+		}
+		
+		to {
+		  -webkit-transform: perspective(400px);
+		  transform: perspective(400px);
+		} */
+
+		/*fadeInLeftBig*/
+		/*from {
+			opacity: 0;
+			transform: translate3d(-2000px, 0, 0);
+		}
+
+		to {
+			opacity: 1;
+			transform: translate3d(0, 0, 0);
+		}*/
 	}
-	@keyframes station-out {
-		0% {
+
+	@keyframes flipinx-out {
+		/* 0% {
 			right: 0;
 			transform: scale(1);
 		}
@@ -369,7 +445,29 @@ export default {
 		100% {
 			right: -100%;
 			transform: scale(0);
+		} */
+
+
+		/*bounceOutRight*/
+		20% {
+		  opacity: 1;
+		  transform: translate3d(-20px, 0, 0);
 		}
+
+		to {
+		  opacity: 0;
+		  transform: translate3d(2000px, 0, 0);
+		}
+
+		/*fadeOutRightBig*/
+		/* from {
+		  opacity: 1;
+		}
+		
+		to {
+		  opacity: 0;
+		  transform: translate3d(2000px, 0, 0);
+		} */
 	}
 
 	.track-list {
