@@ -61,14 +61,18 @@
 		</div>
 
 		<div
-			v-if="logVisible"
-			class="flex-grow-1 log-list"
+			v-if="logVisible && logs.length"
+			class="flex-grow-1 log-list-container"
 		>
 			<div
-				class="log-item && logs.length"
-				v-for="(log, index) in logs"
+				class="h-100 log-list"
 			>
-				#{{index}} {{ log }}
+				<div
+					class="log-item"
+					v-for="(log, index) in logs"
+				>
+					#{{index}} {{ log }}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -95,25 +99,35 @@
 		},
 		methods: {
 			toggleLog () {
+				let self = this;
 				this.logVisible = !this.logVisible;
 
 				if(this.logVisible) {
-					setTimeout(() => {
-						this.logEl = document.querySelectorAll('.log-list')[0];
-						this.logEl.scrollTo(0, this.logEl.scrollHeight);
-						// this.logEl.scrollTo({top: this.logEl.scrollHeight, behavior: 'smooth'});
-					});
+					setTimeout(function() {
+						self.logEl = document.querySelector('.log-list');
+
+						if(self.logEl != undefined) {
+							// self.logEl.scrollTo({top: self.logEl.scrollHeight, behavior: 'smooth'});
+							// self.logEl.scrollTo(0, self.logEl.scrollHeight);
+							self.logEl.scrollTop = self.logEl.scrollHeight;
+						}
+					}, 100);
 				}
 			},
 			add (text) {
+				let self = this;
 				this.logs.push(text);
 				console.log(text);
 
 				if(this.logVisible) {
-					setTimeout(() => {
-						this.logEl.scrollTo(0, this.logEl.scrollHeight);
+					setTimeout(function() {
 						// this.logEl.lastChild && this.logEl.lastChild.scrollIntoView(false);
-					});
+						// self.logEl.scrollTo(0, self.logEl.scrollHeight);
+						
+						if(self.logEl != undefined) {
+							self.logEl.scrollTop = self.logEl.scrollHeight;
+						}
+					}, 100);
 				}
 			},
 			clear () {
@@ -135,25 +149,26 @@
 // <style>
 </script>
 
-<style lang="less">
+<style>
 .log {
 	height: 160px;
 	padding: 0 8px;
 	position: absolute;
 	bottom: 0;
 	overflow-y: hidden;
-	&.active {
-		background: #cfcfcf;
-	}
+}
+.log.active {
+	background: #cfcfcf;
+}
+.log-list-container {
+	flex: 0 1 100%;
+	overflow-y: hidden;
 }
 .log-list {
 	padding: 0 6px;
 	overflow-y: auto;
 	scroll-behavior: smooth;
-	//scroll-behavior: instant;
-	.log.active & {
-		
-	}
+	/*scroll-behavior: instant;*/
 }
 .log-item {
 	color: #00f;
