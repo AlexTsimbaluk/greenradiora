@@ -1,52 +1,75 @@
 <template>
-	<div class="player">
+	<div class="player flex-grow">
 		<loader v-if="!xhrResponceRecieved || waiting"></loader>
 
 		<div
 			v-if="xhrResponceRecieved"
 			class="d-flex flex-column h-100"
 		>
-			<div class="d-flex pb-2">
-				<button
-					class="btn btn-outline-info btn-fab btn-round"
-					@click="getRandomStation"
+			<div class="d-flex flex-shrink-0 justify-content-between py-2 pb-2">
+				<div
+					class="d-flex"
 				>
-					<m-icon
-						class="md-24"
-						:i="'call_split'"
-						:t="'light'"
-					></m-icon>
-					<!-- {{random}} -->
-					<ripple></ripple>
-				</button>
+					<button
+						class="btn btn-outline-info btn-fab btn-round"
+						@click="getRandomStation"
+					>
+						<m-icon
+							class="md-24"
+							:i="'call_split'"
+							:t="'light'"
+						></m-icon>
+						<!-- {{random}} -->
+						<ripple></ripple>
+					</button>
 
-				<button
-					class="btn btn-outline-info btn-fab btn-round"
-					@click="togglePlaying"
-				>
-					<m-icon
-						class="md-24"
-						:i="'play_arrow'"
-						:t="'light'"
-					></m-icon>
-					<ripple></ripple>
-				</button>
+					<button
+						class="btn btn-outline-info btn-fab btn-round"
+						@click="togglePlaying"
+					>
+						<m-icon
+							class="md-24"
+							:i="'play_arrow'"
+							:t="'light'"
+						></m-icon>
+						<ripple></ripple>
+					</button>
 
-				<button
-					class="btn btn-outline-info btn-fab btn-round"
-					@click="stopStream"
+					<button
+						class="btn btn-outline-info btn-fab btn-round"
+						@click="stopStream"
+					>
+						<m-icon
+							class="md-24"
+							:i="'stop'"
+							:t="'light'"
+						></m-icon>
+						<ripple></ripple>
+					</button>
+				</div>
+
+				<div
+					class="d-flex"
 				>
-					<m-icon
-						class="md-24"
-						:i="'stop'"
-						:t="'light'"
-					></m-icon>
-					<ripple></ripple>
-				</button>
+					<input
+						@change="setVolume($event)"
+						v-model="state.volume"
+						class="d-flex align-items-center"
+						type="range"
+						min="0"
+						max="1"
+						step="0.01"
+					/>
+
+					<span class="ml-3 d-flex align-items-center">
+						<!-- TODO: округлить до целых -->
+						{{Math.round(state.volume * 100)}}
+					</span>
+				</div>
 
 				<div
 					v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
-					class="d-flex align-items-center ml-auto time"
+					class="d-flex align-items-center time"
 				>
 					{{playingTime}}
 				</div>	
@@ -56,7 +79,7 @@
 					<div
 						v-if="state.status && state.status.length"
 						@click="state.status = []"
-						class="d-flex align-items-center ml-auto status"
+						class="d-flex align-items-center status"
 					>
 						<!-- <div
 							v-for="s in state.status"
@@ -68,26 +91,7 @@
 				</transition>
 			</div>
 
-			<div class="d-flex">
-				<input
-					@change="setVolume($event)"
-					v-model="state.volume"
-					class="d-flex align-items-center"
-					type="range"
-					min="0"
-					max="1"
-					step="0.01"
-				/>
-
-				<span class="ml-3 d-flex align-items-center">
-					<!-- TODO: округлить до целых -->
-					{{Math.round(state.volume * 100)}}
-				</span>
-			</div>
-
-					
-
-			<div class="playlists d-flex">
+			<div class="playlists d-flex flex-shrink-0 py-2">
 				<div
 					@click="setCurrentPlaylist(playlist)"
 					v-for="playlist in state.playlistsOrder"
@@ -100,21 +104,23 @@
 			</div>
 
 			<div
-				class="track-list"
+				class="d-flex flex-column flex-grow-1 track-list-container"
 			>
-				<!-- <transition-group name="flipinx" mode="out-in"> -->
-				<!-- <transition-group name="flipinx"> -->
-				<transition-group name="flipinx" mode="in-out">
-					<station
-						v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
-						:station="stationsArray[track]"
-						:key="track"
-						:class="{playing: getPlayingStation(stationsArray[track])}"
-					></station>
-				</transition-group>
+				<div
+					class="h-100 track-list"
+				>
+					<transition-group name="flipinx" mode="out-in">
+					<!-- <transition-group name="flipinx"> -->
+					<!-- <transition-group name="flipinx" mode="in-out"> -->
+						<station
+							v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
+							:station="stationsArray[track]"
+							:key="track"
+							:class="{playing: getPlayingStation(stationsArray[track])}"
+						></station>
+					</transition-group>
+				</div>
 			</div>
-
-			<hr>
 		</div>
 
 		<audio id="playerTag" dynamicmetadata></audio>
@@ -264,21 +270,6 @@ export default {
 </script>
 
 <style>
-	h1, h2 {
-	  font-weight: normal;
-	}
-	ul {
-	  list-style-type: none;
-	  padding: 0;
-	}
-	li {
-	  display: inline-block;
-	  margin: 0 10px;
-	}
-	a {
-	  color: #42b983;
-	}
-
 	.status {
 		cursor: default;
 		/*transition: all .3s;*/
@@ -359,7 +350,7 @@ export default {
 	}
 
 	@keyframes flipinx-in {
-		0% {
+		50% {
 			transform: scale(0);
 		}
 
@@ -471,7 +462,6 @@ export default {
 	}
 
 	.track-list {
-		flex: 0 1 100%;
 		overflow-x: hidden;
 		overflow-y: auto;
 		padding-bottom: 6px;
@@ -483,7 +473,7 @@ export default {
 	.playlist {
 		border-radius: 1px;
 		cursor: pointer;
-		padding: 0 4px;
+		padding: 0 4px 2px;
 		text-align: center;
 		overflow: hidden;
 		width: 80px;

@@ -146,18 +146,16 @@
 		}
 	}
 
-// <style>
 </script>
 
 <style>
 .log {
-	height: 160px;
 	padding: 0 8px;
-	position: absolute;
 	bottom: 0;
 	overflow-y: hidden;
 }
 .log.active {
+	height: 160px;
 	background: #cfcfcf;
 }
 .log-list-container {

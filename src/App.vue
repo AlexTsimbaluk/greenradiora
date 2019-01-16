@@ -1,7 +1,7 @@
 <template>
 	<div
 		id="app"
-		class="d-flex justify-content-center"
+		class="d-flex flex-column justify-content-center"
 	>
 		<router-view/>
 		
