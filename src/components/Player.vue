@@ -6,7 +6,7 @@
 			v-if="xhrResponceRecieved"
 			class="d-flex flex-column h-100"
 		>
-			<div class="d-flex flex-shrink-0 justify-content-between py-2 pb-2">
+			<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2">
 				<div
 					class="d-flex"
 				>
@@ -66,29 +66,40 @@
 						{{Math.round(state.volume * 100)}}
 					</span>
 				</div>
+			</div>
+
+			<div class="d-flex flex-shrink-0 row no-gutters py-2">
+				<div
+					class="d-flex col-6 search-station"
+					>
+					<input type="text" class="form-control search-station-input" placeholder="Search" />
+				</div>
 
 				<div
-					v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
-					class="d-flex align-items-center time"
+					class="d-flex justify-content-around col-6"
 				>
-					{{playingTime}}
-				</div>	
-
-				<transition name="flip" mode="out-in">
-				<!-- <transition name="flip" mode="in-out"> -->
 					<div
-						v-if="state.status && state.status.length"
-						@click="state.status = []"
-						class="d-flex align-items-center status"
+						v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
+						class="d-flex align-items-center time"
 					>
-						<!-- <div
-							v-for="s in state.status"
+						{{playingTime}}
+					</div>	
+
+					<transition name="flip" mode="out-in">
+						<div
+							v-if="state.status && state.status.length"
+							@click="state.status = []"
+							class="d-flex align-items-center status"
 						>
-							{{s}}
-						</div> -->
-						{{state.status[state.status.length - 1]}}
-					</div>
-				</transition>
+							<!-- <div
+								v-for="s in state.status"
+							>
+								{{s}}
+							</div> -->
+							{{state.status[state.status.length - 1]}}
+						</div>
+					</transition>
+				</div>
 			</div>
 
 			<div class="playlists d-flex flex-shrink-0 py-2">
@@ -283,6 +294,7 @@ export default {
 		/*animation: flip-in .3s reverse;*/
 		animation: flip-out .3s;
 	}
+
 	/* @keyframes flip-in {
 		0% {
 			transform: scale(0);
@@ -483,5 +495,22 @@ export default {
 	.playlist.active {
 		box-shadow: inset 0 0 28px 2px #00afc5;
 		transition: all 1s;
+	}
+
+	.search-station-input {
+		background: rgba(51, 51, 51, .5);
+		border: 1px solid #00afc5;
+		border-radius: 4px;
+		padding: 6px 4px;
+		/*opacity: 0;*/
+		/*height: 100%;*/
+		/*width: 0;*/
+		position: relative;
+	}
+	.search-station-input.visible:focus {
+		box-shadow: 0 0 5px 0 #0ff inset;
+	}
+	.search-station-input.visible {
+		display: inline;
 	}
 </style>
