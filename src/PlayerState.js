@@ -28,13 +28,14 @@ export default new Vue({
 	methods: {
 		stateChanged () {
 			// console.log('::PlayerState::stateChanged');
-			console.log(this.playerState);
+			// console.log(this.playerState);
 
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 
 			// this.$emit('stateChanged', this.$data);
 			this.$emit('stateChanged', this.playerState);
 		},
+		
 		loader (visible) {
 			this.$emit('loader', visible);
 		},
