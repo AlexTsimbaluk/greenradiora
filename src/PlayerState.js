@@ -28,7 +28,7 @@ export default new Vue({
 	methods: {
 		stateChanged () {
 			// console.log('::PlayerState::stateChanged');
-			// console.log(this.playerState);
+			console.log(this.playerState);
 
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 
@@ -128,6 +128,7 @@ export default new Vue({
 		},
 
 		resetSearch () {
+			this.playerState.searchResults = [];
 			this.playerState.searchString = '';
 			this.stateChanged();
 		},
@@ -366,6 +367,8 @@ export default new Vue({
 			// console.log(this.playerState);
 			// console.log(this.playerState.status);
 			this.playerState.paused = true;
+			this.playerState.searchString = '';
+			this.playerState.searchResults = [];
 			this.stateChanged();
 		}
 	}
