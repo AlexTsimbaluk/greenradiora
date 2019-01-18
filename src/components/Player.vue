@@ -71,8 +71,26 @@
 			<div class="d-flex flex-shrink-0 row no-gutters py-2">
 				<div
 					class="d-flex col-6 search-station"
-					>
-					<input type="text" class="form-control search-station-input" placeholder="Search" />
+				>
+						<input
+							@keyup="searchStation($event)"
+							v-model="state.searchString"
+							type="text"
+							class="form-control search-station-input"
+							placeholder="Search"
+						/>
+
+						<button
+							class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
+							@click="resetSearch();"
+						>
+							<m-icon
+								class="md-24"
+								:i="'close'"
+								:t="'light'"
+							></m-icon>
+							<ripple></ripple>
+						</button>
 				</div>
 
 				<div
@@ -227,17 +245,26 @@ export default {
 		setCurrentPlaylist (playlist) {
 			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
 		},
-		setVolume(event) {
+		setVolume (event) {
 			let val = +event.target.value;
 			PlayerState.setVolume(val);
 		},
-		getPlayingStation(station) {
+		getPlayingStation (station) {
 			if(
 				(this.state.status == 'playing' || this.state.status == 'canplaythrough')
 				&& this.state.nowPlaying.track
 			) {
 				return true;
 			}
+		},
+		searchStation (event) {
+			if(event.target.value.length > 2) {
+				PlayerState.searchStation(event.target.value)
+			}
+		},
+		resetSearch () {
+			PlayerState.resetSearch();
+			// this.state.searchString = '';
 		}
 	},
 	created () {
@@ -497,20 +524,22 @@ export default {
 		transition: all 1s;
 	}
 
-	.search-station-input {
+	.form-control.search-station-input {
 		background: rgba(51, 51, 51, .5);
-		border: 1px solid #00afc5;
+		border: 1px solid rgba(0, 255, 255, 0.33);
 		border-radius: 4px;
-		padding: 6px 4px;
-		/*opacity: 0;*/
-		/*height: 100%;*/
-		/*width: 0;*/
-		position: relative;
+		padding: 0 6px;
+		color: #ccc;
+		font-size: 15px;
+		line-height: 15px;
 	}
-	.search-station-input.visible:focus {
-		box-shadow: 0 0 5px 0 #0ff inset;
+	.form-control.search-station-input:focus {
+		background: transparent;
+		border: 1px solid #00afc5;
+		box-shadow: 0 0 10px 0 #0ff inset;
 	}
-	.search-station-input.visible {
-		display: inline;
+
+	.resetSearch {
+		right: 0;
 	}
 </style>
