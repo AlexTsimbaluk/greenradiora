@@ -155,7 +155,7 @@
 	overflow-y: hidden;
 }
 .log.active {
-	height: 160px;
+	height: 30vh;
 	background: #cfcfcf;
 }
 .log-list-container {
@@ -169,7 +169,7 @@
 	/*scroll-behavior: instant;*/
 }
 .log-item {
-	color: #00f;
+	color: #404040;
 	font-family: monospace;
 	line-height: 1.7;
 }
