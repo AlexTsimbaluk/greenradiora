@@ -136,7 +136,7 @@
 				class="d-flex flex-column flex-grow-1 track-list-container"
 			>
 				<div
-					class="h-100 track-list flex-grow-1"
+					class="col track-list"
 				>
 					<transition-group name="flipinx" mode="out-in">
 					<!-- <transition-group name="flipinx"> -->
@@ -152,7 +152,7 @@
 
 				<div
 					v-if="state.searchResults.length"
-					class="h-100 search-list d-flex flex-column flex-grow-1"
+					class="col d-flex flex-column search-list"
 				>
 					<station
 						v-for="(track, key) in state.searchResults"
