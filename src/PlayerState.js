@@ -18,10 +18,7 @@ export default new Vue({
 				volume: .27,
 				paused: true,
 				status: [],
-				translated: false,
-
-				searchString: '',
-				searchResults: []
+				translated: false
 			},
 		}
 	},
@@ -94,48 +91,6 @@ export default new Vue({
 
 		getVolume () {
 			return this.playerState.volume;
-		},
-
-		searchStation (text) {
-			if(text.length == 0) return;
-
-			let _s = JSON.parse(localStorage.getItem('stations'));
-
-			let prevSearchString = this.playerState.searchString;
-
-			this.playerState.searchString = text.toLowerCase();
-			console.log(this.playerState.searchString);
-			this.playerState.searchResults = [];
-			
-			this.stateChanged();
-
-			for (let _k in _s) {
-				let _st = _s[_k];
-
-				for(let _p in _st) {
-					if(_p == 'station_id') {
-						continue;
-					}
-
-					let val = _st[_p].toLowerCase();
-
-					if(val.indexOf(this.playerState.searchString) != -1) {
-
-						this.playerState.searchResults.push(_st['station_id']);
-						this.stateChanged();
-
-						continue;
-					}
-				}
-			}
-
-			console.log(this.playerState.searchResults.length);
-		},
-
-		resetSearch () {
-			this.playerState.searchResults = [];
-			this.playerState.searchString = '';
-			this.stateChanged();
 		},
 
 		checkStatus () {

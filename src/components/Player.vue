@@ -72,25 +72,32 @@
 				<div
 					class="d-flex col-6 search-station"
 				>
-						<input
-							@keyup="searchStation($event)"
-							v-model="searchString"
-							type="text"
-							class="form-control search-station-input"
-							placeholder="Search"
-						/>
+					<input
+						@keyup="searchStation($event)"
+						v-model="searchString"
+						type="text"
+						class="form-control search-station-input"
+						placeholder="Search"
+					/>
 
-						<button
-							class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
-							@click="resetSearch();"
-						>
-							<m-icon
-								class="md-24"
-								:i="'close'"
-								:t="'light'"
-							></m-icon>
-							<ripple></ripple>
-						</button>
+					<div
+						v-if="noSearchResults"
+						class="d-flex align-items-center h-100 position-absolute no-results"
+					>
+						No results :(
+					</div>
+
+					<button
+						class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
+						@click="resetSearch();"
+					>
+						<m-icon
+							class="md-24"
+							:i="'close'"
+							:t="'light'"
+						></m-icon>
+						<ripple></ripple>
+					</button>
 				</div>
 
 				<div
@@ -209,7 +216,8 @@ export default {
 			state: {},
 
 			searchString: '',
-			searchResults: []
+			searchResults: [],
+			noSearchResults: false
 		}
 	},
 	methods: {
@@ -278,23 +286,15 @@ export default {
 			}
 		},
 		searchStation (event) {
-			/*if(event.target.value.length > 2) {
-				PlayerState.searchStation(event.target.value);
-			}*/
-
 			let searchString = event.target.value;
-			// let prevSearchString = this.searchString;
-
-			// debugger;
 			this.searchResults = [];
+			this.noSearchResults = false;
 
 			if(searchString.length < 3) {
 				return;
 			}
 
-
 			this.searchString = searchString.toLowerCase();
-			console.log(this.searchString);
 
 			let _s = this.stationsArray;
 
@@ -319,12 +319,15 @@ export default {
 
 			this.waiting = false;
 
-			console.log(this.searchResults.length);
+			Utils.logs(this.searchResults.length);
+
+			if(this.searchResults.length == 0) {
+				this.noSearchResults = true;
+			}
 		},
 		resetSearch () {
-			// PlayerState.resetSearch();
-
 			this.searchResults = [];
+			this.noSearchResults = false;
 			this.searchString = '';
 		}
 	},
@@ -569,10 +572,14 @@ export default {
 	.total-search {
 		color: #efff00;
 	}
-	
+
 	.total-search span {
 		color: #00b8ff;
 		font-weight: bold;
+	}
+
+	.no-results {
+		right: 44px;
 	}
 
 	.search-list {
