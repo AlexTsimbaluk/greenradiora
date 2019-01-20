@@ -79,8 +79,9 @@
 	}
 	.deleteStation {
 		position: absolute;
-		right: 10px;
+		right: -10px;
 		top: 50%;
 		transform: translateY(-50%);
+		z-index: 1;
 	}
 </style>
