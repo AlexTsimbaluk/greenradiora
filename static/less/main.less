@@ -90,6 +90,19 @@
 	flex: 0 1 100%;
 }
 
+.o-y-auto {
+	overflow-y: auto;
+}
+.o-y-hidden {
+	overflow-y: hidden;
+}
+.o-x-auto {
+	overflow-x: auto;
+}
+.o-x-hidden {
+	overflow-x: hidden;
+}
+
 
 /* сдвиг placeholder-а вправо при фокусе*/
 .focus-right {
@@ -245,15 +258,16 @@ body {
 		}
 		.station-title {
 			font-size: 1.1em;
-			max-height: 1.4em;
+			// max-height: 1.2em;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			width: ~"calc(100% - 41px)";
 			word-break: break-all;
 		}
 		.station-url {
+			font-size: 0.9em;
 			font-style: italic;
-			max-height: 1.3em;
+			// max-height: 1.1em;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			width: ~"calc(100% - 41px)";

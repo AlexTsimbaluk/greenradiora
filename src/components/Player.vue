@@ -74,7 +74,7 @@
 				>
 						<input
 							@keyup="searchStation($event)"
-							v-model="state.searchString"
+							v-model="searchString"
 							type="text"
 							class="form-control search-station-input"
 							placeholder="Search"
@@ -133,10 +133,10 @@
 			</div>
 
 			<div
-				class="d-flex flex-column flex-grow-1 track-list-container"
+				class="d-flex flex-column flex-grow-1 no-gutters track-list-container"
 			>
 				<div
-					class="col track-list"
+					class="col pb-2 track-list"
 				>
 					<transition-group name="flipinx" mode="out-in">
 					<!-- <transition-group name="flipinx"> -->
@@ -151,14 +151,20 @@
 				</div>
 
 				<div
-					v-if="state.searchResults.length"
-					class="col d-flex flex-column search-list"
+					v-if="searchResults.length"
+					class="col d-flex flex-column no-gutters pt-2 search-list"
 				>
-					<station
-						v-for="(track, key) in state.searchResults"
-						:station="stationsArray[track]"
-						:key="track.station_id"
-					></station>
+					<div class="total-search pb-1">
+						For query <span class="font-weight-bold">"{{searchString}}"</span> found <span class="font-weight-bold">{{searchResults.length}}</span> stations
+					</div>
+
+					<div class="col o-y-auto">
+						<station
+							v-for="(track, key) in searchResults"
+							:station="stationsArray[track]"
+							:key="track.station_id"
+						></station>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -200,7 +206,10 @@ export default {
 
 			waiting: false,
 
-			state: {}
+			state: {},
+
+			searchString: '',
+			searchResults: []
 		}
 	},
 	methods: {
@@ -269,13 +278,54 @@ export default {
 			}
 		},
 		searchStation (event) {
-			if(event.target.value.length > 2) {
-				PlayerState.searchStation(event.target.value)
+			/*if(event.target.value.length > 2) {
+				PlayerState.searchStation(event.target.value);
+			}*/
+
+			let searchString = event.target.value;
+			// let prevSearchString = this.searchString;
+
+			// debugger;
+			this.searchResults = [];
+
+			if(searchString.length < 3) {
+				return;
 			}
+
+
+			this.searchString = searchString.toLowerCase();
+			console.log(this.searchString);
+
+			let _s = this.stationsArray;
+
+			this.waiting = true;
+
+			for (let _k in _s) {
+				let _st = _s[_k];
+
+				for(let _p in _st) {
+					if(_p == 'station_id') {
+						continue;
+					}
+
+					let val = _st[_p].toLowerCase();
+
+					if(val.indexOf(this.searchString) != -1) {
+						this.searchResults.push(_st['station_id']);
+						continue;
+					}
+				}
+			}
+
+			this.waiting = false;
+
+			console.log(this.searchResults.length);
 		},
 		resetSearch () {
-			PlayerState.resetSearch();
-			// this.state.searchString = '';
+			// PlayerState.resetSearch();
+
+			this.searchResults = [];
+			this.searchString = '';
 		}
 	},
 	created () {
@@ -516,10 +566,22 @@ export default {
 		overflow-y: auto;
 	}
 
+	.total-search {
+		color: #efff00;
+	}
+	
+	.total-search span {
+		color: #00b8ff;
+		font-weight: bold;
+	}
+
 	.search-list {
 		border-top: 1px solid #eee;
 		overflow-x: hidden;
-		overflow-y: auto;
+	}
+
+	.resetSearch {
+		right: 0;
 	}
 
 	.playlists {
@@ -554,9 +616,5 @@ export default {
 		background: transparent;
 		border: 1px solid #00afc5;
 		box-shadow: 0 0 10px 0 #0ff inset;
-	}
-
-	.resetSearch {
-		right: 0;
 	}
 </style>

@@ -1,13 +1,13 @@
 <template>
 	<div
 		@click="togglePlaying($event)"
-		class="station"
+		class="d-flex flex-column no-gutters station"
 	>
-		<div class="station-title">
+		<div class="station-title col">
 			{{ station.station_title }}
 		</div>
 
-		<div class="station-url">
+		<div class="station-url col">
 			{{ station.station_url }}
 		</div>
 
@@ -63,9 +63,7 @@
 			}
 		},
 		created () {
-			// console.log('::Station:hook:created');
-			// this.player = PlayerState.getAudioTag('playerTag');
-			// console.log(this.player);
+			
 		}
 	}
 </script>
@@ -78,8 +76,9 @@
 		}
 	}
 	.deleteStation {
-		position: absolute;
+		position: absolute ;
 		right: -10px;
+		right: 0;
 		top: 50%;
 		transform: translateY(-50%);
 		z-index: 1;

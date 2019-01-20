@@ -97,12 +97,17 @@ export default new Vue({
 		},
 
 		searchStation (text) {
+			if(text.length == 0) return;
+
 			let _s = JSON.parse(localStorage.getItem('stations'));
 
-			this.searchString = text.toLowerCase();
-			this.stateChanged();
+			let prevSearchString = this.playerState.searchString;
 
+			this.playerState.searchString = text.toLowerCase();
+			console.log(this.playerState.searchString);
 			this.playerState.searchResults = [];
+			
+			this.stateChanged();
 
 			for (let _k in _s) {
 				let _st = _s[_k];
@@ -114,7 +119,7 @@ export default new Vue({
 
 					let val = _st[_p].toLowerCase();
 
-					if(val.indexOf(this.searchString) != -1) {
+					if(val.indexOf(this.playerState.searchString) != -1) {
 
 						this.playerState.searchResults.push(_st['station_id']);
 						this.stateChanged();
