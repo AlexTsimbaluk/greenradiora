@@ -244,24 +244,20 @@ body {
 			}
 		}
 		.station-title {
-			// font-family: @font-sfuidisplaymedium;
 			font-size: 1.1em;
 			max-height: 1.4em;
 			overflow: hidden;
-			// max-width: 250px;
-			width: ~"calc(100% - 26px)";
+			text-overflow: ellipsis;
+			width: ~"calc(100% - 41px)";
 			word-break: break-all;
 		}
 		.station-url {
-			// font-family: @font-robotoregular;
 			font-style: italic;
 			max-height: 1.3em;
 			overflow: hidden;
-			width: 100%;
+			text-overflow: ellipsis;
+			width: ~"calc(100% - 41px)";
 			word-break: break-all;
-			// position: absolute;
-			// bottom: 0;
-			// top: 60%;
 			&.runningString {
 				animation: runningStringReverse linear infinite 14s;
 			}

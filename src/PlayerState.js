@@ -35,7 +35,7 @@ export default new Vue({
 			// this.$emit('stateChanged', this.$data);
 			this.$emit('stateChanged', this.playerState);
 		},
-		
+
 		loader (visible) {
 			this.$emit('loader', visible);
 		},
@@ -99,7 +99,7 @@ export default new Vue({
 		searchStation (text) {
 			let _s = JSON.parse(localStorage.getItem('stations'));
 
-			this.searchString = text;
+			this.searchString = text.toLowerCase();
 			this.stateChanged();
 
 			this.playerState.searchResults = [];
@@ -114,8 +114,7 @@ export default new Vue({
 
 					let val = _st[_p].toLowerCase();
 
-					if(val.indexOf(text) != -1) {
-						// console.log(_st);
+					if(val.indexOf(this.searchString) != -1) {
 
 						this.playerState.searchResults.push(_st['station_id']);
 						this.stateChanged();

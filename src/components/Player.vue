@@ -136,7 +136,7 @@
 				class="d-flex flex-column flex-grow-1 track-list-container"
 			>
 				<div
-					class="h-100 track-list"
+					class="h-100 track-list flex-grow-1"
 				>
 					<transition-group name="flipinx" mode="out-in">
 					<!-- <transition-group name="flipinx"> -->
@@ -148,6 +148,17 @@
 							:class="{playing: getPlayingStation(stationsArray[track])}"
 						></station>
 					</transition-group>
+				</div>
+
+				<div
+					v-if="state.searchResults.length"
+					class="h-100 search-list d-flex flex-column flex-grow-1"
+				>
+					<station
+						v-for="(track, key) in state.searchResults"
+						:station="stationsArray[track]"
+						:key="track.station_id"
+					></station>
 				</div>
 			</div>
 		</div>
@@ -503,8 +514,14 @@ export default {
 	.track-list {
 		overflow-x: hidden;
 		overflow-y: auto;
-		padding-bottom: 6px;
 	}
+
+	.search-list {
+		border-top: 1px solid #eee;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+
 	.playlists {
 		padding: 2px 0;
 	}
