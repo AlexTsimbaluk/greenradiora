@@ -70,7 +70,7 @@
 
 			<div class="d-flex flex-shrink-0 row no-gutters py-2">
 				<div
-					class="d-flex col-6 search-station"
+					class="d-flex col col-sm-6 search-station"
 				>
 					<input
 						@keyup="searchStation($event)"
@@ -101,7 +101,7 @@
 				</div>
 
 				<div
-					class="d-flex justify-content-around col-6"
+					class="d-flex justify-content-around col col-sm-6"
 				>
 					<div
 						v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
@@ -578,7 +578,25 @@ export default {
 		font-weight: bold;
 	}
 
+	.form-control.search-station-input {
+		background: rgba(51, 51, 51, .5);
+		border: 1px solid rgba(0, 255, 255, 0.33);
+		border-radius: 4px;
+		padding: 0 6px;
+		color: #ccc;
+		font-size: 14px;
+		line-height: 1;
+	}
+	.form-control.search-station-input:focus {
+		background: transparent;
+		border: 1px solid #00afc5;
+		box-shadow: 0 0 10px 0 #0ff inset;
+	}
+
 	.no-results {
+		/* cadetblue - #5f9ea0 */
+		color: cadetblue; 
+		font-size: 12px;
 		right: 44px;
 	}
 
@@ -608,20 +626,5 @@ export default {
 	.playlist.active {
 		box-shadow: inset 0 0 28px 2px #00afc5;
 		transition: all 1s;
-	}
-
-	.form-control.search-station-input {
-		background: rgba(51, 51, 51, .5);
-		border: 1px solid rgba(0, 255, 255, 0.33);
-		border-radius: 4px;
-		padding: 0 6px;
-		color: #ccc;
-		font-size: 15px;
-		line-height: 15px;
-	}
-	.form-control.search-station-input:focus {
-		background: transparent;
-		border: 1px solid #00afc5;
-		box-shadow: 0 0 10px 0 #0ff inset;
 	}
 </style>
