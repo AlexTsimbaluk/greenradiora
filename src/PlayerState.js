@@ -25,11 +25,10 @@ export default new Vue({
 	methods: {
 		stateChanged () {
 			// console.log('::PlayerState::stateChanged');
-			// console.log(this.playerState);
+			// console.log(this.playerState.playlists);
 
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 
-			// this.$emit('stateChanged', this.$data);
 			this.$emit('stateChanged', this.playerState);
 		},
 

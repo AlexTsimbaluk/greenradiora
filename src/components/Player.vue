@@ -12,20 +12,7 @@
 				>
 					<button
 						class="btn btn-outline-info btn-fab btn-round"
-						@click="getRandomStation"
-					>
-						<m-icon
-							class="md-24"
-							:i="'call_split'"
-							:t="'light'"
-						></m-icon>
-						<!-- {{random}} -->
-						<ripple></ripple>
-					</button>
-
-					<button
-						class="btn btn-outline-info btn-fab btn-round"
-						@click="togglePlaying"
+						@click="playStream"
 					>
 						<m-icon
 							class="md-24"
@@ -70,7 +57,7 @@
 
 			<div class="d-flex flex-shrink-0 row no-gutters py-2">
 				<div
-					class="d-flex col col-sm-6 search-station"
+					class="d-flex col-12 col-sm-6 search-station"
 				>
 					<input
 						@keyup="searchStation($event)"
@@ -101,7 +88,7 @@
 				</div>
 
 				<div
-					class="d-flex justify-content-around col col-sm-6"
+					class="d-flex justify-content-around col-12 col-sm-6"
 				>
 					<div
 						v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
@@ -204,9 +191,9 @@ export default {
 			stationsArrayOn100: [],
 			stationKeys: [],
 			stTotal: 0,
-			random: null,
 
-			getRandomInt: Utils.getRandomInt,
+			// random: null,
+			// getRandomInt: Utils.getRandomInt,
 
 			playing: false,
 			playingTime: null,
@@ -221,16 +208,12 @@ export default {
 		}
 	},
 	methods: {
-		getRandomStation () {
-			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
-			// Utils.logs(this.random);
-		},
 		dataTransfered () {
 			Utils.logs('::Player:method:dataTransfered');
 
 			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 			this.makeOn100();
-			this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
+			// this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
 
 			this.xhrResponceRecieved = true;
 		},
@@ -257,14 +240,10 @@ export default {
 				}
 			}
 		},
-		togglePlaying () {
-			console.log(this.state.playlists[this.state.currentPlaylist].tracks);
-			if(PlayerState.paused) {
-				console.log('Player::Play');
-				PlayerState.playStream(this.stationsArray[this.random].station_url);
-			} else {
-				console.log('Player::Stop');
-				PlayerState.stopStream();
+		playStream () {
+			if(this.state.paused) {
+				console.log('::Player:playStream');
+				// PlayerState.playStream(this.stationsArray[this.random].station_url);
 			}
 		},
 		stopStream () {
