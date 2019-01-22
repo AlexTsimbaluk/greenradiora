@@ -57,7 +57,7 @@
 
 			<div class="d-flex flex-shrink-0 row no-gutters py-2">
 				<div
-					class="d-flex col-12 col-sm-6 search-station"
+					class="d-flex col-12 col-sm-6 search-station pb-2"
 				>
 					<input
 						@keyup="searchStation($event)"
@@ -99,7 +99,7 @@
 				</div>
 
 				<div
-					class="d-flex justify-content-around col-12 col-sm-6"
+					class="d-flex justify-content-around col-12 col-sm-6 pb-2"
 				>
 					<div
 						v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
