@@ -66,13 +66,24 @@
 						class="form-control search-station-input"
 						placeholder="Search"
 					/>
+					
+					<transition name="fade" mode="out-in">
+						<div
+							v-if="noSearchResults"
+							key="notfinded"
+							class="d-flex align-items-center h-100 position-absolute no-results"
+						>
+							No results :(
+						</div>
 
-					<div
-						v-if="noSearchResults"
-						class="d-flex align-items-center h-100 position-absolute no-results"
-					>
-						No results :(
-					</div>
+						<div
+							v-if="searchResults.length"
+							key="finded"
+							class="d-flex align-items-center h-100 position-absolute no-results"
+						>
+							{{searchResults.length}}
+						</div>
+					</transition>
 
 					<button
 						class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
@@ -357,25 +368,42 @@ export default {
 		position: relative;
 	}
 
+	.fade-enter-active {
+		animation: fade-in .3s;
+	}
+	.fade-leave-active {
+		animation: fade-out .3s;
+	}
+
+	@keyframes fade-in {
+		0% {
+			opacity: 0;
+		}
+		
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fade-out {
+		0% {
+			opacity: 1;
+		}
+		
+		100% {
+			opacity: 0;
+		}
+	}
+
+
+
+
 	.flip-enter-active {
 		animation: flip-in .3s;
 	}
 	.flip-leave-active {
-		/*animation: flip-in .3s reverse;*/
 		animation: flip-out .3s;
 	}
-
-	/* @keyframes flip-in {
-		0% {
-			transform: scale(0);
-		}
-		50% {
-			transform: scale(1.5);
-		}
-		100% {
-			transform: scale(1);
-		}
-	} */
 
 	@keyframes flip-in {
 		0% {
