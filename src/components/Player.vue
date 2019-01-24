@@ -57,7 +57,7 @@
 
 			<div class="d-flex flex-shrink-0 row no-gutters py-2">
 				<div
-					class="d-flex col-12 col-sm-6 search-station pb-2"
+					class="d-flex col-12 col-sm-6 search-station"
 				>
 					<input
 						@keyup="searchStation($event)"
@@ -99,7 +99,7 @@
 				</div>
 
 				<div
-					class="d-flex justify-content-around col-12 col-sm-6 pb-2"
+					class="d-flex justify-content-around col-12 col-sm-6"
 				>
 					<div
 						v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
@@ -125,7 +125,7 @@
 				</div>
 			</div>
 
-			<div class="playlists d-flex flex-shrink-0 py-2">
+			<div class="d-flex flex-shrink-0 pb-2 playlists">
 				<div
 					@click="setCurrentPlaylist(playlist)"
 					v-for="playlist in state.playlistsOrder"
@@ -167,6 +167,7 @@
 						<station
 							v-for="(track, key) in searchResults"
 							:station="stationsArray[track]"
+							:search="true"
 							:key="track.station_id"
 						></station>
 					</div>
@@ -607,6 +608,10 @@ export default {
 		right: 44px;
 	}
 
+	.search-station {
+		margin-bottom: 8px;
+	}
+
 	.search-list {
 		border-top: 1px solid #eee;
 		overflow-x: hidden;
@@ -617,7 +622,7 @@ export default {
 	}
 
 	.playlists {
-		padding: 2px 0;
+		
 	}
 
 	.playlist {

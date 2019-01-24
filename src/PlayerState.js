@@ -145,11 +145,20 @@ export default new Vue({
 			this.stateChanged();
 		},
 
-		deleteStation (station) {
-			console.log(station.station_id);
+		getCurrentPlaylist () {
+			return this.playerState.playlists[this.playerState.currentPlaylist].tracks;
+		},
 
-			let plCur = this.playerState.playlists[this.playerState.currentPlaylist].tracks;
+		deleteStation (station) {
+			console.log('::' + station.station_title + ' from ' + this.playerState.currentPlaylist + ' playlist deleted');
+			let plCur = this.getCurrentPlaylist();
 			this.playerState.playlists[this.playerState.currentPlaylist].tracks.splice(plCur.indexOf(+station.station_id), 1);
+			this.stateChanged();
+		},
+
+		addStation (station) {
+			Utils.logs('::' + station.station_title + ' added to ' + this.playerState.currentPlaylist + ' playlist');
+			this.getCurrentPlaylist().push(station.station_id);
 			this.stateChanged();
 		},
 

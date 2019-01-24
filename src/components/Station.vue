@@ -12,6 +12,20 @@
 		</div>
 
 		<button
+			v-if="search"
+			class="btn btn-info btn-link btn-fab btn-round deleteStation position-absolute"
+			@click.stop="addStation(station)"
+		>
+			<m-icon
+				class="md-24"
+				:i="'add'"
+				:t="'light'"
+			></m-icon>
+			<ripple></ripple>
+		</button>
+
+		<button
+			v-else
 			class="btn btn-info btn-link btn-fab btn-round deleteStation position-absolute"
 			@click.stop="deleteStation(station)"
 		>
@@ -35,6 +49,10 @@
 			station: {
 				type: Object,
 				reqired: true
+			},
+			search: {
+				type: Boolean,
+				reqired: false
 			}
 		},
 		data () {
@@ -55,10 +73,10 @@
 					PlayerState.stopStream();
 				}
 			},
+			addStation (station) {
+				PlayerState.addStation(station);
+			},
 			deleteStation (station) {
-				console.log('');
-				console.log('::' + station.station_title + ' from ' + PlayerState.playerState.currentPlaylist + ' playlist deleted');
-				
 				PlayerState.deleteStation(station);
 			}
 		},
