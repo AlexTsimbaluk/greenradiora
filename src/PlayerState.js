@@ -25,7 +25,7 @@ export default new Vue({
 	methods: {
 		stateChanged () {
 			// console.log('::PlayerState::stateChanged');
-			// console.log(this.playerState.playlists);
+			console.log(this.playerState.playlists[this.playerState.currentPlaylist].tracks);
 
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 
@@ -158,8 +158,17 @@ export default new Vue({
 
 		addStation (station) {
 			Utils.logs('::' + station.station_title + ' added to ' + this.playerState.currentPlaylist + ' playlist');
-			this.getCurrentPlaylist().push(station.station_id);
+			let plCur = this.getCurrentPlaylist();
+			let plLength = plCur.length;
+
+			plCur.splice(plCur.length - 1, 0, +station.station_id);
 			this.stateChanged();
+
+			setTimeout(() => {
+				let last = plCur.splice(plCur.length - 1, 1)[0];
+				plCur.splice(plCur.length - 1, 0, last);
+				this.stateChanged();
+			}, 400);
 		},
 
 	    audioBindAll (player) {
