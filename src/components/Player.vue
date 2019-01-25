@@ -6,6 +6,42 @@
 			v-if="xhrResponceRecieved"
 			class="d-flex flex-column h-100"
 		>
+			<div
+				class="d-flex flex-shrink-0 justify-content-between current-track"
+			>
+				<transition name="flip" mode="out-in">
+					<div
+						v-if="!state.paused && state.nowPlaying.track"
+						class="flex-grow-1 track-title"
+					>
+						{{state.nowPlaying.track.station_title}}
+					</div>
+				</transition>
+
+				<div
+					class="ml-auto mr-3 status"
+				>
+					<transition name="flip" mode="out-in">
+						<div
+							@click="state.status = ''"
+							v-if="state.status"
+							class="d-flex align-items-center"
+						>
+							{{state.status}}
+						</div>
+					</transition>
+				</div>
+
+				<transition name="flip" mode="out-in">
+					<div
+						v-if="!state.paused"
+						class="d-flex align-items-center time"
+					>
+						{{playingTime}}
+					</div>
+				</transition>
+			</div>
+
 			<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2">
 				<div
 					class="d-flex"
@@ -97,32 +133,6 @@
 						<ripple></ripple>
 					</button>
 				</div>
-
-				<div
-					class="d-flex justify-content-around col-12 col-sm-6"
-				>
-					<div
-						v-if="state.status[state.status.length - 1] == 'playing' || state.status[state.status.length - 1] == 'canplaythrough'"
-						class="d-flex align-items-center time"
-					>
-						{{playingTime}}
-					</div>	
-
-					<transition name="flip" mode="out-in">
-						<div
-							v-if="state.status && state.status.length"
-							@click="state.status = []"
-							class="d-flex align-items-center status"
-						>
-							<!-- <div
-								v-for="s in state.status"
-							>
-								{{s}}
-							</div> -->
-							{{state.status[state.status.length - 1]}}
-						</div>
-					</transition>
-				</div>
 			</div>
 
 			<div class="d-flex flex-shrink-0 pb-2 playlists">
@@ -144,34 +154,35 @@
 					class="col pb-2 track-list"
 				>
 					<transition-group name="flipinx" mode="out-in">
-					<!-- <transition-group name="flipinx"> -->
-					<!-- <transition-group name="flipinx" mode="in-out"> -->
+							<!-- :class="{playing: getPlayingStation(stationsArray[track])}" -->
 						<station
 							v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 							:station="stationsArray[track]"
 							:key="track"
-							:class="{playing: getPlayingStation(stationsArray[track])}"
+							:class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}"
 						></station>
 					</transition-group>
 				</div>
 
-				<div
-					v-if="searchResults.length"
-					class="col d-flex flex-column no-gutters pt-2 search-list"
-				>
-					<div class="total-search pb-1">
-						For query <span class="font-weight-bold">"{{searchString}}"</span> found <span class="font-weight-bold">{{searchResults.length}}</span> stations
-					</div>
+				<transition name="slide" mode="out-in">
+					<div
+						v-if="searchResults.length"
+						class="col d-flex flex-column no-gutters pt-2 search-list"
+					>
+						<div class="total-search pb-1">
+							For query <span class="font-weight-bold">"{{searchString}}"</span> found <span class="font-weight-bold">{{searchResults.length}}</span> stations
+						</div>
 
-					<div class="col o-y-auto">
-						<station
-							v-for="(track, key) in searchResults"
-							:station="stationsArray[track]"
-							:search="true"
-							:key="track.station_id"
-						></station>
+						<div class="col o-y-auto">
+							<station
+								v-for="(track, key) in searchResults"
+								:station="stationsArray[track]"
+								:search="true"
+								:key="track.station_id"
+							></station>
+						</div>
 					</div>
-				</div>
+				</transition>
 			</div>
 		</div>
 
@@ -272,7 +283,9 @@ export default {
 			if(
 				(this.state.status == 'playing' || this.state.status == 'canplaythrough')
 				&& this.state.nowPlaying.track
+				&& this.state.nowPlaying.track.station_id == station
 			) {
+				console.log(station);
 				return true;
 			}
 		},
@@ -343,7 +356,8 @@ export default {
 			this.dataTransfered();
 
 			this.state = PlayerState.playerState;
-			this.state.status = [];
+			// this.state.status = [];
+			this.state.status = '';
 		});
 
 		PlayerState.$on('stateChanged', (state) => {
@@ -363,6 +377,10 @@ export default {
 </script>
 
 <style>
+	.current-track {
+		height: 24px;
+	}
+
 	.status {
 		cursor: default;
 		/*transition: all .3s;*/
@@ -396,6 +414,33 @@ export default {
 		}
 	}
 
+	.slide-enter-active {
+		animation: slide-in .5s;
+	}
+	.slide-leave-active {
+		animation: slide-out .5s;
+	}
+
+	@keyframes slide-in {
+		0% {
+			transform: translateY(100%);
+		}
+		
+		100% {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes slide-out {
+		0% {
+			transform: translateY(0);
+		}
+		
+		100% {
+			transform: translateY(100%);
+		}
+	}
+
 
 
 
@@ -409,40 +454,20 @@ export default {
 	@keyframes flip-in {
 		0% {
 			transform: scale(0);
-		} 
-
-		50% {
-			/*left: 50%;*/
 		}
-
-		/* 80% {
-			opacity: 0.6;
-		} */
 		
 		100% {
 			transform: scale(1);
-			/*left: 0%;*/
-			/*opacity: 1;*/
 		}
 	}
 
 	@keyframes flip-out {
 		0% {
 			transform: scale(1);
-			/*left: 0%;*/
-			/*opacity: 1;*/
 		}
-
-		30% {
-			/*opacity: 0.6;*/
-		}
-
-		50% {}
 		
 		100% {
 			transform: scale(0);
-			/*opacity: 0;*/
-			/*left: 50%;*/
 		}
 	}
 

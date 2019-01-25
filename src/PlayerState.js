@@ -17,15 +17,16 @@ export default new Vue({
 				nowPlaying: {},
 				volume: .27,
 				paused: true,
-				status: [],
+				// status: [],
+				status: '',
 				translated: false
 			},
 		}
 	},
 	methods: {
 		stateChanged () {
-			// console.log('::PlayerState::stateChanged');
-			console.log(this.playerState.playlists[this.playerState.currentPlaylist].tracks);
+			// console.log(this.playerState.playlists[this.playerState.currentPlaylist].tracks);
+			// console.log(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_title);
 
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 
@@ -42,12 +43,12 @@ export default new Vue({
 			return this.playerTag;
 		},
 
-		playStream (streamUrl) {
+		playStream (track) {
 			Utils.logs('::PlayerState::playStream::');
 			
 			let self = this;
 
-			this.playerTag.src = streamUrl;
+			this.playerTag.src = track.station_url;
 
 		    /*this.playerTag.crossOrigin = 'anonymous';
 			setTimeout(function(){
@@ -62,8 +63,9 @@ export default new Vue({
 				playPromise.then(function() {
 					console.log('::playPromise::Success::Begin');
 
-					// this.playerState.nowPlaying.playlist = this.playerState.currentPlaylist;
-					// this.playerState.nowPlaying.track = _currentTrack;
+					// self.playerState.playlists[self.playerState.currentPlaylist].currentTrack = track;
+					self.setCurrentTrack(track);
+					self.setNowPlaying(track);
 
 					// this.stateChanged();
 				}).catch(function() {
@@ -80,6 +82,7 @@ export default new Vue({
 			Utils.logs('::PlayerState::stopStream::');
 			this.playerTag.pause();
 			this.playerState.paused = this.playerTag.paused;
+			this.playerState.nowPlaying = {};
 			this.stateChanged();
 		},
 
@@ -103,18 +106,18 @@ export default new Vue({
 		},
 
 		setStatus (status) {
-			// this.playerState.status = '';
-			// this.playerState.status = status;
-			// this.checkStatus();
+			this.playerState.status = '';
+			this.playerState.status = status;
+			this.checkStatus();
 			
 			// console.log(this.playerState.status);
 
-			if(this.playerState.status.length > 1) {
+			/*if(this.playerState.status.length > 1) {
 				this.playerState.status.shift();
 				this.playerState.status.push(status);
 			} else {
 				this.playerState.status.push(status);
-			}
+			}*/
 		},
 
 		getMetaData (streamingUrl) {
@@ -147,6 +150,25 @@ export default new Vue({
 
 		getCurrentPlaylist () {
 			return this.playerState.playlists[this.playerState.currentPlaylist].tracks;
+		},
+
+		setCurrentTrack (track) {
+			this.playerState.playlists[this.playerState.currentPlaylist].currentTrack = track;
+			this.stateChanged();
+		},
+
+		getCurrentTrack () {
+			return this.playerState.playlists[this.playerState.currentPlaylist].currentTrack;
+		},
+
+		setNowPlaying (track) {
+			this.playerState.nowPlaying.playlist = this.playerState.currentPlaylist;
+			this.playerState.nowPlaying.track = track;
+			this.stateChanged();
+		},
+
+		getNowPlaying () {
+			return this.playerState.playlists[this.playerState.currentPlaylist].currentTrack;
 		},
 
 		deleteStation (station) {
@@ -280,7 +302,8 @@ export default new Vue({
 	        player.addEventListener('playing', (e)=> {
 	     		console.log('::Event.type::' + e.type);
 
-	     		this.setStatus('playing');	     		
+	     		this.setStatus('playing');
+	     		document.title = 'GreenradiorA::' + player.src; 		
 	     		// console.log(e);
 
 	     		// playerState.paused = player.paused;
@@ -346,6 +369,7 @@ export default new Vue({
 			this.playerState.paused = true;
 			this.playerState.searchString = '';
 			this.playerState.searchResults = [];
+			this.playerState.nowPlaying = {};
 			this.stateChanged();
 		}
 	}

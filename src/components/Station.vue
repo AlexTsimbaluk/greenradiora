@@ -67,7 +67,7 @@
 				// PlayerState.playerTag.src = 'http://manehattan.bronytunes.com:80/stream-32.btr';
 				if(PlayerState.playerState.paused) {
 					console.log('Station::Play');
-					PlayerState.playStream(this.station.station_url);
+					PlayerState.playStream(this.station);
 				} else {
 					console.log('Station::Stop');
 					PlayerState.stopStream();
