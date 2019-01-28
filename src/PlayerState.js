@@ -67,6 +67,9 @@ export default new Vue({
 					self.setCurrentTrack(track);
 					self.setNowPlaying(track);
 
+					self.setDocumentTitle(true);
+					// document.title =  self.playerState.nowPlaying.track.station_title + '::Radiora';
+
 					// this.stateChanged();
 				}).catch(function() {
 					console.log('::playPromise::Failed::Begin');
@@ -83,6 +86,7 @@ export default new Vue({
 			this.playerTag.pause();
 			this.playerState.paused = this.playerTag.paused;
 			this.playerState.nowPlaying = {};
+			this.setDocumentTitle(false);
 			this.stateChanged();
 		},
 
@@ -169,6 +173,15 @@ export default new Vue({
 
 		getNowPlaying () {
 			return this.playerState.playlists[this.playerState.currentPlaylist].currentTrack;
+		},
+
+		setDocumentTitle (newTitle) {
+			if(newTitle) {
+				document.title =  this.playerState.nowPlaying.track.station_title + '::Radiora';
+				return;
+			}
+
+			document.title = 'Radiora';
 		},
 
 		deleteStation (station) {
@@ -303,12 +316,15 @@ export default new Vue({
 	     		console.log('::Event.type::' + e.type);
 
 	     		this.setStatus('playing');
-	     		document.title = 'GreenradiorA::' + player.src; 		
-	     		// console.log(e);
+	     		
 
 	     		// playerState.paused = player.paused;
 
 	     		this.loader(false);
+
+	     		// this.setDocumentTitle();
+	     		// console.log(this.playerState.nowPlaying.track);
+	     		// document.title =  this.playerState.nowPlaying.track.station_title + '::Radiora';
 	        });
 	        player.addEventListener('ratechange', (e)=> {
 	     		console.log('::Event.type::' + e.type);
