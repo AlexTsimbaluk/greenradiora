@@ -183,10 +183,19 @@
 									@click="searchFullToggle"
 								>
 									<m-icon
+										v-if="searchFull"
+										class="md-24"
+										:i="'vertical_align_center'"
+										:t="'light'"
+									></m-icon>
+
+									<m-icon
+										v-else
 										class="md-24"
 										:i="'vertical_align_top'"
 										:t="'light'"
 									></m-icon>
+
 									<ripple></ripple>
 								</button>
 							</div>
