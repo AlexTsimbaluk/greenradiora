@@ -79,12 +79,17 @@
 	}
 }
 
-.d-flex {
-	// flex: 1 1 0;
-	> * {
-		// flex: 0 0 auto;
-	}
+@prop-font-name: font-size;
+@levels-font-size-count: 30;
+
+.generate-font-size(@levels-font-size-count, @q: 1) when (@q =< @levels-font-size-count) {
+    .@{prop-font-name}-@{q} {
+        // font-size: (0em + (@q / 10));
+        font-size: (0px + (@q));
+    }
+    .generate-font-size(@levels-font-size-count, (@q + 1));
 }
+.generate-font-size(@levels-font-size-count);
 
 .flex-grow {
 	flex: 0 1 100%;

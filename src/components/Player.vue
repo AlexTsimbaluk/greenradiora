@@ -150,27 +150,46 @@
 			<div
 				class="d-flex flex-column flex-grow-1 no-gutters track-list-container"
 			>
-				<div
-					class="col pb-2 track-list"
-				>
-					<transition-group name="flipinx" mode="out-in">
-							<!-- :class="{playing: getPlayingStation(stationsArray[track])}" -->
-						<station
-							v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
-							:station="stationsArray[track]"
-							:key="track"
-							:class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}"
-						></station>
-					</transition-group>
-				</div>
+				<transition name="slide" mode="out-in">
+					<div
+						v-if="!searchFull"
+						class="col pb-2 track-list"
+					>
+						<transition-group name="flipinx" mode="out-in">
+								<!-- :class="{playing: getPlayingStation(stationsArray[track])}" -->
+							<station
+								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
+								:station="stationsArray[track]"
+								:key="track"
+								:class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}"
+							></station>
+						</transition-group>
+					</div>
+				</transition>
 
 				<transition name="slide" mode="out-in">
 					<div
 						v-if="searchResults.length"
 						class="col d-flex flex-column no-gutters pt-2 search-list"
 					>
-						<div class="total-search pb-1">
-							For query <span class="font-weight-bold">"{{searchString}}"</span> found <span class="font-weight-bold">{{searchResults.length}}</span> stations
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="total-search">
+								For query <span class="font-weight-bold">"{{searchString}}"</span> found <span class="font-weight-bold">{{searchResults.length}}</span> stations
+							</div>
+
+							<div class="">
+								<button
+									class="btn btn-link btn-fab"
+									@click="searchFullToggle"
+								>
+									<m-icon
+										class="md-24"
+										:i="'vertical_align_top'"
+										:t="'light'"
+									></m-icon>
+									<ripple></ripple>
+								</button>
+							</div>
 						</div>
 
 						<div class="col o-y-auto">
@@ -227,7 +246,8 @@ export default {
 
 			searchString: '',
 			searchResults: [],
-			noSearchResults: false
+			noSearchResults: false,
+			searchFull: false
 		}
 	},
 	methods: {
@@ -295,7 +315,8 @@ export default {
 			this.noSearchResults = false;
 
 			if(searchString.length < 3) {
-				return;
+				this.searchFull = false;
+				return false;
 			}
 
 			this.searchString = searchString.toLowerCase();
@@ -333,6 +354,10 @@ export default {
 			this.searchResults = [];
 			this.noSearchResults = false;
 			this.searchString = '';
+			this.searchFull = false;
+		},
+		searchFullToggle () {
+			this.searchFull = !this.searchFull;
 		}
 	},
 	created () {
