@@ -423,21 +423,25 @@ export default {
 
 	@keyframes slide-in {
 		0% {
-			transform: translateY(100%);
+			flex-grow: 0;
+			/*transform: translateY(100%);*/
 		}
 		
 		100% {
-			transform: translateY(0);
+			flex-grow: 1;
+			/*transform: translateY(0);*/
 		}
 	}
 
 	@keyframes slide-out {
 		0% {
-			transform: translateY(0);
+			flex-grow: 1;
+			/*transform: translateY(0);*/
 		}
 		
 		100% {
-			transform: translateY(100%);
+			flex-grow: 0;
+			/*transform: translateY(100%);*/
 		}
 	}
 
