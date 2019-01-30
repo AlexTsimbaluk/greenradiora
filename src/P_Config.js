@@ -58,23 +58,23 @@ export default new Vue({
 			];
 
 			nirvanaPlaylist.currentTrack 	= {
-					id 				: 1330,
-					url 			:'http://graalradio.com:8123/future',
-					title 			:'Graal Radio Future'
+					station_id 				: 1330,
+					station_url 			:'http://graalradio.com:8123/future',
+					station_title 			:'Graal Radio Future'
 					// scrollPosition 	: 0
 			};
 
 			dubstepPlaylist.currentTrack 	= {
-					id 				: 2599,
-					url 			:'http://sc3.dubplate.fm:8200/lofi_autodj',
-					title 			:'Walmer Radio'
+					station_id 				: 2599,
+					station_url 			:'http://sc3.dubplate.fm:8200/lofi_autodj',
+					station_title 			:'Walmer Radio'
 					// scrollPosition - ???
 			};
 
 			dubPlaylist.currentTrack     	= {
-					id 				: 55,
-					url 			:'http://sc3.dubplate.fm:5000/dubstep/192',
-					title 			:'Dub & Bass'
+					station_id 				: 55,
+					station_url 			:'http://sc3.dubplate.fm:5000/dubstep/192',
+					station_title 			:'Dub & Bass'
 			};
 
 			// this.playerState.playlists['~Nirvana~']       	= nirvanaPlaylist;

@@ -306,11 +306,10 @@ export default {
 		},
 		playStream () {
 			if(this.state.paused) {
-				console.log('');
-				console.log('::Player:playStream::' + PlayerState.getCurrentTrack().station_url);
+				let track = PlayerState.getCurrentTrack() || this.state.playlists[this.state.currentPlaylist].currentTrack;
+				console.log('::Player:playStream::' + track.station_url);
 
-				// PlayerState.playStream(this.state.playlists[this.state.currentPlaylist].currentTrack);
-				PlayerState.playStream(PlayerState.getCurrentTrack());
+				PlayerState.playStream(track);
 			}
 		},
 		stopStream () {
