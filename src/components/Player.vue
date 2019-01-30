@@ -198,6 +198,18 @@
 
 									<ripple></ripple>
 								</button>
+
+								<button
+									class="btn btn-link btn-fab"
+									@click="resetSearch();"
+								>
+									<m-icon
+										class="md-24"
+										:i="'close'"
+										:t="'light'"
+									></m-icon>
+									<ripple></ripple>
+								</button>
 							</div>
 						</div>
 
