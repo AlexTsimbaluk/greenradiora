@@ -305,6 +305,7 @@ export default {
 			}
 		},
 		playStream () {
+			// TODO: проверить в новых/пустых плейлистах
 			if(this.state.paused) {
 				let track = PlayerState.getCurrentTrack() || this.state.playlists[this.state.currentPlaylist].currentTrack;
 				console.log('::Player:playStream::' + track.station_url);
