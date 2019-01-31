@@ -25,7 +25,8 @@ export default new Vue({
 	},
 	methods: {
 		stateChanged () {
-			// console.log(this.playerState.playlists[this.playerState.currentPlaylist].tracks);
+			console.log(this.playerState.playlists);
+			// console.log(this.playerState.playlists[this.playerState.currentPlaylist]);
 			// console.log(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_title);
 
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
@@ -159,6 +160,19 @@ export default new Vue({
 		addPlaylist () {
 			console.log('');
 			console.log(':::add playlist');
+
+			let defaultName = new Date().getTime().toString().substr(6);
+
+			let _p = {
+				name: defaultName,
+				tracks: [],
+				currentTrack: {}
+			};
+
+			this.playerState.playlists[defaultName] = _p;
+			this.playerState.currentPlaylist = defaultName;
+			this.playerState.playlistsOrder.push(defaultName);
+			this.stateChanged();
 		},
 
 		setCurrentTrack (track) {

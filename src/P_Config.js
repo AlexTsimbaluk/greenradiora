@@ -77,20 +77,10 @@ export default new Vue({
 					station_title 			:'Dub & Bass'
 			};
 
-			// this.playerState.playlists['~Nirvana~']       	= nirvanaPlaylist;
-			// this.playerState.playlists['Dubstep']       	= dubstepPlaylist;
-			// this.playerState.playlists['|_Dub_|']           	= dubPlaylist;
-
 			this.playerState.currentPlaylist = '~Nirvana~';
-			
-			// this.playerState.volume = .27;
-			// this.playerState.paused = true;
 		}
 	},
 	created () {
 		console.log('::P_Config:hook:created');
-
-		// this.init();
-		// console.log(this.playerState);
 	}
 });
