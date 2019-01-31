@@ -135,15 +135,31 @@
 				</div>
 			</div>
 
-			<div class="d-flex flex-shrink-0 pb-2 playlists">
-				<div
-					@click="setCurrentPlaylist(playlist)"
-					v-for="playlist in state.playlistsOrder"
-					class="playlist"
-					:class="[state.currentPlaylist == playlist ? 'active' : '']"
-				>
-					<ripple></ripple>
-					{{playlist}}
+			<div class="d-flex align-items-center flex-shrink-0 pb-2">
+				<div class="d-flex flex-grow-1 playlists">
+					<div
+						@click="setCurrentPlaylist(playlist)"
+						v-for="playlist in state.playlistsOrder"
+						class="playlist"
+						:class="[state.currentPlaylist == playlist ? 'active' : '']"
+					>
+						<ripple></ripple>
+						{{playlist}}
+					</div>
+				</div>
+
+				<div class="flex-grow-0">
+					<button
+						class="btn btn-link btn-fab"
+						@click="addPlaylist"
+					>
+						<m-icon
+							class="md-24"
+							:i="'add'"
+							:t="'light'"
+						></m-icon>
+						<ripple></ripple>
+					</button>
 				</div>
 			</div>
 
@@ -382,6 +398,9 @@ export default {
 		},
 		searchFullToggle () {
 			this.searchFull = !this.searchFull;
+		},
+		addPlaylist () {
+			PlayerState.addPlaylist();
 		}
 	},
 	created () {
@@ -700,16 +719,19 @@ export default {
 	}
 
 	.playlists {
-		
+		height: 30px;
 	}
 
 	.playlist {
 		border-radius: 1px;
 		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		padding: 0 4px 2px;
 		text-align: center;
 		overflow: hidden;
-		width: 80px;
+		width: 100px;
 		position: relative;
 	}
 

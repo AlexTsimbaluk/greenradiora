@@ -156,6 +156,11 @@ export default new Vue({
 			return this.playerState.playlists[this.playerState.currentPlaylist].tracks;
 		},
 
+		addPlaylist () {
+			console.log('');
+			console.log(':::add playlist');
+		},
+
 		setCurrentTrack (track) {
 			this.playerState.playlists[this.playerState.currentPlaylist].currentTrack = track;
 			this.stateChanged();
