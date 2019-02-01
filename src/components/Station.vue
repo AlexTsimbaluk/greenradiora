@@ -74,6 +74,7 @@
 				}
 			},
 			addStation (station) {
+				this.$emit('addStation');
 				PlayerState.addStation(station);
 			},
 			deleteStation (station) {

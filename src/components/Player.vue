@@ -175,6 +175,7 @@
 							name="flipinx"
 							mode="out-in"
 						>
+								<!-- @addStation="scrollToBottom($event)" -->
 							<station
 								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 								:station="stationsArray[track]"
@@ -233,6 +234,7 @@
 
 						<div class="col o-y-auto">
 							<station
+								@addStation="scrollToBottom($event)"
 								v-for="(track, key) in searchResults"
 								:station="stationsArray[track]"
 								:search="true"
@@ -393,6 +395,14 @@ export default {
 		},
 		addPlaylist () {
 			PlayerState.addPlaylist();
+		},
+		scrollToBottom (event) {
+			let $trackList = document.querySelector('.track-list');
+			console.log($trackList);
+
+			// $trackList.scrollTo({top: $trackList.scrollHeight, behavior: 'smooth'});
+			// $trackList.scrollTo(0, $trackList.scrollHeight);
+			$trackList.scrollTop = $trackList.scrollHeight;
 		}
 	},
 	created () {
@@ -664,6 +674,7 @@ export default {
 	.track-list {
 		overflow-x: hidden;
 		overflow-y: auto;
+		scroll-behavior: smooth;
 	}
 
 	.total-search {
