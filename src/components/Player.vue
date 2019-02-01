@@ -171,8 +171,10 @@
 						v-if="!searchFull"
 						class="col pb-2 track-list"
 					>
-						<transition-group name="flipinx" mode="out-in">
-								<!-- :class="{playing: getPlayingStation(stationsArray[track])}" -->
+						<transition-group
+							name="flipinx"
+							mode="out-in"
+						>
 							<station
 								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 								:station="stationsArray[track]"
@@ -338,16 +340,6 @@ export default {
 		setVolume (event) {
 			let val = +event.target.value;
 			PlayerState.setVolume(val);
-		},
-		getPlayingStation (station) {
-			if(
-				(this.state.status == 'playing' || this.state.status == 'canplaythrough')
-				&& this.state.nowPlaying.track
-				&& this.state.nowPlaying.track.station_id == station
-			) {
-				console.log(station);
-				return true;
-			}
 		},
 		searchStation (event) {
 			let searchString = event.target.value;

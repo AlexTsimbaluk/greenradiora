@@ -9,15 +9,22 @@ export default new Vue({
 		return {
 			playerTag: null,
 			playingTime: null,
+			DEFAULT_PLAYLIST_NAME: '___',
 
 			playerState: {
-				playlists: {},
+				// playlists: {},
+				playlists: {
+					'___': {
+						name: '',
+						tracks: [],
+						currentTrack: {}
+					}
+				},
 				playlistsOrder: [],
 				currentPlaylist: '',
 				nowPlaying: {},
 				volume: .27,
 				paused: true,
-				// status: [],
 				status: '',
 				translated: false
 			},
@@ -25,7 +32,7 @@ export default new Vue({
 	},
 	methods: {
 		stateChanged () {
-			console.log(this.playerState.playlists);
+			console.log(this.playerState);
 			// console.log(this.playerState.playlists[this.playerState.currentPlaylist]);
 			// console.log(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_title);
 
@@ -167,11 +174,26 @@ export default new Vue({
 				name: defaultName,
 				tracks: [],
 				currentTrack: {}
+				/*setTracks: function set (val)  {
+					let plLength = plCur.length;
+
+					plCur.splice(plCur.length - 1, 0, +val);
+					this.stateChanged();
+
+					setTimeout(() => {
+						let last = plCur.splice(plCur.length - 1, 1)[0];
+						plCur.splice(plCur.length - 1, 0, last);
+						this.stateChanged();
+					}, 400);
+				}*/
 			};
 
-			this.playerState.playlists[defaultName] = _p;
 			this.playerState.currentPlaylist = defaultName;
 			this.playerState.playlistsOrder.push(defaultName);
+
+			// this.playerState.playlists[defaultName] = _p;
+			Vue.set(this.playerState.playlists, defaultName, _p);
+			
 			this.stateChanged();
 		},
 
@@ -395,7 +417,18 @@ export default new Vue({
 		if(localStorage.getItem('playerState') == undefined) {
 			P_Config.init();
 
-			this.playerState = Object.assign(this.playerState, P_Config.playerState);
+			// this.playerState = Object.assign({}, this.playerState, P_Config.playerState);
+
+			for(let pl in P_Config.playerState.playlists) {
+				let pls = P_Config.playerState.playlists;
+
+				Vue.set(this.playerState.playlists, pl, pls[pl]);
+			}
+			delete this.playerState.playlists[this.DEFAULT_PLAYLIST_NAME];
+			
+			Vue.set(this.playerState, 'currentPlaylist', P_Config.playerState.currentPlaylist);
+			Vue.set(this.playerState, 'playlistsOrder', P_Config.playerState.playlistsOrder);
+
 			localStorage.setItem('playerState', JSON.stringify(this.playerState));
 		} else {
 			this.playerState = JSON.parse(localStorage.getItem('playerState'));
