@@ -722,7 +722,7 @@ export default {
 	}
 
 	.playlists {
-		height: 30px;
+		overflow-x: auto;
 	}
 
 	.playlist {
@@ -731,10 +731,12 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		height: 30px;
+		width: 100px;
+		min-width: 100px;
+		overflow: hidden;
 		padding: 0 4px 2px;
 		text-align: center;
-		overflow: hidden;
-		width: 100px;
 		position: relative;
 	}
 
