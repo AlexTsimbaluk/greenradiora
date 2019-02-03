@@ -1,5 +1,5 @@
 <template>
-	<div class="player flex-grow">
+	<div class="player flex-grow mx-auto">
 		<loader v-if="!xhrResponceRecieved || waiting"></loader>
 
 		<div
@@ -137,15 +137,41 @@
 
 			<div class="d-flex align-items-center flex-shrink-0 pb-2">
 				<div class="d-flex flex-grow-1 playlists">
-					<div
-						@click="setCurrentPlaylist(playlist)"
-						v-for="playlist in state.playlistsOrder"
-						class="playlist"
-						:class="[state.currentPlaylist == playlist ? 'active' : '']"
-					>
-						<ripple></ripple>
-						{{playlist}}
-					</div>
+					<!-- <transition-group
+						mode="out-in"
+						name="playlist"
+						class="d-flex w-100"
+					> -->
+						<div
+							v-for="(playlist, index) in state.playlistsOrder"
+							class="playlist"
+							:class="[playlist == state.currentPlaylist ? 'active' : '']"
+							:key="index"
+						>
+							<div class="row align-items-center w-100 no-gutters position-relative">
+								<div
+									class="col-2 playlist-controls"
+									@click.stop="deletePlaylist($event, playlist, index, playlist == state.currentPlaylist)"
+								>
+									<m-icon
+										class="md-16"
+										:i="'not_interested'"
+										:t="'light'"
+									></m-icon>
+								</div>
+
+								<div
+									@click="setCurrentPlaylist(playlist)"
+									class="col-8 o-x-hidden text-ellipsis position-static font-size-14"
+								>
+									{{playlist}}
+									<ripple></ripple>
+								</div>
+
+								<div class="col-2 playlist-controls"></div>
+							</div>
+						</div>
+					<!-- </transition-group> -->
 				</div>
 
 				<div class="flex-grow-0">
@@ -172,10 +198,10 @@
 						class="col pb-2 track-list"
 					>
 						<transition-group
+							v-if="state.currentPlaylist && state.playlists[state.currentPlaylist].tracks.length"
 							name="flipinx"
 							mode="out-in"
 						>
-								<!-- @addStation="scrollToBottom($event)" -->
 							<station
 								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 								:station="stationsArray[track]"
@@ -403,6 +429,9 @@ export default {
 			// $trackList.scrollTo({top: $trackList.scrollHeight, behavior: 'smooth'});
 			// $trackList.scrollTo(0, $trackList.scrollHeight);
 			$trackList.scrollTop = $trackList.scrollHeight;
+		},
+		deletePlaylist(event, playlistName, index, active) {
+			PlayerState.deletePlaylist(playlistName, index, active);
 		}
 	},
 	created () {
@@ -455,6 +484,60 @@ export default {
 		cursor: default;
 		/*transition: all .3s;*/
 		position: relative;
+	}
+
+	.playlist-enter-active {
+		animation: playlist-in 0.4s;
+	}
+	.playlist-leave-active {
+		animation: playlist-out 0.4s;
+	}
+
+	@keyframes playlist-in {
+		from {
+			transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+			animation-timing-function: ease-in;
+			opacity: 0;
+		}
+
+		40% {
+			transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+			animation-timing-function: ease-in;
+		}
+
+		60% {
+			transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+			opacity: 1;
+		}
+
+		80% {
+			transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+		}
+
+		to {
+			transform: perspective(400px);
+		}
+	}
+
+	@keyframes playlist-out {
+		/* from {
+			transform-origin: right bottom;
+			opacity: 1;
+		}
+		
+		  to {
+			transform-origin: right bottom;
+			transform: rotate3d(0, 0, 1, -45deg);
+			opacity: 0;
+		} */
+
+		0% {
+			transform: scale(1);
+		}
+		
+		100% {
+			transform: scale(0);
+		}
 	}
 
 	.fade-enter-active {
@@ -732,16 +815,23 @@ export default {
 		align-items: center;
 		justify-content: center;
 		height: 30px;
-		width: 100px;
-		min-width: 100px;
+		width: 106px;
+		min-width: 106px;
+		margin-right: 2px;
+		padding: 0 0px 0px;
 		overflow: hidden;
-		padding: 0 4px 2px;
 		text-align: center;
 		position: relative;
+		transition: all 1s ease-out 0.3s;
 	}
 
 	.playlist.active {
-		box-shadow: inset 0 0 28px 2px #00afc5;
-		transition: all 1s;
+		box-shadow: inset 0 0 28px 2px rgba(128, 0, 255, 0.69);
+	}
+
+	.playlist-controls {
+		cursor: default;
+		position: relative;
+		z-index: 1;
 	}
 </style>

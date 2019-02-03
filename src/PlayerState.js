@@ -32,7 +32,7 @@ export default new Vue({
 	},
 	methods: {
 		stateChanged () {
-			console.log(this.playerState);
+			// console.log(this.playerState);
 			// console.log(this.playerState.playlists[this.playerState.currentPlaylist]);
 			// console.log(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_title);
 
@@ -165,7 +165,6 @@ export default new Vue({
 		},
 
 		addPlaylist () {
-			console.log('');
 			console.log(':::add playlist');
 
 			let defaultName = new Date().getTime().toString().substr(6);
@@ -194,6 +193,27 @@ export default new Vue({
 			// this.playerState.playlists[defaultName] = _p;
 			Vue.set(this.playerState.playlists, defaultName, _p);
 			
+			this.stateChanged();
+		},
+
+		deletePlaylist(playlistName, index, active) {
+			Utils.logs('::Playlist ' + playlistName + ' deleted');
+
+			if(active) {
+				this.playerState.currentPlaylist =
+					this.playerState.playlistsOrder[index - 1]
+					|| this.playerState.playlistsOrder[index + 1]
+					|| '';
+			}
+
+			delete this.playerState.playlists[playlistName];
+			this.playerState.playlistsOrder.splice(index, 1);
+
+			if(this.playerState.playlistsOrder.length == 0) {
+				console.log('доб');
+				this.addPlaylist();
+			}
+
 			this.stateChanged();
 		},
 
