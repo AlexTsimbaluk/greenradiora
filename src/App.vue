@@ -49,4 +49,5 @@ export default {
 <style lang="sass">
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 @import '../node_modules/material-kit/assets/scss/material-kit.scss';
+@import '../node_modules/animate.css/animate.min.css';
 </style>
