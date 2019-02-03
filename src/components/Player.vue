@@ -822,11 +822,12 @@ export default {
 		overflow: hidden;
 		text-align: center;
 		position: relative;
-		transition: all 1s ease-out 0.3s;
+		transition: all 0.6s ease-out;
 	}
 
 	.playlist.active {
 		box-shadow: inset 0 0 28px 2px rgba(128, 0, 255, 0.69);
+		transition: all 0.6s ease-out 0.3s;
 	}
 
 	.playlist-controls {
