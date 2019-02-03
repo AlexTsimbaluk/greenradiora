@@ -12,6 +12,7 @@ export default new Vue({
 			DEFAULT_PLAYLIST_NAME: '___',
 
 			playerState: {
+				playlistEdit: -1,
 				// playlists: {},
 				playlists: {
 					'___': {
@@ -212,6 +213,16 @@ export default new Vue({
 			if(this.playerState.playlistsOrder.length == 0) {
 				console.log('доб');
 				this.addPlaylist();
+			}
+
+			this.stateChanged();
+		},
+
+		editPlaylist(playlistName, index) {
+			if(this.playerState.playlistEdit != index) {
+				this.playerState.playlistEdit = index;
+			} else {
+				this.playerState.playlistEdit = -1;
 			}
 
 			this.stateChanged();
@@ -456,6 +467,7 @@ export default new Vue({
 			// console.log(this.playerState.status);
 			this.playerState.paused = true;
 			this.playerState.searchString = '';
+			this.playerState.playlistEdit = -1;
 			this.playerState.searchResults = [];
 			this.playerState.nowPlaying = {};
 			this.stateChanged();

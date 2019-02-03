@@ -151,7 +151,7 @@
 							<div class="row align-items-center w-100 no-gutters position-relative">
 								<div
 									class="col-2 playlist-controls"
-									@click.stop="deletePlaylist($event, playlist, index, playlist == state.currentPlaylist)"
+									@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
 								>
 									<m-icon
 										class="md-16"
@@ -161,14 +161,50 @@
 								</div>
 
 								<div
-									@click="setCurrentPlaylist(playlist)"
-									class="col-8 o-x-hidden text-ellipsis position-static font-size-14"
+									class="col-8 position-static font-size-14"
 								>
-									{{playlist}}
-									<ripple></ripple>
+									<transition
+										mode="out-in"
+										enter-active-class="animated zoomIn faster"
+									    leave-active-class="animated zoomOut faster"
+									>
+										<div
+											v-if="state.playlistEdit != index"
+											key="name"
+											@click="setCurrentPlaylist(playlist)"
+											class="w-100 o-x-hidden text-ellipsis playlist-title"
+										>
+											{{playlist}}
+											<ripple></ripple>
+										</div>
+
+										<div
+											v-if="state.playlistEdit == index"
+											key="edit"
+											class="w-100 h-100"
+										>
+												<!-- @keyup="searchStation($event)" -->
+											<input
+												v-model="state.playlistsOrder[index]"
+												type="text"
+												autofocus
+												placeholder="Edit"
+												class="form-control edit-playlist-input"
+											/>
+										</div>
+									</transition>
 								</div>
 
-								<div class="col-2 playlist-controls"></div>
+								<div
+									class="col-2 playlist-controls"
+									@click.stop="editPlaylist(playlist, index)"
+								>
+									<m-icon
+										class="md-16"
+										:i="'edit'"
+										:t="'light'"
+									></m-icon>
+								</div>
 							</div>
 						</div>
 					<!-- </transition-group> -->
@@ -430,8 +466,11 @@ export default {
 			// $trackList.scrollTo(0, $trackList.scrollHeight);
 			$trackList.scrollTop = $trackList.scrollHeight;
 		},
-		deletePlaylist(event, playlistName, index, active) {
+		deletePlaylist(playlistName, index, active) {
 			PlayerState.deletePlaylist(playlistName, index, active);
+		},
+		editPlaylist(playlistName, index) {
+			PlayerState.editPlaylist(playlistName, index);
 		}
 	},
 	created () {
@@ -769,19 +808,34 @@ export default {
 		font-weight: bold;
 	}
 
+	.form-control.edit-playlist-input {
+		background: transparent;
+		border-bottom: 1px solid rgba(0, 255, 255, 0.33);
+		height: 20px;
+		padding: 0 2px;
+		text-align: center;
+	}
 	.form-control.search-station-input {
 		background: rgba(51, 51, 51, .5);
 		border: 1px solid rgba(0, 255, 255, 0.33);
 		border-radius: 4px;
 		padding: 0 6px;
+	}
+
+	.form-control.edit-playlist-input,
+	.form-control.search-station-input {
 		color: #ccc;
 		font-size: 14px;
 		line-height: 1;
 	}
+	.form-control.edit-playlist-input:focus,
 	.form-control.search-station-input:focus {
 		background: transparent;
-		border: 1px solid #00afc5;
+		color: #ccc;
+	}
+	.form-control.search-station-input:focus {
 		box-shadow: 0 0 10px 0 #0ff inset;
+		border: 1px solid #00afc5;
 	}
 
 	.no-results {
@@ -809,16 +863,16 @@ export default {
 	}
 
 	.playlist {
+		align-items: center;
 		border-radius: 1px;
 		cursor: pointer;
 		display: flex;
-		align-items: center;
 		justify-content: center;
 		height: 30px;
 		width: 106px;
 		min-width: 106px;
-		margin-right: 2px;
-		padding: 0 0px 0px;
+		margin-right: 6px;
+		padding: 0;
 		overflow: hidden;
 		text-align: center;
 		position: relative;
@@ -834,5 +888,9 @@ export default {
 		cursor: default;
 		position: relative;
 		z-index: 1;
+	}
+
+	.playlist-title {
+		padding: 0 2px;
 	}
 </style>
