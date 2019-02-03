@@ -33,8 +33,12 @@
 	/* Support for IE. */
 	font-feature-settings: 'liga';
 
+	&.md-14 { font-size: 14px; }
+	&.md-16 { font-size: 16px; }
 	&.md-18 { font-size: 18px; }
+	&.md-20 { font-size: 20px; }
 	&.md-24 { font-size: 24px; }
+	&.md-30 { font-size: 30px; }
 	&.md-36 { font-size: 36px; }
 	&.md-48 { font-size: 48px; }
 
@@ -106,6 +110,10 @@
 }
 .o-x-hidden {
 	overflow-x: hidden;
+}
+
+.text-ellipsis {
+	text-overflow: ellipsis;
 }
 
 
@@ -224,7 +232,7 @@ body {
 .player {
 	color: #eee;
 	overflow: hidden;
-	padding: 12px;
+	padding: 8px;
 	width: 580px;
 
 	@media screen and (max-width: 767px) {
