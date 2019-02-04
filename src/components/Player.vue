@@ -137,11 +137,12 @@
 
 			<div class="d-flex align-items-center flex-shrink-0 pb-2">
 				<div class="d-flex flex-grow-1 playlists">
-					<!-- <transition-group
+					<transition-group
 						mode="out-in"
-						name="playlist"
-						class="d-flex w-100"
-					> -->
+						enter-active-class="animated zoomIn faster"
+					    leave-active-class="animated rotateOutDownLeft faster"
+						class="d-flex w-100 o-y-hidden"
+					>
 						<div
 							v-for="(playlist, index) in state.playlistsOrder"
 							class="playlist"
@@ -207,7 +208,7 @@
 								</div>
 							</div>
 						</div>
-					<!-- </transition-group> -->
+					</transition-group>
 				</div>
 
 				<div class="flex-grow-0">
