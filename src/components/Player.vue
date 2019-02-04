@@ -184,9 +184,9 @@
 											key="edit"
 											class="w-100 h-100"
 										>
-												<!-- @keyup="searchStation($event)" -->
 											<input
 												v-model="state.playlistsOrder[index]"
+												@keyup="playlistNameUpdate($event, index)"
 												type="text"
 												autofocus
 												placeholder="Edit"
@@ -198,7 +198,7 @@
 
 								<div
 									class="col-2 playlist-controls"
-									@click.stop="editPlaylist(playlist, index)"
+									@click.stop="editPlaylist(index)"
 								>
 									<m-icon
 										class="md-16"
@@ -470,8 +470,18 @@ export default {
 		deletePlaylist(playlistName, index, active) {
 			PlayerState.deletePlaylist(playlistName, index, active);
 		},
-		editPlaylist(playlistName, index) {
-			PlayerState.editPlaylist(playlistName, index);
+		editPlaylist(index) {
+			PlayerState.editPlaylist(index);
+			/*let input = document.querySelector('.edit-playlist-input');
+			console.log(input);
+			Utils.setCursorPosition(input, 0, input.value.length);*/
+		},
+		playlistNameUpdate (event, index) {
+			if(event.keyCode == 13 || event.key == 'Enter') {
+				PlayerState.editPlaylist(-1);
+				// console.log(index);
+			}
+			// Utils.setCursorPosition(event.target, 0, event.target.value.length);
 		}
 	},
 	created () {

@@ -218,7 +218,7 @@ export default new Vue({
 			this.stateChanged();
 		},
 
-		editPlaylist(playlistName, index) {
+		editPlaylist(index) {
 			if(this.playerState.playlistEdit != index) {
 				this.playerState.playlistEdit = index;
 			} else {
