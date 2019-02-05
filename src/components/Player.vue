@@ -170,7 +170,7 @@
 									    leave-active-class="animated zoomOut faster"
 									>
 										<div
-											v-if="state.playlistEdit != index"
+											v-if="playlistEdit != index"
 											key="name"
 											@click="setCurrentPlaylist(playlist)"
 											class="w-100 o-x-hidden text-ellipsis playlist-title"
@@ -180,13 +180,14 @@
 										</div>
 
 										<div
-											v-if="state.playlistEdit == index"
+											v-if="playlistEdit == index"
 											key="edit"
 											class="w-100 h-100"
 										>
 											<input
 												v-model="state.playlistsOrder[index]"
-												@keyup="playlistNameUpdate($event, index)"
+												@keyup.enter="toggleEditPlaylist(playlist, -1)"
+												@change="playlistNameUpdated($event, playlist, index)"
 												type="text"
 												autofocus
 												placeholder="Edit"
@@ -198,7 +199,7 @@
 
 								<div
 									class="col-2 playlist-controls"
-									@click.stop="editPlaylist(index)"
+									@click.stop="toggleEditPlaylist(playlist, index)"
 								>
 									<m-icon
 										class="md-16"
@@ -351,7 +352,10 @@ export default {
 			searchString: '',
 			searchResults: [],
 			noSearchResults: false,
-			searchFull: false
+			searchFull: false,
+
+			playlistEdit: -1,
+			playlistOldName: ''
 		}
 	},
 	methods: {
@@ -470,17 +474,49 @@ export default {
 		deletePlaylist(playlistName, index, active) {
 			PlayerState.deletePlaylist(playlistName, index, active);
 		},
-		editPlaylist(index) {
-			PlayerState.editPlaylist(index);
+		toggleEditPlaylist(playlistName, index) {
 			/*let input = document.querySelector('.edit-playlist-input');
 			console.log(input);
 			Utils.setCursorPosition(input, 0, input.value.length);*/
-		},
-		playlistNameUpdate (event, index) {
-			if(event.keyCode == 13 || event.key == 'Enter') {
-				PlayerState.editPlaylist(-1);
-				// console.log(index);
+
+			console.log('');
+			console.log(index);
+			// console.log('::' + this.playlistOldName);
+			console.log(this.playlistEdit);
+
+			if(index == -1 || (this.playlistEdit == index)) {
+				console.log('скрыть инпут');
+				// console.log('Enter');
+				this.playlistEdit = -1;
+				this.playlistOldName = '';
+			} else if(this.playlistEdit != index) {
+				console.log('показать инпут');
+				this.playlistEdit = index;
+				this.playlistOldName = playlistName;
 			}
+
+			/*if(this.playlistEdit != index) {
+				console.log('toggle инпут');
+				this.playlistEdit = index;
+				this.playlistOldName = playlistName;
+			} else {
+				console.log('toggle не инпут');
+				this.playlistEdit = -1;
+				this.playlistOldName = '';
+			}*/
+
+			// console.log('::' + this.playlistOldName);
+			console.log(this.playlistEdit);
+
+			PlayerState.stateChanged();
+		},
+		playlistNameUpdated (event, playlistName, index) {
+			console.log(event);
+			console.log(index);
+
+			PlayerState.editPlaylist(this.playlistOldName, playlistName, index);
+			this.playlistOldName = '';
+			
 			// Utils.setCursorPosition(event.target, 0, event.target.value.length);
 		}
 	},

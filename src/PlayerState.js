@@ -12,8 +12,6 @@ export default new Vue({
 			DEFAULT_PLAYLIST_NAME: '___',
 
 			playerState: {
-				playlistEdit: -1,
-				// playlists: {},
 				playlists: {
 					'___': {
 						name: '',
@@ -218,12 +216,19 @@ export default new Vue({
 			this.stateChanged();
 		},
 
-		editPlaylist(index) {
-			if(this.playerState.playlistEdit != index) {
-				this.playerState.playlistEdit = index;
-			} else {
-				this.playerState.playlistEdit = -1;
-			}
+		editPlaylist(oldPlaylistName, newPlaylistName, index) {
+			console.log('playerState:editPlaylist');
+			console.log(oldPlaylistName, newPlaylistName, index);
+
+			this.playerState.playlistsOrder[index] = newPlaylistName;
+
+			let _playlist = this.playerState.playlists[oldPlaylistName];
+
+			console.log(_playlist);
+
+			delete this.playerState.playlists[oldPlaylistName];
+			_playlist.name = newPlaylistName;
+			Vue.set(this.playerState.playlists, newPlaylistName, _playlist);
 
 			this.stateChanged();
 		},
