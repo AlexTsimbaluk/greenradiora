@@ -185,11 +185,11 @@
 											class="w-100 h-100"
 										>
 											<input
+												v-focus
 												v-model="state.playlistsOrder[index]"
-												@keyup.enter="toggleEditPlaylist(playlist, -1)"
+												@keyup.enter="toggleEditPlaylist(playlist, -1, playlist == state.currentPlaylist)"
 												@change="playlistNameUpdated($event, playlist, index)"
 												type="text"
-												autofocus
 												placeholder="Edit"
 												class="form-control edit-playlist-input"
 											/>
@@ -199,7 +199,7 @@
 
 								<div
 									class="col-2 playlist-controls"
-									@click.stop="toggleEditPlaylist(playlist, index)"
+									@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
 								>
 									<m-icon
 										class="md-16"
@@ -236,7 +236,7 @@
 						class="col pb-2 track-list"
 					>
 						<transition-group
-							v-if="state.currentPlaylist && state.playlists[state.currentPlaylist].tracks.length"
+							v-if="state.currentPlaylist && state.playlists[state.currentPlaylist] && state.playlists[state.currentPlaylist].tracks.length"
 							name="flipinx"
 							mode="out-in"
 						>
@@ -355,6 +355,7 @@ export default {
 			searchFull: false,
 
 			playlistEdit: -1,
+			playlistEditedIsActive: null,
 			playlistOldName: ''
 		}
 	},
@@ -474,11 +475,7 @@ export default {
 		deletePlaylist(playlistName, index, active) {
 			PlayerState.deletePlaylist(playlistName, index, active);
 		},
-		toggleEditPlaylist(playlistName, index) {
-			/*let input = document.querySelector('.edit-playlist-input');
-			console.log(input);
-			Utils.setCursorPosition(input, 0, input.value.length);*/
-
+		toggleEditPlaylist(playlistName, index, active) {
 			if(index == -1 || (this.playlistEdit == index)) {
 				this.playlistEdit = -1;
 				this.playlistOldName = '';
@@ -486,18 +483,14 @@ export default {
 				this.playlistEdit = index;
 				this.playlistOldName = playlistName;
 			}
-			console.log(this.playlistEdit);
 
+			this.playlistEditedIsActive = active;
 			PlayerState.stateChanged();
 		},
 		playlistNameUpdated (event, playlistName, index) {
-			console.log(event);
-			console.log(index);
-
-			PlayerState.editPlaylist(this.playlistOldName, playlistName, index);
+			PlayerState.editPlaylist(this.playlistOldName, playlistName, index, this.playlistEditedIsActive);
 			this.playlistOldName = '';
-			
-			// Utils.setCursorPosition(event.target, 0, event.target.value.length);
+			this.playlistEditedIsActive = null;
 		}
 	},
 	created () {

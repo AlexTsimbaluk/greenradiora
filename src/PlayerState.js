@@ -216,21 +216,24 @@ export default new Vue({
 			this.stateChanged();
 		},
 
-		editPlaylist(oldPlaylistName, newPlaylistName, index) {
+		editPlaylist(oldPlaylistName, newPlaylistName, index, active) {
 			console.log('playerState:editPlaylist');
-			console.log(oldPlaylistName, newPlaylistName, index);
 
 			this.playerState.playlistsOrder[index] = newPlaylistName;
 
+			if(active) {
+				this.setCurrentPlaylist(newPlaylistName);
+			}
+
 			let _playlist = this.playerState.playlists[oldPlaylistName];
-
-			console.log(_playlist);
-
-			delete this.playerState.playlists[oldPlaylistName];
 			_playlist.name = newPlaylistName;
+
 			Vue.set(this.playerState.playlists, newPlaylistName, _playlist);
 
+			delete this.playerState.playlists[oldPlaylistName];
+
 			this.stateChanged();
+			Utils.logs('Playlist new name is ' + newPlaylistName);
 		},
 
 		setCurrentTrack (track) {
