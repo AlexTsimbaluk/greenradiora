@@ -479,33 +479,13 @@ export default {
 			console.log(input);
 			Utils.setCursorPosition(input, 0, input.value.length);*/
 
-			console.log('');
-			console.log(index);
-			// console.log('::' + this.playlistOldName);
-			console.log(this.playlistEdit);
-
 			if(index == -1 || (this.playlistEdit == index)) {
-				console.log('скрыть инпут');
-				// console.log('Enter');
 				this.playlistEdit = -1;
 				this.playlistOldName = '';
 			} else if(this.playlistEdit != index) {
-				console.log('показать инпут');
 				this.playlistEdit = index;
 				this.playlistOldName = playlistName;
 			}
-
-			/*if(this.playlistEdit != index) {
-				console.log('toggle инпут');
-				this.playlistEdit = index;
-				this.playlistOldName = playlistName;
-			} else {
-				console.log('toggle не инпут');
-				this.playlistEdit = -1;
-				this.playlistOldName = '';
-			}*/
-
-			// console.log('::' + this.playlistOldName);
 			console.log(this.playlistEdit);
 
 			PlayerState.stateChanged();

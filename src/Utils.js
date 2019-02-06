@@ -10,7 +10,9 @@ export default new Vue({
 		locationInfo () {
 			console.log('');
 
-			for(let key in location) if(typeof location[key] == 'string') console.log(key + '::' + location[key]);
+			for(let key in location) if(typeof location[key] == 'string') {
+				console.log(key + '::' + location[key]);
+			}
 
 			console.log('');
 		},
@@ -43,6 +45,6 @@ export default new Vue({
 	created () {
 		console.log('::Utils:hook:created');
 
-		this.locationInfo()
+		// this.locationInfo();
 	}
 });
