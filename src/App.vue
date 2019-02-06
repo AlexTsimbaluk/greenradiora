@@ -22,11 +22,16 @@ import Loader from '@/components/Loader';
 import Ripple from '@/components/Ripple';
 import MIcon from '@/components/MIcon';
 
+import Focus from '@/directives/Focus.js';
+
 
 Vue.component('Log', Log);
 Vue.component('Ripple', Ripple);
 Vue.component('MIcon', MIcon);
 Vue.component('Loader', Loader);
+
+
+Vue.directive('focus', Focus);
 
 
 export default {
