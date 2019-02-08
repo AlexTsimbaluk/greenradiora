@@ -217,13 +217,29 @@ export default new Vue({
 
 		editPlaylist(oldPlaylistName, newPlaylistName, index, active) {
 			console.log('playerState:editPlaylist');
+
+			/*let duplicate = false;
+			for (let i = 0; i < this.playerState.playlistsOrder.length; i++) {
+				if(this.playerState.playlistsOrder[i] == newPlaylistName) {
+					duplicate = true;
+					break;
+					console.log('duplicate');
+				}
+				console.log(i);
+			}
+
+			if(duplicate) {
+				newPlaylistName = oldPlaylistName;
+			}*/
+
 			
-			// ☯ - 9775
-			// ☺ - 9786
-			let nbsp = String.fromCharCode(160);
-			nbsp += String.fromCharCode(9775);
 
 			if(newPlaylistName.length == 0) {
+				// ☯ - 9775
+				// ☺ - 9786
+				let nbsp = String.fromCharCode(160);
+				nbsp += String.fromCharCode(9775);
+				
 				if(oldPlaylistName.indexOf(nbsp) == 0) {
 					newPlaylistName = oldPlaylistName.substring(nbsp.length);
 				} else {
