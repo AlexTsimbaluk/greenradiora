@@ -121,17 +121,20 @@
 						</div>
 					</transition>
 
-					<button
-						class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
-						@click="resetSearch();"
-					>
-						<m-icon
-							class="md-24"
-							:i="'close'"
-							:t="'light'"
-						></m-icon>
-						<ripple></ripple>
-					</button>
+					<transition name="fade" mode="out-in">
+						<button
+							v-if="searchResults.length"
+							class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
+							@click="resetSearch();"
+						>
+							<m-icon
+								class="md-24"
+								:i="'close'"
+								:t="'light'"
+							></m-icon>
+							<ripple></ripple>
+						</button>
+					</transition>
 				</div>
 			</div>
 
