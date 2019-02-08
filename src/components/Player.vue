@@ -149,7 +149,7 @@
 							:class="[playlist == state.currentPlaylist ? 'active' : '']"
 							:key="index"
 						>
-							<div class="row align-items-center w-100 no-gutters position-relative">
+							<div class="row align-items-center w-100 mh-100 no-gutters position-relative">
 								<div
 									class="col-2 playlist-controls"
 									@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
@@ -162,7 +162,7 @@
 								</div>
 
 								<div
-									class="col-8 position-static font-size-14"
+									class="col-8 mh-100 position-static font-size-13"
 								>
 									<transition
 										mode="out-in"
@@ -238,7 +238,9 @@
 						<transition-group
 							v-if="state.currentPlaylist && state.playlists[state.currentPlaylist] && state.playlists[state.currentPlaylist].tracks.length"
 							name="flipinx"
-							mode="out-in"
+							mode="in-out"
+							enter-active-class="animated flipInY faster"
+						    leave-active-class="animated slideOutRight faster"
 						>
 							<station
 								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
@@ -466,7 +468,6 @@ export default {
 		},
 		scrollToBottom (event) {
 			let $trackList = document.querySelector('.track-list');
-			console.log($trackList);
 
 			// $trackList.scrollTo({top: $trackList.scrollHeight, behavior: 'smooth'});
 			// $trackList.scrollTo(0, $trackList.scrollHeight);
@@ -697,7 +698,7 @@ export default {
 		backface-visibility: visible;
 	}
 	.flipinx-leave-active {
-		animation-duration: .6s;
+		animation-duration: .4s;
 		animation-name: flipinx-out;
 	}
 
