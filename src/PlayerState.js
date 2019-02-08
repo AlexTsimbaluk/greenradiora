@@ -209,7 +209,6 @@ export default new Vue({
 			this.playerState.playlistsOrder.splice(index, 1);
 
 			if(this.playerState.playlistsOrder.length == 0) {
-				console.log('доб');
 				this.addPlaylist();
 			}
 
@@ -218,6 +217,23 @@ export default new Vue({
 
 		editPlaylist(oldPlaylistName, newPlaylistName, index, active) {
 			console.log('playerState:editPlaylist');
+			
+			// ☯ - 9775
+			// ☺ - 9786
+			let nbsp = String.fromCharCode(160);
+			nbsp += String.fromCharCode(9775);
+
+			if(newPlaylistName.length == 0) {
+				if(oldPlaylistName.indexOf(nbsp) == 0) {
+					newPlaylistName = oldPlaylistName.substring(nbsp.length);
+				} else {
+					newPlaylistName = nbsp + oldPlaylistName;
+				}
+
+				setTimeout(() => {
+					this.editPlaylist(newPlaylistName, newPlaylistName.substring(nbsp.length), index, active);
+				}, 2000);
+			}
 
 			this.playerState.playlistsOrder[index] = newPlaylistName;
 
