@@ -138,8 +138,29 @@
 				</div>
 			</div>
 
-			<div class="d-flex align-items-center flex-shrink-0 pb-2">
+			<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative">
 				<div class="d-flex flex-grow-1 playlists">
+					<transition
+						mode="out-in"
+						enter-active-class="animated zoomIn faster"
+					    leave-active-class="animated rotateOutDownLeft faster"
+					>
+						<div
+							class="playlist playlist-name-error"
+							v-if="state.playlistNameError != -1"
+							:style="{ left: state.playlistNameError * 112 + 'px' }"
+						>
+							No, please
+							<!-- <m-icon
+								class="md-16 ml-1"
+								:i="'sentiment_dissatisfied'"
+								:t="'light'"
+							></m-icon> -->
+							<span class="font-size-15">☹</span>
+							<span class="font-size-24" style="margin-top: -4px;">☺</span>
+						</div>
+					</transition>
+
 					<transition-group
 						mode="out-in"
 						enter-active-class="animated zoomIn faster"
@@ -151,7 +172,7 @@
 							class="playlist"
 							:class="[playlist == state.currentPlaylist ? 'active' : '']"
 							:key="index"
-						>
+						>							
 							<div class="row align-items-center w-100 mh-100 no-gutters position-relative">
 								<div
 									class="col-2 playlist-controls"
@@ -916,5 +937,13 @@ export default {
 
 	.playlist-title {
 		padding: 0 2px;
+	}
+
+	.playlist-name-error {
+		font-size: 13px;
+		margin-left: 10px;
+		margin-right: 0;
+		top: -20px;
+		position: absolute;
 	}
 </style>

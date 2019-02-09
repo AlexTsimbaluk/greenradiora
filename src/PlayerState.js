@@ -25,7 +25,8 @@ export default new Vue({
 				volume: .27,
 				paused: true,
 				status: '',
-				translated: false
+				translated: false,
+				playlistNameError: -1
 			},
 		}
 	},
@@ -216,30 +217,17 @@ export default new Vue({
 		},
 
 		editPlaylist(oldPlaylistName, newPlaylistName, index, active) {
-			console.log('playerState:editPlaylist');
+			let duplicate = Object.keys(this.playerState.playlists).some((name) => {
+				return name == newPlaylistName;
+			});
 
-			/*let duplicate = false;
-			for (let i = 0; i < this.playerState.playlistsOrder.length; i++) {
-				if(this.playerState.playlistsOrder[i] == newPlaylistName) {
-					duplicate = true;
-					break;
-					console.log('duplicate');
-				}
-				console.log(i);
-			}
-
-			if(duplicate) {
-				newPlaylistName = oldPlaylistName;
-			}*/
-
-			
-
-			if(newPlaylistName.length == 0) {
+			if(newPlaylistName.length == 0 || duplicate) {
+				this.playerState.playlistNameError = index;
+				this.stateChanged();
 				// ☯ - 9775
 				// ☺ - 9786
-				let nbsp = String.fromCharCode(160);
-				nbsp += String.fromCharCode(9775);
-				
+				let nbsp = String.fromCharCode(9775) + String.fromCharCode(160);
+
 				if(oldPlaylistName.indexOf(nbsp) == 0) {
 					newPlaylistName = oldPlaylistName.substring(nbsp.length);
 				} else {
@@ -248,7 +236,10 @@ export default new Vue({
 
 				setTimeout(() => {
 					this.editPlaylist(newPlaylistName, newPlaylistName.substring(nbsp.length), index, active);
-				}, 2000);
+				}, 1800);
+			} else {
+				this.playerState.playlistNameError = -1;
+				this.stateChanged();
 			}
 
 			this.playerState.playlistsOrder[index] = newPlaylistName;
