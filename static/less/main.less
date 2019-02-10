@@ -16,7 +16,8 @@
 	font-weight: normal;
 	font-style: normal;
 	font-size: 24px;
-	line-height: 38px !important;
+	line-height: 38px;
+	// line-height: 1.58;
 	display: inline-block;
 	text-transform: none;
 	letter-spacing: normal;
@@ -33,14 +34,30 @@
 	/* Support for IE. */
 	font-feature-settings: 'liga';
 
-	&.md-14 { font-size: 14px; }
-	&.md-16 { font-size: 16px; }
-	&.md-18 { font-size: 18px; }
-	&.md-20 { font-size: 20px; }
-	&.md-24 { font-size: 24px; }
-	&.md-30 { font-size: 30px; }
-	&.md-36 { font-size: 36px; }
-	&.md-48 { font-size: 48px; }
+	&.md-14 {
+		font-size: 14px;
+	}
+	&.md-16 {
+		font-size: 16px;
+	}
+	&.md-18 {
+		font-size: 18px;
+	}
+	&.md-20 {
+		font-size: 20px;
+	}
+	&.md-24 {
+		font-size: 24px;
+	}
+	&.md-30 {
+		font-size: 30px;
+	}
+	&.md-36 {
+		font-size: 36px;
+	}
+	&.md-48 {
+		font-size: 48px;
+	}
 
 	&.md-dark {
 		color: rgba(0, 0, 0, 0.54);
@@ -54,6 +71,16 @@
 		&.md-inactive {
 			color: rgba(255, 255, 255, 0.3);
 		}
+	}
+}
+
+.animated {
+	&.delay-1s {
+		animation-delay: 1s;
+	}
+
+	&.slow-fast {
+		animation-duration: 1.2s;
 	}
 }
 
@@ -94,6 +121,20 @@
     .generate-font-size(@levels-font-size-count, (@q + 1));
 }
 .generate-font-size(@levels-font-size-count);
+
+
+@levels-column-count: 24;
+
+
+.make-grid-column(@levels-column-count, @q: 1) when (@q =< @levels-column-count) {
+    ._col-@{q} {
+        flex: 0 0 100% / 24 * @q;
+        max-width: 100% / 24 * @q;
+    }
+    .make-grid-column(@levels-column-count, (@q + 1));
+}
+.make-grid-column(@levels-column-count);
+
 
 .flex-grow {
 	flex: 0 1 100%;
@@ -167,6 +208,7 @@ html {
 }
 
 body {
+	background: rgba(0, 0, 0, 0.75);
 	color: #000;
 	height: 100%;
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;

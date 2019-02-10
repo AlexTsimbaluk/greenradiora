@@ -148,7 +148,7 @@
 						<div
 							class="playlist playlist-name-error"
 							v-if="state.playlistNameError != -1"
-							:style="{ left: state.playlistNameError * 112 + 'px' }"
+							:style="{ left: state.playlistNameError * 106 + 'px' }"
 						>
 							No, please
 							<!-- <m-icon
@@ -173,9 +173,10 @@
 							:class="[playlist == state.currentPlaylist ? 'active' : '']"
 							:key="index"
 						>							
-							<div class="row align-items-center w-100 mh-100 no-gutters position-relative">
+							<!-- <div class="row align-items-center w-100 h-100 no-gutters position-relative"> -->
+							<div class="row flex-nowrap w-100 h-100 no-gutters position-relative">
 								<div
-									class="col-2 playlist-controls"
+									class="col d-flex justify-content-center playlist-controls"
 									@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
 								>
 									<m-icon
@@ -186,7 +187,7 @@
 								</div>
 
 								<div
-									class="col-8 mh-100 position-static font-size-13"
+									class="_col-15 d-flex position-static font-size-13 plt"
 								>
 									<transition
 										mode="out-in"
@@ -197,7 +198,7 @@
 											v-if="playlistEdit != index"
 											key="name"
 											@click="setCurrentPlaylist(playlist)"
-											class="w-100 o-x-hidden text-ellipsis playlist-title"
+											class="align-self-center w-100 o-x-hidden text-ellipsis playlist-title"
 										>
 											{{playlist}}
 											<ripple></ripple>
@@ -222,7 +223,7 @@
 								</div>
 
 								<div
-									class="col-2 playlist-controls"
+									class="col d-flex justify-content-center playlist-controls"
 									@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
 								>
 									<m-icon
@@ -261,11 +262,12 @@
 					>
 						<transition-group
 							v-if="state.currentPlaylist && state.playlists[state.currentPlaylist] && state.playlists[state.currentPlaylist].tracks.length"
-							name="flipinx"
-							mode="in-out"
-							enter-active-class="animated flipInY faster"
-						    leave-active-class="animated slideOutRight faster"
+							mode="out-in"
+							enter-active-class="animated flipInY slow-fast"
+						    leave-active-class="animated bounceOutRight"
 						>
+							<!-- enter-active-class="animated flipInY faster" -->
+						    <!-- leave-active-class="animated flipOutY" -->
 							<station
 								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 								:station="stationsArray[track]"
@@ -913,15 +915,19 @@ export default {
 		cursor: pointer;
 		display: flex;
 		justify-content: center;
-		height: 30px;
+		height: 32px;
+		line-height: 32px;
 		width: 106px;
-		min-width: 106px;
-		margin-right: 6px;
+		/*margin-right: 6px;*/
 		padding: 0;
 		overflow: hidden;
 		text-align: center;
 		position: relative;
 		transition: all 0.6s ease-out;
+	}
+
+	.playlist .material-icons {
+		line-height: 32px;
 	}
 
 	.playlist.active {
@@ -930,9 +936,24 @@ export default {
 	}
 
 	.playlist-controls {
+		/* flex-grow: 1;
+		flex-grow: 0;
+		flex-shrink: 1;
+		flex-shrink: 0;
+		flex: 0 1 20%;*/
+
 		cursor: default;
+		padding: 0 2px;
 		position: relative;
 		z-index: 1;
+	}
+
+	.plt {
+		/* flex-grow: 1;
+		flex-grow: 0;
+		flex-shrink: 1;
+		flex-shrink: 0; */
+		/*flex: 0 1 60%;*/
 	}
 
 	.playlist-title {
