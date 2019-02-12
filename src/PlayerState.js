@@ -296,7 +296,13 @@ export default new Vue({
 
 		addStation (station) {
 			Utils.logs('::' + station.station_title + ' added to ' + this.playerState.currentPlaylist + ' playlist');
+			
 			let plCur = this.getCurrentPlaylist();
+			
+			if(plCur.some((i) => { return i == station.station_id; })) {
+				return false;
+			}
+			
 			let plLength = plCur.length;
 
 			plCur.splice(plCur.length - 1, 0, +station.station_id);
