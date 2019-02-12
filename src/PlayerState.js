@@ -302,7 +302,7 @@ export default new Vue({
 			if(plCur.some((i) => { return i == station.station_id; })) {
 				return false;
 			}
-			
+
 			let plLength = plCur.length;
 
 			plCur.splice(plCur.length - 1, 0, +station.station_id);
@@ -312,7 +312,7 @@ export default new Vue({
 				let last = plCur.splice(plCur.length - 1, 1)[0];
 				plCur.splice(plCur.length - 1, 0, last);
 				this.stateChanged();
-			}, 400);
+			}, 1000);
 		},
 
 	    audioBindAll (player) {

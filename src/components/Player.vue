@@ -263,11 +263,9 @@
 						<transition-group
 							v-if="state.currentPlaylist && state.playlists[state.currentPlaylist] && state.playlists[state.currentPlaylist].tracks.length"
 							mode="out-in"
-							enter-active-class="animated flipInY slow-fast"
-						    leave-active-class="animated bounceOutRight"
+							enter-active-class="animated fadeInLeft slow-fast"
+						    leave-active-class="animated fadeOutRight faster"
 						>
-							<!-- enter-active-class="animated flipInY faster" -->
-						    <!-- leave-active-class="animated flipOutY" -->
 							<station
 								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 								:station="stationsArray[track]"
