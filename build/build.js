@@ -12,6 +12,10 @@ const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
 
 const spinner = ora('building for production...')
+
+let _start = new Date();
+let _startMs = _start.getTime();
+
 spinner.start()
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
@@ -32,10 +36,17 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       process.exit(1)
     }
 
+    let _end = new Date();
+    let _endMs = _end.getTime();
+    let _buildTime = Math.round((_end - _start) / 1000);
+    let _buildSec = _buildTime % 60;
+    let _buildMin = (_buildTime - _buildSec) / 60;
+
     console.log(chalk.cyan('  Build complete.\n'))
     console.log(chalk.yellow(
       '  Tip: built files are meant to be served over an HTTP server.\n' +
       '  Opening index.html over file:// won\'t work.\n'
     ))
+    console.log(chalk.cyan('  Build time: ' + _buildMin  + 'm ' + _buildSec + 's.\n'))
   })
 })
