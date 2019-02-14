@@ -187,7 +187,7 @@
 								</div>
 
 								<div
-									class="_col-15 d-flex position-static font-size-13 plt"
+									class="_col-14 d-flex position-static font-size-13 plt"
 								>
 									<transition
 										mode="out-in"
@@ -207,7 +207,7 @@
 										<div
 											v-if="playlistEdit == index"
 											key="edit"
-											class="w-100 h-100"
+											class="align-self-center playlist-title"
 										>
 											<input
 												v-focus
@@ -916,6 +916,7 @@ export default {
 		height: 32px;
 		line-height: 32px;
 		width: 106px;
+		min-width: 106px;
 		/*margin-right: 6px;*/
 		padding: 0;
 		overflow: hidden;
