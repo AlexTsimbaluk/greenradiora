@@ -216,31 +216,11 @@ export default new Vue({
 			this.stateChanged();
 		},
 
+		// TODO
 		editPlaylist(oldPlaylistName, newPlaylistName, index, active) {
-			let duplicate = Object.keys(this.playerState.playlists).some((name) => {
-				return name == newPlaylistName;
-			});
+			console.log(oldPlaylistName, newPlaylistName, index, active);
 
-			if(newPlaylistName.length == 0 || duplicate) {
-				this.playerState.playlistNameError = index;
-				this.stateChanged();
-				// ☯ - 9775
-				// ☺ - 9786
-				let nbsp = String.fromCharCode(9775) + String.fromCharCode(160);
-
-				if(oldPlaylistName.indexOf(nbsp) == 0) {
-					newPlaylistName = oldPlaylistName.substring(nbsp.length);
-				} else {
-					newPlaylistName = nbsp + oldPlaylistName;
-				}
-
-				setTimeout(() => {
-					this.editPlaylist(newPlaylistName, newPlaylistName.substring(nbsp.length), index, active);
-				}, 1800);
-			} else {
-				this.playerState.playlistNameError = -1;
-				this.stateChanged();
-			}
+			this.playerState.playlistNameError = -1;
 
 			this.playerState.playlistsOrder[index] = newPlaylistName;
 
@@ -507,6 +487,7 @@ export default new Vue({
 			this.playerState.playlistEdit = -1;
 			this.playerState.searchResults = [];
 			this.playerState.nowPlaying = {};
+			this.playerState.playlistNameError = -1;
 			this.stateChanged();
 		}
 	}

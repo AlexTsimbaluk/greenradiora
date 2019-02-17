@@ -1,340 +1,354 @@
 <template>
-	<div class="player flex-grow mx-auto">
+	<div
+		class="player flex-grow mx-auto"
+	>
 		<loader v-if="!xhrResponceRecieved || waiting"></loader>
 
-		<div
-			v-if="xhrResponceRecieved"
-			class="d-flex flex-column h-100"
+		<transition
+			mode="out-in"
+			enter-active-class="animated fadeIn"
+		    leave-active-class="animated fadeOut"
 		>
 			<div
-				class="d-flex flex-shrink-0 justify-content-between current-track"
+				v-if="xhrResponceRecieved"
+				class="d-flex flex-column h-100"
 			>
-				<transition name="flip" mode="out-in">
-					<div
-						v-if="!state.paused && state.nowPlaying.track"
-						class="flex-grow-1 track-title"
-					>
-						{{state.nowPlaying.track.station_title}}
-					</div>
-				</transition>
-
 				<div
-					class="ml-auto mr-3 status"
+					class="d-flex flex-shrink-0 justify-content-between current-track"
 				>
 					<transition name="flip" mode="out-in">
 						<div
-							@click="state.status = ''"
-							v-if="state.status"
-							class="d-flex align-items-center"
+							v-if="!state.paused && state.nowPlaying.track"
+							class="flex-grow-1 track-title"
 						>
-							{{state.status}}
+							{{state.nowPlaying.track.station_title}}
 						</div>
 					</transition>
-				</div>
 
-				<transition name="flip" mode="out-in">
 					<div
-						v-if="!state.paused"
-						class="d-flex align-items-center time"
+						class="ml-auto mr-3 status"
 					>
-						{{playingTime}}
+						<transition name="flip" mode="out-in">
+							<div
+								@click="state.status = ''"
+								v-if="state.status"
+								class="d-flex align-items-center"
+							>
+								{{state.status}}
+							</div>
+						</transition>
 					</div>
-				</transition>
-			</div>
 
-			<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2">
-				<div
-					class="d-flex"
-				>
-					<button
-						class="btn btn-outline-info btn-fab btn-round"
-						@click="playStream"
-					>
-						<m-icon
-							class="md-24"
-							:i="'play_arrow'"
-							:t="'light'"
-						></m-icon>
-						<ripple></ripple>
-					</button>
-
-					<button
-						class="btn btn-outline-info btn-fab btn-round"
-						@click="stopStream"
-					>
-						<m-icon
-							class="md-24"
-							:i="'stop'"
-							:t="'light'"
-						></m-icon>
-						<ripple></ripple>
-					</button>
-				</div>
-
-				<div
-					class="d-flex"
-				>
-					<input
-						@change="setVolume($event)"
-						v-model="state.volume"
-						class="d-flex align-items-center"
-						type="range"
-						min="0"
-						max="1"
-						step="0.01"
-					/>
-
-					<span class="ml-3 d-flex align-items-center">
-						<!-- TODO: округлить до целых -->
-						{{Math.round(state.volume * 100)}}
-					</span>
-				</div>
-			</div>
-
-			<div class="d-flex flex-shrink-0 row no-gutters py-2">
-				<div
-					class="d-flex col-12 col-sm-6 search-station"
-				>
-					<input
-						@keyup="searchStation($event)"
-						v-model="searchString"
-						type="text"
-						class="form-control search-station-input"
-						placeholder="Search"
-					/>
-					
-					<transition name="fade" mode="out-in">
+					<transition name="flip" mode="out-in">
 						<div
-							v-if="noSearchResults"
-							key="notfinded"
-							class="d-flex align-items-center h-100 position-absolute no-results"
+							v-if="!state.paused"
+							class="d-flex align-items-center time"
 						>
-							No results :(
-						</div>
-
-						<div
-							v-if="searchResults.length"
-							key="finded"
-							class="d-flex align-items-center h-100 position-absolute no-results"
-						>
-							{{searchResults.length}}
+							{{playingTime}}
 						</div>
 					</transition>
+				</div>
 
-					<transition name="fade" mode="out-in">
+				<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2">
+					<div
+						class="d-flex"
+					>
 						<button
-							v-if="searchResults.length"
-							class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
-							@click="resetSearch();"
+							class="btn btn-outline-info btn-fab btn-round"
+							@click="playStream"
 						>
 							<m-icon
 								class="md-24"
-								:i="'close'"
+								:i="'play_arrow'"
 								:t="'light'"
 							></m-icon>
 							<ripple></ripple>
 						</button>
-					</transition>
-				</div>
-			</div>
 
-			<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative">
-				<div class="d-flex flex-grow-1 playlists">
-					<transition
-						mode="out-in"
-						enter-active-class="animated zoomIn faster"
-					    leave-active-class="animated rotateOutDownLeft faster"
-					>
-						<div
-							class="playlist playlist-name-error"
-							v-if="state.playlistNameError != -1"
-							:style="{ left: state.playlistNameError * 106 + 'px' }"
+						<button
+							class="btn btn-outline-info btn-fab btn-round"
+							@click="stopStream"
 						>
-							No, please
-							<!-- <m-icon
-								class="md-16 ml-1"
-								:i="'sentiment_dissatisfied'"
+							<m-icon
+								class="md-24"
+								:i="'stop'"
 								:t="'light'"
-							></m-icon> -->
-							<span class="font-size-15">☹</span>
-							<span class="font-size-24" style="margin-top: -4px;">☺</span>
-						</div>
-					</transition>
+							></m-icon>
+							<ripple></ripple>
+						</button>
+					</div>
 
-					<transition-group
-						mode="out-in"
-						enter-active-class="animated zoomIn faster"
-					    leave-active-class="animated rotateOutDownLeft faster"
-						class="d-flex w-100 o-y-hidden"
+					<div
+						class="d-flex"
 					>
-						<div
-							v-for="(playlist, index) in state.playlistsOrder"
-							class="playlist"
-							:class="[playlist == state.currentPlaylist ? 'active' : '']"
-							:key="index"
-						>							
-							<!-- <div class="row align-items-center w-100 h-100 no-gutters position-relative"> -->
-							<div class="row flex-nowrap w-100 h-100 no-gutters position-relative">
-								<div
-									class="col d-flex justify-content-center playlist-controls"
-									@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
-								>
-									<m-icon
-										class="md-16"
-										:i="'not_interested'"
-										:t="'light'"
-									></m-icon>
-								</div>
+						<input
+							@change="setVolume($event)"
+							v-model="state.volume"
+							class="d-flex align-items-center"
+							type="range"
+							min="0"
+							max="1"
+							step="0.01"
+						/>
 
-								<div
-									class="_col-14 d-flex position-static font-size-13 plt"
-								>
-									<transition
-										mode="out-in"
-										enter-active-class="animated zoomIn faster"
-									    leave-active-class="animated zoomOut faster"
+						<span class="ml-3 d-flex align-items-center">
+							<!-- TODO: округлить до целых -->
+							{{Math.round(state.volume * 100)}}
+						</span>
+					</div>
+				</div>
+
+				<div class="d-flex flex-shrink-0 row no-gutters py-2">
+					<div
+						class="d-flex col-12 col-sm-6 search-station"
+					>
+						<input
+							@keyup="searchStation($event)"
+							v-model="searchString"
+							type="text"
+							class="form-control search-station-input"
+							placeholder="Search"
+						/>
+						
+						<transition name="fade" mode="out-in">
+							<div
+								v-if="noSearchResults"
+								key="notfinded"
+								class="d-flex align-items-center h-100 position-absolute no-results"
+							>
+								No results :(
+							</div>
+
+							<div
+								v-if="searchResults.length"
+								key="finded"
+								class="d-flex align-items-center h-100 position-absolute no-results"
+							>
+								{{searchResults.length}}
+							</div>
+						</transition>
+
+						<transition name="fade" mode="out-in">
+							<button
+								v-if="searchResults.length"
+								class="btn btn-info btn-link btn-fab btn-round position-absolute h-100 resetSearch"
+								@click="resetSearch();"
+							>
+								<m-icon
+									class="md-24"
+									:i="'close'"
+									:t="'light'"
+								></m-icon>
+								<ripple></ripple>
+							</button>
+						</transition>
+					</div>
+				</div>
+
+				<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative">
+					<!-- TODO: скролл пр добавлении
+					ref="playlistsPanel" -->
+					<div
+						class="d-flex flex-grow-1 playlists"
+					>
+						<transition
+							mode="out-in"
+							enter-active-class="animated zoomIn faster"
+						    leave-active-class="animated rotateOutDownLeft faster"
+						>
+							<div
+								class="playlist playlist-name-error"
+								v-if="state.playlistNameError != -1 && playlistEdit != -1"
+								:style="{ left: state.playlistNameError * 106 + 'px' }"
+							>
+								No, please
+								<!-- <m-icon
+									class="md-16 ml-1"
+									:i="'sentiment_dissatisfied'"
+									:t="'light'"
+								></m-icon> -->
+								<span class="font-size-15">☹</span>
+								<!-- <span class="font-size-24" style="margin-top: -4px;">☺</span> -->
+							</div>
+						</transition>
+
+						<transition-group
+							mode="out-in"
+							enter-active-class="animated zoomIn faster"
+						    leave-active-class="animated rotateOutDownLeft faster"
+							class="d-flex w-100 o-y-hidden"
+						>
+							<div
+								v-for="(playlist, index) in state.playlistsOrder"
+								class="playlist"
+								:class="[playlist == state.currentPlaylist ? 'active' : '']"
+								:key="index"
+							>							
+								<!-- <div class="row align-items-center w-100 h-100 no-gutters position-relative"> -->
+								<div class="row flex-nowrap w-100 h-100 no-gutters position-relative">
+									<div
+										class="col d-flex justify-content-center playlist-controls"
+										@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
 									>
-										<div
-											v-if="playlistEdit != index"
-											key="name"
-											@click="setCurrentPlaylist(playlist)"
-											class="align-self-center w-100 o-x-hidden text-ellipsis playlist-title"
-										>
-											{{playlist}}
-											<ripple></ripple>
-										</div>
+										<m-icon
+											class="md-16"
+											:i="'not_interested'"
+											:t="'light'"
+										></m-icon>
+									</div>
 
-										<div
-											v-if="playlistEdit == index"
-											key="edit"
-											class="align-self-center playlist-title"
+									<div
+										class="_col-14 d-flex position-static font-size-13 plt"
+									>
+										<transition
+											mode="out-in"
+											enter-active-class="animated zoomIn faster"
+										    leave-active-class="animated zoomOut faster"
 										>
-											<input
-												v-focus
-												v-model="state.playlistsOrder[index]"
-												@keyup.enter="toggleEditPlaylist(playlist, -1, playlist == state.currentPlaylist)"
-												@change="playlistNameUpdated($event, playlist, index)"
-												type="text"
-												placeholder="Edit"
-												class="form-control edit-playlist-input"
-											/>
-										</div>
-									</transition>
-								</div>
+											<div
+												v-if="playlistEdit != index"
+												key="name"
+												@click="setCurrentPlaylist(playlist)"
+												class="align-self-center w-100 o-x-hidden text-ellipsis playlist-title"
+											>
+												{{playlist}}
+												<ripple></ripple>
+											</div>
 
-								<div
-									class="col d-flex justify-content-center playlist-controls"
-									@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
-								>
-									<m-icon
-										class="md-16"
-										:i="'edit'"
-										:t="'light'"
-									></m-icon>
+											<div
+												v-if="playlistEdit == index"
+												key="edit"
+												class="align-self-center playlist-title"
+											>
+													<!-- v-model="state.playlistsOrder[index]" -->
+													<!-- @change="playlistNameUpdated($event, playlist, index)" -->
+													<!-- @keyup.enter="toggleEditPlaylist(playlist, -1, playlist == state.currentPlaylist)" -->
+												<input
+													v-focus
+													:value="state.playlistsOrder[index]"
+													@keyup="setPlaylistName($event, playlist, index)"
+													type="text"
+													placeholder="Edit"
+													class="form-control edit-playlist-input"
+												/>
+											</div>
+										</transition>
+									</div>
+
+									<div
+										class="col d-flex justify-content-center playlist-controls"
+										@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
+									>
+										<m-icon
+											class="md-16"
+											:i="'edit'"
+											:t="'light'"
+										></m-icon>
+									</div>
 								</div>
 							</div>
-						</div>
-					</transition-group>
-				</div>
-
-				<div class="flex-grow-0">
-					<button
-						class="btn btn-link btn-fab"
-						@click="addPlaylist"
-					>
-						<m-icon
-							class="md-24"
-							:i="'add'"
-							:t="'light'"
-						></m-icon>
-						<ripple></ripple>
-					</button>
-				</div>
-			</div>
-
-			<div
-				class="d-flex flex-column flex-grow-1 no-gutters track-list-container"
-			>
-				<transition name="slide" mode="out-in">
-					<div
-						v-if="!searchFull"
-						class="col pb-2 track-list"
-					>
-						<transition-group
-							v-if="state.currentPlaylist && state.playlists[state.currentPlaylist] && state.playlists[state.currentPlaylist].tracks.length"
-							mode="out-in"
-							enter-active-class="animated fadeInLeft slow-fast"
-						    leave-active-class="animated fadeOutRight faster"
-						>
-							<station
-								v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
-								:station="stationsArray[track]"
-								:key="track"
-								:class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}"
-							></station>
 						</transition-group>
 					</div>
-				</transition>
 
-				<transition name="slide" mode="out-in">
-					<div
-						v-if="searchResults.length"
-						class="col d-flex flex-column no-gutters pt-2 search-list"
-					>
-						<div class="d-flex justify-content-between align-items-center">
-							<div class="total-search">
-								For query <span class="font-weight-bold">"{{searchString}}"</span> found <span class="font-weight-bold">{{searchResults.length}}</span> stations
-							</div>
-
-							<div class="">
-								<button
-									class="btn btn-link btn-fab"
-									@click="searchFullToggle"
-								>
-									<m-icon
-										v-if="searchFull"
-										class="md-24"
-										:i="'vertical_align_center'"
-										:t="'light'"
-									></m-icon>
-
-									<m-icon
-										v-else
-										class="md-24"
-										:i="'vertical_align_top'"
-										:t="'light'"
-									></m-icon>
-
-									<ripple></ripple>
-								</button>
-
-								<button
-									class="btn btn-link btn-fab"
-									@click="resetSearch();"
-								>
-									<m-icon
-										class="md-24"
-										:i="'close'"
-										:t="'light'"
-									></m-icon>
-									<ripple></ripple>
-								</button>
-							</div>
-						</div>
-
-						<div class="col o-y-auto">
-							<station
-								@addStation="scrollToBottom($event)"
-								v-for="(track, key) in searchResults"
-								:station="stationsArray[track]"
-								:search="true"
-								:key="track.station_id"
-							></station>
-						</div>
+					<div class="flex-grow-0">
+						<button
+							class="btn btn-link btn-fab"
+							@click="addPlaylist"
+						>
+							<m-icon
+								class="md-24"
+								:i="'add'"
+								:t="'light'"
+							></m-icon>
+							<ripple></ripple>
+						</button>
 					</div>
-				</transition>
+				</div>
+
+				<div
+					class="d-flex flex-column flex-grow-1 no-gutters track-list-container"
+				>
+					<transition name="slide" mode="out-in">
+						<div
+							v-if="!searchFull"
+							class="col pb-2 track-list"
+						>
+							<transition-group
+								v-if="state.currentPlaylist && state.playlists[state.currentPlaylist] && state.playlists[state.currentPlaylist].tracks.length"
+								mode="out-in"
+								enter-active-class="animated fadeInLeft slow-fast"
+							    leave-active-class="animated fadeOutRight faster"
+							>
+								<station
+									v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
+									:station="stationsArray[track]"
+									:key="track"
+									:class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}"
+								></station>
+							</transition-group>
+						</div>
+					</transition>
+
+					<transition name="slide" mode="out-in">
+						<div
+							v-if="searchResults.length"
+							class="col d-flex flex-column no-gutters pt-2 search-list"
+						>
+							<div class="d-flex justify-content-between align-items-center">
+								<div class="total-search">
+									For query <span class="font-weight-bold">"{{searchString}}"</span> found <span class="font-weight-bold">{{searchResults.length}}</span> stations
+								</div>
+
+								<div class="">
+									<button
+										class="btn btn-link btn-fab"
+										@click="searchFullToggle"
+									>
+										<m-icon
+											v-if="searchFull"
+											class="md-24"
+											:i="'vertical_align_center'"
+											:t="'light'"
+										></m-icon>
+
+										<m-icon
+											v-else
+											class="md-24"
+											:i="'vertical_align_top'"
+											:t="'light'"
+										></m-icon>
+
+										<ripple></ripple>
+									</button>
+
+									<button
+										class="btn btn-link btn-fab"
+										@click="resetSearch();"
+									>
+										<m-icon
+											class="md-24"
+											:i="'close'"
+											:t="'light'"
+										></m-icon>
+										<ripple></ripple>
+									</button>
+								</div>
+							</div>
+
+							<div class="col o-y-auto">
+								<station
+									@addStation="scrollToBottom($event)"
+									v-for="(track, key) in searchResults"
+									:station="stationsArray[track]"
+									:search="true"
+									:key="track.station_id"
+								></station>
+							</div>
+						</div>
+					</transition>
+				</div>
 			</div>
-		</div>
+		</transition>
 
 		<audio id="playerTag" dynamicmetadata></audio>
 	</div>
@@ -381,8 +395,8 @@ export default {
 			searchFull: false,
 
 			playlistEdit: -1,
-			playlistEditedIsActive: null,
-			playlistOldName: ''
+			playlistEditedIsActive: null
+			// playlistOldName: ''
 		}
 	},
 	methods: {
@@ -501,21 +515,55 @@ export default {
 			PlayerState.deletePlaylist(playlistName, index, active);
 		},
 		toggleEditPlaylist(playlistName, index, active) {
+			this.state.playlistNameError = -1;
+
 			if(index == -1 || (this.playlistEdit == index)) {
 				this.playlistEdit = -1;
-				this.playlistOldName = '';
+				// this.playlistOldName = '';
 			} else if(this.playlistEdit != index) {
 				this.playlistEdit = index;
-				this.playlistOldName = playlistName;
+				// this.playlistOldName = playlistName;
 			}
 
 			this.playlistEditedIsActive = active;
 			PlayerState.stateChanged();
 		},
-		playlistNameUpdated (event, playlistName, index) {
+		/*playlistNameUpdated (event, playlistName, index) {
 			PlayerState.editPlaylist(this.playlistOldName, playlistName, index, this.playlistEditedIsActive);
 			this.playlistOldName = '';
 			this.playlistEditedIsActive = null;
+		},*/
+		setPlaylistName (event, playlist, index) {
+			let val = event.target.value;
+
+			if(val.length == 0 || val == playlist) {
+				return false;
+			}
+
+			let duplicate = Object.keys(this.state.playlists).some((name) => {
+				return name == val;
+			});
+
+			if(duplicate) {
+				this.state.playlistNameError = index;
+				return false;
+			}
+
+
+			// TODO: починить на телефоне
+			if(val.length == 0 || duplicate) {
+				// this.state.playlistNameError = index;
+				// ☯ - 9775
+				// ☺ - 9786
+				// let nbsp = String.fromCharCode(9775) + String.fromCharCode(160);
+			} else {
+				// this.state.playlistNameError = -1;
+			}
+
+			if(val.length > 0 && !duplicate) {
+				this.state.playlistNameError = -1;
+				PlayerState.editPlaylist(playlist, val, index, this.playlistEditedIsActive);
+			}
 		}
 	},
 	created () {
