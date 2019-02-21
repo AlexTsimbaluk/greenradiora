@@ -23,6 +23,7 @@ import Ripple from '@/components/Ripple';
 import MIcon from '@/components/MIcon';
 
 import Focus from '@/directives/Focus.js';
+import Scroll from '@/directives/Scroll.js';
 
 
 Vue.component('Log', Log);
@@ -32,6 +33,7 @@ Vue.component('Loader', Loader);
 
 
 Vue.directive('focus', Focus);
+Vue.directive('scroll', Scroll);
 
 
 export default {

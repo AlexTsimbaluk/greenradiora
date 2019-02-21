@@ -146,9 +146,8 @@
 				</div>
 
 				<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative">
-					<!-- TODO: скролл пр добавлении
-					ref="playlistsPanel" -->
 					<div
+						ref="playlistsPanel"
 						class="d-flex flex-grow-1 playlists"
 					>
 						<transition
@@ -172,82 +171,83 @@
 							</div>
 						</transition>
 
-						<transition-group
+						<!-- <transition-group
 							mode="out-in"
 							enter-active-class="animated zoomIn faster"
-						    leave-active-class="animated rotateOutDownLeft faster"
+						    leave-active-class="animated rotateOutDownLeft faster"						    
 							class="d-flex w-100 o-y-hidden"
-						>
-							<div
-								v-for="(playlist, index) in state.playlistsOrder"
-								class="playlist"
-								:class="[playlist == state.currentPlaylist ? 'active' : '']"
-								:key="index"
-							>							
-								<!-- <div class="row align-items-center w-100 h-100 no-gutters position-relative"> -->
-								<div class="row flex-nowrap w-100 h-100 no-gutters position-relative">
-									<div
-										class="col d-flex justify-content-center playlist-controls"
-										@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
-									>
-										<m-icon
-											class="md-16"
-											:i="'not_interested'"
-											:t="'light'"
-										></m-icon>
-									</div>
-
-									<div
-										class="_col-14 d-flex position-static font-size-13 plt"
-									>
-										<transition
-											mode="out-in"
-											enter-active-class="animated zoomIn faster"
-										    leave-active-class="animated zoomOut faster"
+						> -->
+							<div class="d-flex">
+								<div
+									v-for="(playlist, index) in state.playlistsOrder"
+									class="playlist"
+									:class="[playlist == state.currentPlaylist ? 'active' : '']"
+									:key="index"
+								>							
+									<div class="row flex-nowrap w-100 h-100 no-gutters position-relative">
+										<div
+											class="col d-flex justify-content-center playlist-controls"
+											@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
 										>
-											<div
-												v-if="playlistEdit != index"
-												key="name"
-												@click="setCurrentPlaylist(playlist)"
-												class="align-self-center w-100 o-x-hidden text-ellipsis playlist-title"
-											>
-												{{playlist}}
-												<ripple></ripple>
-											</div>
+											<m-icon
+												class="md-16"
+												:i="'not_interested'"
+												:t="'light'"
+											></m-icon>
+										</div>
 
-											<div
-												v-if="playlistEdit == index"
-												key="edit"
-												class="align-self-center playlist-title"
+										<div
+											class="_col-14 d-flex position-static font-size-13 plt"
+										>
+											<transition
+												mode="out-in"
+												enter-active-class="animated zoomIn faster"
+											    leave-active-class="animated zoomOut faster"
 											>
-													<!-- v-model="state.playlistsOrder[index]" -->
-													<!-- @change="playlistNameUpdated($event, playlist, index)" -->
-													<!-- @keyup.enter="toggleEditPlaylist(playlist, -1, playlist == state.currentPlaylist)" -->
-												<input
-													v-focus
-													:value="state.playlistsOrder[index]"
-													@keyup="setPlaylistName($event, playlist, index)"
-													type="text"
-													placeholder="Edit"
-													class="form-control edit-playlist-input"
-												/>
-											</div>
-										</transition>
-									</div>
+												<div
+													v-if="playlistEdit != index"
+													key="name"
+													@click="setCurrentPlaylist($event, playlist)"
+													class="align-self-center w-100 o-x-hidden text-ellipsis playlist-title"
+												>
+													{{playlist}}
+													<ripple></ripple>
+												</div>
 
-									<div
-										class="col d-flex justify-content-center playlist-controls"
-										@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
-									>
-										<m-icon
-											class="md-16"
-											:i="'edit'"
-											:t="'light'"
-										></m-icon>
+												<div
+													v-if="playlistEdit == index"
+													key="edit"
+													class="align-self-center playlist-title"
+												>
+														<!-- v-model="state.playlistsOrder[index]" -->
+														<!-- @change="playlistNameUpdated($event, playlist, index)" -->
+														<!-- @keyup.enter="toggleEditPlaylist(playlist, -1, playlist == state.currentPlaylist)" -->
+													<input
+														v-focus
+														:value="state.playlistsOrder[index]"
+														@keyup="setPlaylistName($event, playlist, index)"
+														type="text"
+														placeholder="Edit"
+														class="form-control edit-playlist-input"
+													/>
+												</div>
+											</transition>
+										</div>
+
+										<div
+											class="col d-flex justify-content-center playlist-controls"
+											@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
+										>
+											<m-icon
+												class="md-16"
+												:i="'edit'"
+												:t="'light'"
+											></m-icon>
+										</div>
 									</div>
 								</div>
 							</div>
-						</transition-group>
+						<!-- </transition-group> -->
 					</div>
 
 					<div class="flex-grow-0">
@@ -396,7 +396,6 @@ export default {
 
 			playlistEdit: -1,
 			playlistEditedIsActive: null
-			// playlistOldName: ''
 		}
 	},
 	methods: {
@@ -444,7 +443,10 @@ export default {
 		stopStream () {
 			PlayerState.stopStream();
 		},
-		setCurrentPlaylist (playlist) {
+		setCurrentPlaylist (event, playlist) {
+			// console.log(event.clientX);
+			// console.log(event.pageX);
+			// console.log(event.screenX);
 			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
 		},
 		setVolume (event) {
@@ -502,7 +504,11 @@ export default {
 			this.searchFull = !this.searchFull;
 		},
 		addPlaylist () {
+			let $playlistsPanel = this.$refs.playlistsPanel;
+
 			PlayerState.addPlaylist();
+			// $playlistsPanel.scrollLeft = $playlistsPanel.scrollWidth;
+			$playlistsPanel.scrollTo({top: 0, left: $playlistsPanel.scrollWidth, behavior: 'smooth'});
 		},
 		scrollToBottom (event) {
 			let $trackList = document.querySelector('.track-list');
@@ -519,20 +525,13 @@ export default {
 
 			if(index == -1 || (this.playlistEdit == index)) {
 				this.playlistEdit = -1;
-				// this.playlistOldName = '';
 			} else if(this.playlistEdit != index) {
 				this.playlistEdit = index;
-				// this.playlistOldName = playlistName;
 			}
 
 			this.playlistEditedIsActive = active;
 			PlayerState.stateChanged();
 		},
-		/*playlistNameUpdated (event, playlistName, index) {
-			PlayerState.editPlaylist(this.playlistOldName, playlistName, index, this.playlistEditedIsActive);
-			this.playlistOldName = '';
-			this.playlistEditedIsActive = null;
-		},*/
 		setPlaylistName (event, playlist, index) {
 			let val = event.target.value;
 
@@ -564,6 +563,10 @@ export default {
 				this.state.playlistNameError = -1;
 				PlayerState.editPlaylist(playlist, val, index, this.playlistEditedIsActive);
 			}
+		},
+		getScroll (event, el) {
+			console.log(event);
+			console.log(el);
 		}
 	},
 	created () {
@@ -953,6 +956,7 @@ export default {
 
 	.playlists {
 		overflow-x: auto;
+		scroll-behavior: smooth;
 	}
 
 	.playlist {
