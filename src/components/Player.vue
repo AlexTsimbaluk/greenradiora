@@ -148,6 +148,7 @@
 				<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative">
 					<div
 						ref="playlistsPanel"
+						v-scroll="getScroll"
 						class="d-flex flex-grow-1 playlists"
 					>
 						<transition
@@ -399,8 +400,8 @@ export default {
 		}
 	},
 	methods: {
-		dataTransfered () {
-			Utils.logs('::Player:method:dataTransfered');
+		init () {
+			Utils.logs('+++ Player:init successfully');
 
 			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 			this.makeOn100();
@@ -570,11 +571,11 @@ export default {
 		}
 	},
 	created () {
-		console.log('::Player:hook:created');
+		console.log('@@@ Player:hook:created');
 
 		PlayerData.$on('dataTransfer', () => {
-			console.log('::Player:$on:dataTransfer');
-			Utils.logs('::Data recieved');
+			Utils.logs('');
+			console.log('+++ Player:$on:dataTransfer::Data from PlayerData recieved successfully');
 
 			PlayerState.getAudioTag('playerTag');
 
@@ -587,23 +588,19 @@ export default {
 				this.playingTime = min + ':' + sec;
 			});
 
-			this.dataTransfered();
+			this.init();
 
 			this.state = PlayerState.playerState;
-			// this.state.status = [];
 			this.state.status = '';
 		});
 
 		PlayerState.$on('stateChanged', (state) => {
-			// console.log('::Player:$on:PlayerState:stateChanged');
 			// console.log(state);
-
 			this.state = state;
 		});
 
 		PlayerState.$on('loader', (visible) => {
-			console.log('::Player:$on:PlayerState:loader');
-			
+			// console.log('::Player:$on:PlayerState:loader');
 			this.waiting = visible;
 		});
 	}

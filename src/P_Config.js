@@ -81,6 +81,6 @@ export default new Vue({
 		}
 	},
 	created () {
-		console.log('::P_Config:hook:created');
+		console.log('@@@ P_Config:hook:created');
 	}
 });

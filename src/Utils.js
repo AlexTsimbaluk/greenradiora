@@ -43,7 +43,7 @@ export default new Vue({
 		  }
 	},
 	created () {
-		console.log('::Utils:hook:created');
+		console.log('@@@ Utils:hook:created');
 
 		// this.locationInfo();
 	}

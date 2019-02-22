@@ -138,7 +138,7 @@
 			}
 		},
 		created () {
-			console.log('::Log:hook:created');
+			console.log('@@@ Log:hook:created');
 
 			Utils.$on('log', (text) => {
 				this.add(text);

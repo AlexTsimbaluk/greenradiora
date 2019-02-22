@@ -23,6 +23,7 @@ new Vue({
 		
 	},
 	created () {
+		console.log('');
 		console.log('========Vue App Entry Point========');
 
 		var cordova = {

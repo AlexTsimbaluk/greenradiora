@@ -297,45 +297,45 @@ export default new Vue({
 
 	    audioBindAll (player) {
 	    	player.addEventListener('abort', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('abort');
 	     		this.loader(false);
 	        });
 	        player.addEventListener('canplay', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('canplay');
 	        });
 	        player.addEventListener('canplaythrough', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('canplaythrough');
 	        });
 	        player.addEventListener('durationchange', (e)=> {
-	     		// console.log('::Event.type::' + e.type);
+	     		// console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('durationchange');
 	        });
 	        player.addEventListener('emptied', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('emptied');
 	     		// $(".spinner").hide();
 	     		this.loader(false);
 	        });
 	        player.addEventListener('encrypted', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('encrypted');
 	        });
 	        player.addEventListener('ended', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('ended');
 	        });
 	        player.addEventListener('error', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('error');
 	     		console.log('Error::' + e.code +':: ' + e.message);
@@ -352,22 +352,22 @@ export default new Vue({
 	     		}*/
 	        });
 	        player.addEventListener('interruptbegin', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('interruptbegin');
 	        });
 	        player.addEventListener('interruptend', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('interruptend');
 	        });
 	        player.addEventListener('loadeddata', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('loadeddata');
 	        });
 	        player.addEventListener('loadedmetadata', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('loadedmetadata');
 	     		player.mozGetMetadata && console.log(player.mozGetMetadata());
@@ -375,18 +375,18 @@ export default new Vue({
 	     		this.getMetaData(this.playerTag.src);
 	        });
 	        player.addEventListener('loadstart', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.getMetaData(this.playerTag.src);
 	     		this.setStatus('loadstart');
 	        });
 	        player.addEventListener('mozaudioavailable', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('mozaudioavailable');
 	        });
 	        player.addEventListener('pause', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('pause');
 	     		this.loader(false);
@@ -396,13 +396,13 @@ export default new Vue({
 	     		// playerState.paused = player.paused;
 	        });
 	        player.addEventListener('play', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('play');	     		
 	     		this.loader(true);
 	        });
 	        player.addEventListener('playing', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('playing');
 	     		
@@ -416,17 +416,17 @@ export default new Vue({
 	     		// document.title =  this.playerState.nowPlaying.track.station_title + '::Radiora';
 	        });
 	        player.addEventListener('ratechange', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('ratechange');
 	        });
 	        player.addEventListener('seeked', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('seeked');
 	        });
 	        player.addEventListener('seeking', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('seeking');
 	        });
@@ -441,26 +441,26 @@ export default new Vue({
 	 			this.playingTime = min + ':' + sec;
 	        });*/
 	        player.addEventListener('stalled', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('stalled');
 	     		// $(".spinner").hide();
 	     		this.loader(false);
 	        });
 	        player.addEventListener('suspend', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('suspend');
 	        });
 	        player.addEventListener('waiting', (e)=> {
-	     		console.log('::Event.type::' + e.type);
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('waiting');
 	        });
 	    }
 	},
 	created () {
-		console.log('::PlayerState:hook:created');
+		console.log('@@@ PlayerState:hook:created');
 
 		if(localStorage.getItem('playerState') == undefined) {
 			P_Config.init();
