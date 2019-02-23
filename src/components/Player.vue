@@ -13,6 +13,7 @@
 				v-if="xhrResponceRecieved"
 				class="d-flex flex-column h-100"
 			>
+				<!-- track title, playing time -->
 				<div
 					class="d-flex flex-shrink-0 justify-content-between current-track"
 				>
@@ -25,7 +26,7 @@
 						</div>
 					</transition>
 
-					<div
+					<!-- <div
 						class="ml-auto mr-3 status"
 					>
 						<transition name="flip" mode="out-in">
@@ -37,7 +38,7 @@
 								{{state.status}}
 							</div>
 						</transition>
-					</div>
+					</div> -->
 
 					<transition name="flip" mode="out-in">
 						<div
@@ -48,7 +49,8 @@
 						</div>
 					</transition>
 				</div>
-
+				
+				<!-- buttons, volume -->
 				<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2">
 					<div
 						class="d-flex"
@@ -97,8 +99,9 @@
 						</span>
 					</div>
 				</div>
-
-				<div class="d-flex flex-shrink-0 row no-gutters py-2">
+				
+				<!-- search station input -->
+				<div class="d-flex flex-shrink-0 row no-gutters py-2 position-relative">
 					<div
 						class="d-flex col-12 col-sm-6 search-station"
 					>
@@ -142,9 +145,25 @@
 								<ripple></ripple>
 							</button>
 						</transition>
+
+					</div>
+
+					<div
+						class="ml-auto mr-3 status"
+					>
+						<transition name="flip" mode="out-in">
+							<div
+								@click="state.status = ''"
+								v-if="state.status"
+								class="d-flex align-items-center"
+							>
+								{{state.status}}
+							</div>
+						</transition>
 					</div>
 				</div>
 
+				<!-- playlists Panel -->
 				<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative">
 					<div
 						ref="playlistsPanel"
@@ -265,7 +284,8 @@
 						</button>
 					</div>
 				</div>
-
+				
+				<!-- track list -->
 				<div
 					class="d-flex flex-column flex-grow-1 no-gutters track-list-container"
 				>
@@ -614,8 +634,11 @@ export default {
 
 	.status {
 		cursor: default;
-		/*transition: all .3s;*/
-		position: relative;
+		font-size: 12px;
+		line-height: 1;
+		position: absolute;
+		top: 8px;
+		right: -14px;
 	}
 
 	.playlist-enter-active {

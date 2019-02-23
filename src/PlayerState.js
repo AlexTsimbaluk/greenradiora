@@ -120,7 +120,7 @@ export default new Vue({
 		setStatus (status) {
 			this.playerState.status = '';
 			this.playerState.status = status;
-			this.checkStatus();
+			// this.checkStatus();
 			
 			// console.log(this.playerState.status);
 
