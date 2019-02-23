@@ -120,16 +120,7 @@ export default new Vue({
 		setStatus (status) {
 			this.playerState.status = '';
 			this.playerState.status = status;
-			// this.checkStatus();
-			
-			// console.log(this.playerState.status);
-
-			/*if(this.playerState.status.length > 1) {
-				this.playerState.status.shift();
-				this.playerState.status.push(status);
-			} else {
-				this.playerState.status.push(status);
-			}*/
+			this.checkStatus();
 		},
 
 		getMetaData (streamingUrl) {

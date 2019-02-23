@@ -26,20 +26,6 @@
 						</div>
 					</transition>
 
-					<!-- <div
-						class="ml-auto mr-3 status"
-					>
-						<transition name="flip" mode="out-in">
-							<div
-								@click="state.status = ''"
-								v-if="state.status"
-								class="d-flex align-items-center"
-							>
-								{{state.status}}
-							</div>
-						</transition>
-					</div> -->
-
 					<transition name="flip" mode="out-in">
 						<div
 							v-if="!state.paused"
@@ -100,7 +86,7 @@
 					</div>
 				</div>
 				
-				<!-- search station input -->
+				<!-- search station input, status -->
 				<div class="d-flex flex-shrink-0 row no-gutters py-2 position-relative">
 					<div
 						class="d-flex col-12 col-sm-6 search-station"
@@ -148,19 +134,16 @@
 
 					</div>
 
-					<div
-						class="ml-auto mr-3 status"
-					>
-						<transition name="flip" mode="out-in">
-							<div
-								@click="state.status = ''"
-								v-if="state.status"
-								class="d-flex align-items-center"
-							>
-								{{state.status}}
-							</div>
-						</transition>
-					</div>
+					
+					<transition name="flip" mode="out-in">
+						<div
+							@click="state.status = ''"
+							v-if="state.status"
+							class="status"
+						>
+							{{state.status}}
+						</div>
+					</transition>
 				</div>
 
 				<!-- playlists Panel -->
@@ -638,7 +621,7 @@ export default {
 		line-height: 1;
 		position: absolute;
 		top: 8px;
-		right: -14px;
+		right: 0;
 	}
 
 	.playlist-enter-active {
