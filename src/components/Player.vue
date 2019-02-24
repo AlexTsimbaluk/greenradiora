@@ -204,8 +204,8 @@
 										>
 											<transition
 												mode="out-in"
-												enter-active-class="animated zoomIn faster"
-											    leave-active-class="animated zoomOut faster"
+												enter-active-class="animated zoomIn fastest"
+											    leave-active-class="animated zoomOut fastest"
 											>
 												<div
 													v-if="playlistEdit != index"
@@ -612,7 +612,9 @@ export default {
 
 <style>
 	.current-track {
+		font-size: 14px;
 		height: 24px;
+		overflow-y: hidden;
 	}
 
 	.status {
