@@ -1,11 +1,15 @@
 <template>
 	<div
 		id="app"
+		:style="{opacity: appOpacity}"
 		class="d-flex flex-column justify-content-center"
+		ref="app"
 	>
 		<router-view/>
 		
-		<log></log>		
+		<log
+			@setAppOpacity="setAppOpacity($event)"
+		></log>		
 	</div>
 </template>
 
@@ -40,8 +44,17 @@ export default {
 	name: 'App',
 	data () {
 		return {
-
+			appOpacity: 1
 		}
+	},
+	methods: {
+		setAppOpacity (event) {
+			this.appOpacity = event;
+			this.$emit('opacityChanged', this.appOpacity);
+		}
+	},
+	created () {
+		this.$emit('opacityChanged', this.appOpacity);
 	}
 }
 

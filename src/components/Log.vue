@@ -17,6 +17,17 @@
 
 				<button
 					class="btn btn-default btn-fab btn-round btn-control"
+					@click="toggleOpacityRange"
+				>
+					<m-icon
+						:i="'settings'"
+						:t="opacityRangeVisible ? 'light' : ''"
+					></m-icon>
+					<ripple></ripple>
+				</button>
+
+				<button
+					class="btn btn-default btn-fab btn-round btn-control"
 					@click="clearLocalStorage"
 				>
 					<m-icon
@@ -73,7 +84,25 @@
 				>
 					#{{index}} {{ log }}
 				</div>
+
 			</div>
+		</div>
+		
+		<div
+			v-if="logVisible && opacityRangeVisible"
+			class="m-auto"
+		>
+				<!-- v-model="state.volume" -->
+			<input
+				@change="setAppOpacity($event)"
+				@opacityChanged="opacityChanged(event)"
+				class="d-flex align-items-center"
+				type="range"
+				min="0.5"
+				max="1"
+				:value="appOpacity"
+				step="0.01"
+			/>
 		</div>
 	</div>
 </template>
@@ -94,13 +123,20 @@
 				logEl: null,
 
 				locationReload: Utils.locationReload,
-				clearLocalStorage: Utils.clearLocalStorage
+				clearLocalStorage: Utils.clearLocalStorage,
+
+				opacityRangeVisible: false,
+				appOpacity: 1
 			}
 		},
 		methods: {
 			toggleLog () {
 				let self = this;
 				this.logVisible = !this.logVisible;
+
+				if(!this.logVisible) {
+					this.opacityRangeVisible = false;
+				}
 
 				if(this.logVisible) {
 					setTimeout(function() {
@@ -135,6 +171,22 @@
 			},
 			playerDataInit () {
 				PlayerData.init();
+			},
+			toggleOpacityRange () {
+				if(!this.logVisible) {
+					this.logVisible = true;
+				}
+
+				this.clear();
+				this.opacityRangeVisible = !this.opacityRangeVisible;
+			},
+			setAppOpacity (event) {
+				let opacity = +event.target.value;
+
+				this.$emit('setAppOpacity', opacity);
+			},
+			opacityChanged (event) {
+				this.appOpacity = event;
 			}
 		},
 		created () {
