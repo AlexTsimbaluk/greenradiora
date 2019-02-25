@@ -51,8 +51,6 @@ new Vue({
 				document.body.classList.add('device-' + PlayerData.device);
 				
 				PlayerData.init();
-
-				this.$emit('deviceready')
 			}
 		};
 
