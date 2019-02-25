@@ -985,6 +985,11 @@ export default {
 		transition: all 0.6s ease-out;
 	}
 
+	.device-android .playlist {
+		width: 100px;
+		min-width: 100px;
+	}
+
 	.playlist .material-icons {
 		line-height: 32px;
 	}
