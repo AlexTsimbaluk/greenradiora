@@ -189,7 +189,8 @@
 								>							
 									<div class="row flex-nowrap w-100 h-100 no-gutters position-relative">
 										<div
-											class="col d-flex justify-content-center playlist-controls"
+											:class="[playlist == state.currentPlaylist ? 'd-flex' : 'hidden']"
+											class="col justify-content-center playlist-controls"
 											@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
 										>
 											<m-icon
@@ -200,7 +201,8 @@
 										</div>
 
 										<div
-											class="_col-14 d-flex position-static font-size-13 plt"
+											:class="[playlist == state.currentPlaylist ? '_col-14' : 'col px-2']"
+											class="d-flex position-static font-size-13 plt"
 										>
 											<transition
 												mode="out-in"
@@ -238,7 +240,8 @@
 										</div>
 
 										<div
-											class="col d-flex justify-content-center playlist-controls"
+											:class="[playlist == state.currentPlaylist ? 'd-flex' : 'hidden']"
+											class="col justify-content-center playlist-controls"
 											@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
 										>
 											<m-icon
