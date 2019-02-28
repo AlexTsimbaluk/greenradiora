@@ -15,7 +15,7 @@
 			>
 				<!-- track title, playing time -->
 				<div
-					class="d-flex flex-shrink-0 justify-content-between current-track"
+					class="d-flex flex-shrink-0 justify-content-between current-track px-2"
 				>
 					<transition name="flip" mode="out-in">
 						<div
@@ -37,7 +37,7 @@
 				</div>
 				
 				<!-- buttons, volume -->
-				<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2">
+				<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2 px-2">
 					<div
 						class="d-flex"
 					>
@@ -87,7 +87,7 @@
 				</div>
 				
 				<!-- search station input, status -->
-				<div class="d-flex flex-shrink-0 row no-gutters py-2 position-relative">
+				<div class="d-flex flex-shrink-0 row no-gutters py-2 position-relative px-2">
 					<div
 						class="d-flex col-12 col-sm-6 search-station"
 					>
@@ -147,7 +147,7 @@
 				</div>
 
 				<!-- playlists Panel -->
-				<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative">
+				<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative px-2">
 					<div
 						ref="playlistsPanel"
 						v-scroll="getScroll"
