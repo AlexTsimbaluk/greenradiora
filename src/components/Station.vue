@@ -43,6 +43,14 @@
 	import PlayerData from '@/PlayerData.js';
 	import PlayerState from '@/PlayerState.js';
 
+	/*import { Observable, from } from 'rxjs';
+	import Rx from 'rxjs/Rx';
+
+
+	const messageObservable = Rx.Observable.of(
+		PlayerState
+	);*/
+
 	export default {
 		name: 'Station',
 		props: {
@@ -65,13 +73,19 @@
 				// PlayerState.playerTag.src = 'http://serv02.streamsfortheworld.com:8000/radiosama_low';
 				// PlayerState.playerTag.src = 'http://icecast.norecords.org:8000/nrc-320.mp3';
 				// PlayerState.playerTag.src = 'http://manehattan.bronytunes.com:80/stream-32.btr';
-				if(PlayerState.playerState.paused) {
+				
+
+				/*if(PlayerState.playerState.paused) {
 					console.log('Station::Play');
 					PlayerState.playStream(this.station);
-				} else {
+				} else if(PlayerState.nowPlaying && PlayerState.nowPlaying.track.station_id == station.station_id) {
 					console.log('Station::Stop');
 					PlayerState.stopStream();
-				}
+				} else {
+					console.log('else');
+				}*/
+				
+				PlayerState.togglePlaying(this.station);
 			},
 			addStation (station) {
 				this.$emit('addStation');

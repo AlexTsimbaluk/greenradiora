@@ -76,9 +76,8 @@ export default new Vue({
 					self.setNowPlaying(track);
 
 					self.setDocumentTitle(true);
-					// document.title =  self.playerState.nowPlaying.track.station_title + '::Radiora';
-
-					// this.stateChanged();
+					
+					Utils.logs(`Playing ${track.station_title}`)
 				}).catch(function() {
 					console.log('::playPromise::Failed::Begin');
 					self.stopStream();
@@ -96,6 +95,16 @@ export default new Vue({
 			this.playerState.nowPlaying = {};
 			this.setDocumentTitle(false);
 			this.stateChanged();
+		},
+
+		togglePlaying (station) {
+			if(this.playerState.paused) {
+				this.playStream(station);
+			} else if(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_id == station.station_id) {
+				this.stopStream();
+			} else {
+				this.playStream(station);
+			}
 		},
 
 		setVolume (volume) {

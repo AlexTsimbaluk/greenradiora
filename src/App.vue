@@ -19,6 +19,9 @@
 
 import Vue from 'vue';
 
+// import Rx from 'rxjs/Rx';
+// import VueRx from 'vue-rx';
+
 import Utils from '@/Utils.js';
 
 import Log from '@/components/Log';
@@ -38,6 +41,9 @@ Vue.component('Loader', Loader);
 
 Vue.directive('focus', Focus);
 Vue.directive('scroll', Scroll);
+
+
+// Vue.use(VueRx, Rx);
 
 
 export default {
