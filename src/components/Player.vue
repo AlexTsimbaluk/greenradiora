@@ -147,7 +147,7 @@
 				</div>
 
 				<!-- playlists Panel -->
-				<div class="d-flex align-items-center flex-shrink-0 pb-2 position-relative px-2">
+				<div class="d-flex align-items-center flex-shrink-0 pb-2 pl-2 position-relative">
 					<div
 						ref="playlistsPanel"
 						v-scroll="getScroll"
@@ -627,6 +627,11 @@ export default {
 		position: absolute;
 		top: 8px;
 		right: 0;
+	}
+
+	.device-android .status {
+		top: 12px;
+		right: 14px;
 	}
 
 	.playlist-enter-active {
