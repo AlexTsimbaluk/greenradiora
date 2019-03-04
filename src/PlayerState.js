@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
 
+import PlayerAudio from '@/PlayerAudio.js';
+
 import Utils from '@/Utils.js';
 import P_Config from '@/P_Config.js';
 
@@ -48,6 +50,9 @@ export default new Vue({
 		getAudioTag (id) {
 			this.playerTag = document.getElementById(id);
 			this.playerTag.volume = this.playerState.volume;
+
+     		PlayerAudio.init(this.playerTag);
+     		
 			return this.playerTag;
 		},
 
@@ -58,10 +63,10 @@ export default new Vue({
 
 			this.playerTag.src = track.station_url;
 
-		    /*this.playerTag.crossOrigin = 'anonymous';
+		    this.playerTag.crossOrigin = 'anonymous';
 			setTimeout(function(){
 				this.playerTag.crossOrigin = 'anonymous';
-		    }, 3000);*/
+		    }, 3000);
 
 			this.audioBindAll(this.playerTag);
 
@@ -71,13 +76,12 @@ export default new Vue({
 				playPromise.then(function() {
 					console.log('::playPromise::Success::Begin');
 
-					// self.playerState.playlists[self.playerState.currentPlaylist].currentTrack = track;
 					self.setCurrentTrack(track);
 					self.setNowPlaying(track);
 
 					self.setDocumentTitle(true);
 					
-					Utils.logs(`Playing ${track.station_title}`)
+					Utils.logs(`Playing ${track.station_title}`);					
 				}).catch(function() {
 					console.log('::playPromise::Failed::Begin');
 					self.stopStream();
@@ -296,77 +300,66 @@ export default new Vue({
 		},
 
 	    audioBindAll (player) {
-	    	player.addEventListener('abort', (e)=> {
+	    	player.addEventListener('abort', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('abort');
 	     		this.loader(false);
 	        });
-	        player.addEventListener('canplay', (e)=> {
+	        player.addEventListener('canplay', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('canplay');
 	        });
-	        player.addEventListener('canplaythrough', (e)=> {
+	        player.addEventListener('canplaythrough', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('canplaythrough');
 	        });
-	        player.addEventListener('durationchange', (e)=> {
-	     		// console.log('# Event.type: ' + e.type);
+	        player.addEventListener('durationchange', (e) => {
+	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('durationchange');
 	        });
-	        player.addEventListener('emptied', (e)=> {
+	        player.addEventListener('emptied', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('emptied');
 	     		// $(".spinner").hide();
 	     		this.loader(false);
 	        });
-	        player.addEventListener('encrypted', (e)=> {
+	        player.addEventListener('encrypted', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('encrypted');
 	        });
-	        player.addEventListener('ended', (e)=> {
+	        player.addEventListener('ended', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('ended');
 	        });
-	        player.addEventListener('error', (e)=> {
+	        player.addEventListener('error', (e) => {
 	     		console.log('# Event.type: ' + e.type);
-
-	     		this.setStatus('error');
-	     		console.log('Error::' + e.code +':: ' + e.message);
-	     		// console.log(e);
-
-	     		// $(".spinner").hide();
 	     		this.loader(false);
-	     		
-	     		/*if(playerState.paused) {
-	     			console.log('paused');
-	     			$('.track.waiting').
-	     				removeClass('waiting').
-	     				addClass('error-playing');
-	     		}*/
 	        });
-	        player.addEventListener('interruptbegin', (e)=> {
+	        player.addEventListener('interruptbegin', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('interruptbegin');
 	        });
-	        player.addEventListener('interruptend', (e)=> {
+	        player.addEventListener('interruptend', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('interruptend');
 	        });
-	        player.addEventListener('loadeddata', (e)=> {
+	        player.addEventListener('loadeddata', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('loadeddata');
+
+	     		// PlayerAudio.init(player);
 	        });
-	        player.addEventListener('loadedmetadata', (e)=> {
+	        player.addEventListener('loadedmetadata', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('loadedmetadata');
@@ -374,18 +367,18 @@ export default new Vue({
 
 	     		this.getMetaData(this.playerTag.src);
 	        });
-	        player.addEventListener('loadstart', (e)=> {
+	        player.addEventListener('loadstart', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.getMetaData(this.playerTag.src);
 	     		this.setStatus('loadstart');
 	        });
-	        player.addEventListener('mozaudioavailable', (e)=> {
+	        player.addEventListener('mozaudioavailable', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('mozaudioavailable');
 	        });
-	        player.addEventListener('pause', (e)=> {
+	        player.addEventListener('pause', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('pause');
@@ -393,44 +386,38 @@ export default new Vue({
 
 	     		console.log('pause::' +  player.paused);
 	     		player.currentTime = 0;
-	     		// playerState.paused = player.paused;
 	        });
-	        player.addEventListener('play', (e)=> {
+	        player.addEventListener('play', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('play');	     		
 	     		this.loader(true);
 	        });
-	        player.addEventListener('playing', (e)=> {
+	        player.addEventListener('playing', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('playing');
 	     		
 
-	     		// playerState.paused = player.paused;
 
 	     		this.loader(false);
-
-	     		// this.setDocumentTitle();
-	     		// console.log(this.playerState.nowPlaying.track);
-	     		// document.title =  this.playerState.nowPlaying.track.station_title + '::Radiora';
 	        });
-	        player.addEventListener('ratechange', (e)=> {
+	        player.addEventListener('ratechange', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('ratechange');
 	        });
-	        player.addEventListener('seeked', (e)=> {
+	        player.addEventListener('seeked', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('seeked');
 	        });
-	        player.addEventListener('seeking', (e)=> {
+	        player.addEventListener('seeking', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('seeking');
 	        });
-	        /*player.addEventListener('timeupdate', (e)=> {
+	        /*player.addEventListener('timeupdate', (e) => {
 	 			var time = Math.ceil(player.currentTime);
 	 			
 	 			var sec = ('0' + parseInt(Math.floor(time % 60))).slice(-2);
@@ -440,19 +427,18 @@ export default new Vue({
 
 	 			this.playingTime = min + ':' + sec;
 	        });*/
-	        player.addEventListener('stalled', (e)=> {
+	        player.addEventListener('stalled', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('stalled');
-	     		// $(".spinner").hide();
 	     		this.loader(false);
 	        });
-	        player.addEventListener('suspend', (e)=> {
+	        player.addEventListener('suspend', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('suspend');
 	        });
-	        player.addEventListener('waiting', (e)=> {
+	        player.addEventListener('waiting', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('waiting');

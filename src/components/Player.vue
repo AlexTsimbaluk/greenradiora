@@ -366,6 +366,7 @@ import Vue from 'vue';
 
 import PlayerData from '@/PlayerData.js';
 import PlayerState from '@/PlayerState.js';
+import PlayerAudio from '@/PlayerAudio.js';
 import P_Config from '@/P_Config.js';
 import Utils from '@/Utils.js';
 
@@ -584,6 +585,7 @@ export default {
 			console.log('+++ Player:$on:dataTransfer::Data from PlayerData recieved successfully');
 
 			PlayerState.getAudioTag('playerTag');
+			// PlayerAudio.init();
 
 			PlayerState.playerTag.addEventListener('timeupdate', (e)=> {
 				var time = Math.ceil(PlayerState.playerTag.currentTime);

@@ -9,7 +9,9 @@
 		
 		<log
 			@setAppOpacity="setAppOpacity($event)"
-		></log>		
+		></log>
+
+		<fractal></fractal>
 	</div>
 </template>
 
@@ -28,15 +30,18 @@ import Log from '@/components/Log';
 import Loader from '@/components/Loader';
 import Ripple from '@/components/Ripple';
 import MIcon from '@/components/MIcon';
+import Fractal from '@/components/Fractal';
+
 
 import Focus from '@/directives/Focus.js';
 import Scroll from '@/directives/Scroll.js';
 
 
 Vue.component('Log', Log);
+Vue.component('Loader', Loader);
 Vue.component('Ripple', Ripple);
 Vue.component('MIcon', MIcon);
-Vue.component('Loader', Loader);
+Vue.component('Fractal', Fractal);
 
 
 Vue.directive('focus', Focus);
