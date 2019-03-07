@@ -395,6 +395,8 @@ export default {
 
 			waiting: false,
 
+			playerTag: null,
+
 			state: {},
 
 			searchString: '',
@@ -585,7 +587,7 @@ export default {
 			console.log('+++ Player:$on:dataTransfer::Data from PlayerData recieved successfully');
 
 			PlayerState.getAudioTag('playerTag');
-			// PlayerAudio.init();
+			this.playerTag = PlayerState.playerTag;
 
 			PlayerState.playerTag.addEventListener('timeupdate', (e)=> {
 				var time = Math.ceil(PlayerState.playerTag.currentTime);

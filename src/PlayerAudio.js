@@ -21,6 +21,7 @@ export default new Vue({
 			this.analyserEqLeft = new this.Analyser(this.audioCtx, this.source, {smoothingTimeConstant: 0.4, fftSize: 1024}, this);
 			
 			this.$emit('eqLeftCanvas');
+			// this.$emit('streamDataEqLeft', this.analyserEqLeft);
 
 			this.analyserEqLeft.update();
 		},
@@ -56,11 +57,14 @@ export default new Vue({
 		    this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
 
 	        this.update = () => {
-	            requestAnimationFrame(this.update);
+	        	console.log('update');
+	            // requestAnimationFrame(this.update);
 
-	            this.analyser.getByteFrequencyData(this.streamData);
-	            ctx.$emit('streamDataEqLeft', this.streamData);
+	            ctx.$emit('streamDataEqLeft', this.analyser);
 	        }
+	            // this.analyser.getByteFrequencyData(this.streamData);
+	            // ctx.$emit('streamDataEqLeft', this.streamData);
+	            console.log(this.streamData);
 		},
 		enableAnimation (visName) {
 			this.streamDataEqLeft = analyserEqLeft.streamData;// this - AudioApiElement

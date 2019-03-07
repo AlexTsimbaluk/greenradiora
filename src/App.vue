@@ -22,7 +22,7 @@
 import Vue from 'vue';
 
 // import Rx from 'rxjs/Rx';
-// import VueRx from 'vue-rx';
+import VueRx from 'vue-rx';
 
 import Utils from '@/Utils.js';
 
@@ -48,7 +48,7 @@ Vue.directive('focus', Focus);
 Vue.directive('scroll', Scroll);
 
 
-// Vue.use(VueRx, Rx);
+Vue.use(VueRx);
 
 
 export default {
@@ -65,6 +65,7 @@ export default {
 		}
 	},
 	created () {
+		// console.log(Observable);
 		this.$emit('opacityChanged', this.appOpacity);
 	}
 }

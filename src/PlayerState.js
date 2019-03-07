@@ -1,7 +1,16 @@
 import Vue from 'vue';
+
 import axios from 'axios';
 
-import PlayerAudio from '@/PlayerAudio.js';
+import { Observable } from 'rxjs';
+import { of, from } from 'rxjs';
+import { fromPromise } from 'rxjs';
+
+// https://stackoverflow.com/questions/45784825/frompromise-does-not-exist-on-type-observable/45785513
+// import { fromPromise } from 'rxjs/observable/fromPromise';
+// import 'rxjs/add/observable/fromPromise';
+
+// import PlayerAudio from '@/PlayerAudio.js';
 
 import Utils from '@/Utils.js';
 import P_Config from '@/P_Config.js';
@@ -30,18 +39,25 @@ export default new Vue({
 				translated: false,
 				playlistNameError: -1
 			},
+
+			sub$: null,
+			stateChanged: null
 		}
 	},
 	methods: {
-		stateChanged () {
-			// console.log(this.playerState);
-			// console.log(this.playerState.playlists[this.playerState.currentPlaylist]);
-			// console.log(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_title);
+		/*stateChanged () {
+			return new Promise((resolve, reject) => {
+				// console.log(this.playerState);
+				// console.log(this.playerState.playlists[this.playerState.currentPlaylist]);
+				// console.log(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_title);
 
-			localStorage.setItem('playerState', JSON.stringify(this.playerState));
+				// localStorage.setItem('playerState', JSON.stringify(this.playerState));
+				// this.$emit('stateChanged', this.playerState);
 
-			this.$emit('stateChanged', this.playerState);
-		},
+				localStorage.setItem('playerState', JSON.stringify(this.playerState));
+				this.$emit('stateChanged', this.playerState);
+			});
+		},*/
 
 		loader (visible) {
 			this.$emit('loader', visible);
@@ -51,7 +67,7 @@ export default new Vue({
 			this.playerTag = document.getElementById(id);
 			this.playerTag.volume = this.playerState.volume;
 
-     		PlayerAudio.init(this.playerTag);
+     		// PlayerAudio.init(this.playerTag);
      		
 			return this.playerTag;
 		},
@@ -447,6 +463,52 @@ export default new Vue({
 	},
 	created () {
 		console.log('@@@ PlayerState:hook:created');
+
+		this.stateChanged = () => {
+			return new Promise((resolve, reject) => {
+				// console.log(this.playerState);
+				// resolve(3);
+
+				localStorage.setItem('playerState', JSON.stringify(this.playerState));
+				this.$emit('stateChanged', this.playerState);
+			});
+		};
+
+
+		/*this.sub$ = Observable.create((observer) => {
+			console.log('');
+			console.log('Observable created');
+
+			this.stateChanged();
+
+			observer.next(this.playerTag);
+		});*/
+
+		// this.sub$ = of(this.stateChanged());
+
+		// this.sub$ = fromEvent(this, 'stateChanged');
+
+		/*of(this.playerState).subscribe(
+			(state) => {
+				console.log('');
+				console.log('PlayerState changed');
+				console.log(state);
+				// console.log(PlayerState.playerTag);
+			},
+			(err) => console.error('error:', err),
+			() => console.log('Completed')
+		);*/
+
+		/*let sub = fromPromise(this.stateChanged()).subscribe(
+			(val) => {				
+				console.log('');
+				console.log('+ From fractal sub');
+				console.log(val);
+			},
+			(err) => console.error('error:', err),
+			() => console.log('completed')
+		);*/
+
 
 		if(localStorage.getItem('playerState') == undefined) {
 			P_Config.init();
