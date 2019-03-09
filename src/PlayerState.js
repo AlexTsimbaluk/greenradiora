@@ -38,14 +38,13 @@ export default new Vue({
 				paused: true,
 				status: '',
 				translated: false,
-				playlistNameError: -1
+				playlistNameError: -1,
+				animations: {}
 			},
 
 			sub$: null,
 			promiseSource: null,
-			promiseSourceState: null,
-
-			animations: {}
+			promiseSourceState: null
 		}
 	},
 	methods: {
@@ -79,7 +78,7 @@ export default new Vue({
 			this.playerTag = document.getElementById(id);
 			this.playerTag.volume = this.playerState.volume;
 
-			this.animations = PlayerAudio.getAnimations();
+			this.playerState.animations = PlayerAudio.getAnimations();
 			console.log(this.animations);
 
      		// PlayerAudio.init(this.playerTag);
@@ -103,12 +102,13 @@ export default new Vue({
 
 			let playPromise = this.playerTag.play();
 
-			let _eq = this.animations['eq'];
+			let _eq = this.playerState.animations['eq'];
 
 	        if (playPromise !== undefined) {
 				playPromise.then(function() {
 					console.log('::playPromise::Success::Begin');
 
+					_eq.stop();
 					_eq.start();
 
 					self.setCurrentTrack(track);
@@ -118,6 +118,7 @@ export default new Vue({
 					
 					Utils.logs(`Playing ${track.station_title}`);					
 				}).catch(function() {
+					// TODO: src = "https://cross-origin.com/myvideo.html" - ?
 					console.log('::playPromise::Failed::Begin');
 					self.stopStream();
 				});
@@ -130,7 +131,7 @@ export default new Vue({
 		stopStream () {
 			Utils.logs('::PlayerState::stopStream::');
 
-			let _eq = this.animations['eq'];
+			let _eq = this.playerState.animations['eq'];
 			_eq.stop();
 
 			this.playerTag.pause();
