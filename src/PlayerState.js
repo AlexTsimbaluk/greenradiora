@@ -12,6 +12,7 @@ import { fromPromise } from 'rxjs';
 
 // import PlayerAudio from '@/PlayerAudio.js';
 
+import PlayerAudio from '@/PlayerAudio.js';
 import Utils from '@/Utils.js';
 import P_Config from '@/P_Config.js';
 
@@ -42,7 +43,9 @@ export default new Vue({
 
 			sub$: null,
 			promiseSource: null,
-			promiseSourceState: null
+			promiseSourceState: null,
+
+			animations: {}
 		}
 	},
 	methods: {
@@ -76,6 +79,9 @@ export default new Vue({
 			this.playerTag = document.getElementById(id);
 			this.playerTag.volume = this.playerState.volume;
 
+			this.animations = PlayerAudio.getAnimations();
+			console.log(this.animations);
+
      		// PlayerAudio.init(this.playerTag);
      		
 			return this.playerTag;
@@ -97,9 +103,13 @@ export default new Vue({
 
 			let playPromise = this.playerTag.play();
 
+			let _eq = this.animations['eq'];
+
 	        if (playPromise !== undefined) {
 				playPromise.then(function() {
 					console.log('::playPromise::Success::Begin');
+
+					_eq.start();
 
 					self.setCurrentTrack(track);
 					self.setNowPlaying(track);
@@ -119,6 +129,10 @@ export default new Vue({
 
 		stopStream () {
 			Utils.logs('::PlayerState::stopStream::');
+
+			let _eq = this.animations['eq'];
+			_eq.stop();
+
 			this.playerTag.pause();
 			this.playerState.paused = this.playerTag.paused;
 			this.playerState.nowPlaying = {};
