@@ -25,7 +25,7 @@
 				audioCtx: null,
 				// источник звука для аудиоконтекста
 				source: null,
-				analyserEqLeft: null,
+				analyserEq: null,
 
 				canvas: null,
 				_q: 1,
@@ -37,25 +37,34 @@
 		// TODO: разделить каналы - https://dzone.com/articles/exploring-html5-web-audio
 		methods: {
 			init () {
-				this.audioCtx = new window.AudioContext;
-				this.source = this.audioCtx.createMediaElementSource(PlayerState.playerTag);
-				
-				this.initCanvas();
+				this.audioCtx.resume().then(() => {
+					this.source = this.audioCtx.createMediaElementSource(PlayerState.playerTag);
+					
+					this.initCanvas();
 
-				/*console.log(this.audioCtx);
-				console.log(this.source);
-				console.log(this.canvas);
-				console.log(this.analyserEqLeft);*/
+					/*console.log(this.audioCtx);
+					console.log(this.source);
+					console.log(this.canvas);
+					console.log(this.analyserEq);*/
 
 
-				this.analyserEqLeft = new this.Analyser('eq', this.audioCtx, this.source, {smoothingTimeConstant: 0.4, fftSize: 1024}, this);
+					this.analyserEq = new this.Analyser(
+						'eq',
+						this.audioCtx,
+						this.source,
+						this.drawEq,	
+						{smoothingTimeConstant: 0.4, fftSize: 1024}
+					);
 
-				PlayerAudio.createAnimations(this.analyserEqLeft);
-
-				// this.analyserEqLeft.start();
+					PlayerAudio.createAnimations(this.analyserEq);
+				});
 			},
-			Analyser (name, audioCtx, src, analyserOpts, ctx) {
+			Analyser (name, audioCtx, src, drawCb, analyserOpts) {
 				let animationFrame;
+
+				// audioCtx.resume().then(() => {});
+				// audioCtx.resume();
+
 				this.name = name;
 			    this.analyser = audioCtx.createAnalyser();
 
@@ -69,14 +78,14 @@
 
 		        this.start = () => {
 		            this.analyser.getByteFrequencyData(this.streamData);
-		            ctx.drawEqLeft(this.streamData);
+		            drawCb(this.streamData);
 		            animationFrame = requestAnimationFrame(this.start);
 		        }
 
 		        this.stop = () => {
-				    // this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
+		        	console.log('@@@ Fractal:animation:stop');
 				    this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
-		            ctx.drawEqLeft(this.streamData, true);
+		            drawCb(this.streamData, true);
 		        	cancelAnimationFrame(animationFrame);
 		        }
 			},
@@ -97,13 +106,10 @@
 				this.canvasWidth 	= canvas.width;
 				this.canvasHeight 	= canvas.height;
 			},
-			drawEqLeft (streamData, stop) {
-				// let streamData = this.analyserEqLeft.streamData;
-				// console.log(this.analyserEqLeft);
+			drawEq (streamData, stop) {
 				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
 				
 				if(stop) {
-					console.log(streamData);
 					return false;
 				}
 
@@ -176,6 +182,15 @@
 		created () {
 			console.log('@@@ Fractal:hook:created');
 
+
+			PlayerData.$on('dataTransfer', () => {
+				this.audioCtx = new window.AudioContext;
+				this.init();
+			});
+
+			// this.bW = (document.documentElement.clientWidth > 511) ?  +(document.documentElement.clientWidth / 512).toFixed(1) : 1;
+
+
 			/*this.sub = PlayerState.sub$.subscribe(
 				(val) => {
 					console.log(val);
@@ -209,20 +224,6 @@
 			);*/
 
 			// const subscribe = PlayerState.promiseSource.subscribe(val => console.log(val));
-
-
-			PlayerData.$on('dataTransfer', () => {
-				this.init();
-			});
-
-			// this.bW = (document.documentElement.clientWidth > 511) ?  +(document.documentElement.clientWidth / 512).toFixed(1) : 1;
-			
-			PlayerAudio.$on('eqLeftCanvas', () => {
-				console.log(1);
-				this.canvas = new this.AudioCanvas('visEqLeft', document.documentElement.clientWidth, document.documentElement.clientHeight - 10);
-				this._q = +((this.canvas.canvasHeight / 2 / 255).toFixed(2));
-				console.log(this.canvas);
-			});
 		}
 	}
 </script>
