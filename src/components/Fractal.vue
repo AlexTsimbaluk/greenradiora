@@ -37,14 +37,22 @@
 		},
 		methods: {
 			init () {
+				this.audioCtx = new window.AudioContext;
 				this.source = this.audioCtx.createMediaElementSource(PlayerState.playerTag);
 
 				this.analyserEqLeft = new this.Analyser(this.audioCtx, this.source, {smoothingTimeConstant: 0.4, fftSize: 1024}, this);
 				
-				this.$emit('eqLeftCanvas');
-				// this.$emit('streamDataEqLeft', this.analyserEqLeft);
+				this.initCanvas();
+
+				/*console.log(this.audioCtx);
+				console.log(this.source);
+				console.log(this.canvas);
+				console.log(this.analyserEqLeft);*/
+
 
 				this.analyserEqLeft.update();
+
+				
 			},
 			Analyser (audioCtx, src, analyserOpts, ctx) {
 			    this.analyser = audioCtx.createAnalyser();
@@ -60,14 +68,10 @@
 			    this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
 
 		        this.update = () => {
-		        	console.log('update');
-		            // requestAnimationFrame(this.update);
-
-		            ctx.$emit('streamDataEqLeft', this.analyser);
+		            this.analyser.getByteFrequencyData(this.streamData);
+		            ctx.drawEqLeft(this.streamData);
+		            requestAnimationFrame(this.update);
 		        }
-		            // this.analyser.getByteFrequencyData(this.streamData);
-		            // ctx.$emit('streamDataEqLeft', this.streamData);
-		            console.log(this.streamData);
 			},
 			enableAnimation (visName) {
 				this.streamDataEqLeft = analyserEqLeft.streamData;// this - AudioApiElement
@@ -76,6 +80,11 @@
 			disableAnimation (visName) {
 				this.streamDataEqLeft = null;
 			    drawEqLeft();
+			},
+
+			initCanvas () {
+				this.canvas = new this.AudioCanvas('visEqLeft', document.documentElement.clientWidth, document.documentElement.clientHeight - 10);
+				this._q = +((this.canvas.canvasHeight / 2 / 255).toFixed(2));				
 			},
 
 
@@ -91,10 +100,11 @@
 				this.canvasHeight 	= canvas.height;
 			},
 			drawEqLeft (streamData) {
-				console.log(this.analyserEqLeft);
+				// let streamData = this.analyserEqLeft.streamData;
+				// console.log(this.analyserEqLeft);
 				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
 
-				this.analyserEqLeft.getByteFrequencyData(this.analyserEqLeft.streamData);
+				// this.analyserEqLeft.getByteFrequencyData(this.analyserEqLeft.streamData);
 				// ctx.$emit('streamDataEqLeft', this.streamData);
 
 			    for(let bin = 0; streamData && bin < streamData.length; bin ++) {
@@ -218,7 +228,14 @@
 				() => console.log('completed')
 			);*/
 
-			this.audioCtx = new window.AudioContext;
+			// const subscribe = PlayerState.promiseSource.subscribe(val => console.log(val));
+
+
+			PlayerData.$on('dataTransfer', () => {
+				this.init();
+			});
+
+			
 
 
 

@@ -356,8 +356,6 @@
 				</div>
 			</div>
 		</transition>
-
-		<audio id="playerTag" dynamicmetadata></audio>
 	</div>
 </template>
 
@@ -582,11 +580,12 @@ export default {
 	created () {
 		console.log('@@@ Player:hook:created');
 
+
 		PlayerData.$on('dataTransfer', () => {
 			Utils.logs('');
 			console.log('+++ Player:$on:dataTransfer::Data from PlayerData recieved successfully');
 
-			PlayerState.getAudioTag('playerTag');
+			
 			this.playerTag = PlayerState.playerTag;
 
 			PlayerState.playerTag.addEventListener('timeupdate', (e)=> {

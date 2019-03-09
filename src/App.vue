@@ -12,6 +12,8 @@
 		></log>
 
 		<fractal></fractal>
+
+		<audio id="playerTag" dynamicmetadata></audio>
 	</div>
 </template>
 
@@ -65,7 +67,6 @@ export default {
 		}
 	},
 	created () {
-		// console.log(Observable);
 		this.$emit('opacityChanged', this.appOpacity);
 	}
 }

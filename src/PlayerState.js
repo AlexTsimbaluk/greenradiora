@@ -41,12 +41,13 @@ export default new Vue({
 			},
 
 			sub$: null,
-			stateChanged: null
+			promiseSource: null,
+			promiseSourceState: null
 		}
 	},
 	methods: {
-		/*stateChanged () {
-			return new Promise((resolve, reject) => {
+		stateChanged () {
+			/*return new Promise((resolve, reject) => {
 				// console.log(this.playerState);
 				// console.log(this.playerState.playlists[this.playerState.currentPlaylist]);
 				// console.log(this.playerState.playlists[this.playerState.currentPlaylist].currentTrack.station_title);
@@ -56,8 +57,16 @@ export default new Vue({
 
 				localStorage.setItem('playerState', JSON.stringify(this.playerState));
 				this.$emit('stateChanged', this.playerState);
+			});*/
+
+			return new Promise((resolve, reject) => {
+				// console.log(this.playerState);
+				resolve(this.playerState);
+
+				localStorage.setItem('playerState', JSON.stringify(this.playerState));
+				this.$emit('stateChanged', this.playerState);
 			});
-		},*/
+		},
 
 		loader (visible) {
 			this.$emit('loader', visible);
@@ -464,15 +473,15 @@ export default new Vue({
 	created () {
 		console.log('@@@ PlayerState:hook:created');
 
-		this.stateChanged = () => {
+		/*this.stateChanged = () => {
 			return new Promise((resolve, reject) => {
-				// console.log(this.playerState);
-				// resolve(3);
+				console.log(this.playerState);
+				resolve(this.playerState);
 
 				localStorage.setItem('playerState', JSON.stringify(this.playerState));
 				this.$emit('stateChanged', this.playerState);
 			});
-		};
+		};*/
 
 
 		/*this.sub$ = Observable.create((observer) => {
@@ -484,9 +493,13 @@ export default new Vue({
 			observer.next(this.playerTag);
 		});*/
 
-		// this.sub$ = of(this.stateChanged());
+		// https://stackoverflow.com/questions/45784825/frompromise-does-not-exist-on-type-observable/45785513
 
-		// this.sub$ = fromEvent(this, 'stateChanged');
+		this.promiseSource = from(new Promise(resolve => resolve('Hello World!')));
+		const subscribe = this.promiseSource.subscribe(val => console.log(val));
+
+		// this.promiseSourceState = from(this.stateChanged());
+		// const subscribe2 = this.promiseSourceState.subscribe(val => console.log(val));
 
 		/*of(this.playerState).subscribe(
 			(state) => {
@@ -499,8 +512,8 @@ export default new Vue({
 			() => console.log('Completed')
 		);*/
 
-		/*let sub = fromPromise(this.stateChanged()).subscribe(
-			(val) => {				
+		/*let sub = from(this.stateChanged()).subscribe(
+			(val) => {
 				console.log('');
 				console.log('+ From fractal sub');
 				console.log(val);

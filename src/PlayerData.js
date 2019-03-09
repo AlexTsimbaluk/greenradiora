@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
 
+import PlayerState from '@/PlayerState.js';
+
 export default new Vue({
 	data: {
 		// инициализировалась ли cordova
@@ -17,6 +19,7 @@ export default new Vue({
 		dataTransfer (msec) {
 			// передача с отсрочкой, потому что Player не успевает создаться
 			setTimeout(() => {
+				PlayerState.getAudioTag('playerTag');
 				this.$emit('dataTransfer');
 			}, msec);
 		},
