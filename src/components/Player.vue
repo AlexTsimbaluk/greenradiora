@@ -36,56 +36,6 @@
 					</transition>
 				</div>
 				
-				<!-- buttons, volume -->
-				<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2 px-2">
-					<div
-						class="d-flex"
-					>
-						<button
-							class="btn btn-outline-info btn-fab btn-round"
-							@click="playStream"
-						>
-							<m-icon
-								class="md-24"
-								:i="'play_arrow'"
-								:t="'light'"
-							></m-icon>
-							<ripple></ripple>
-						</button>
-
-						<button
-							class="btn btn-outline-info btn-fab btn-round"
-							@click="stopStream"
-						>
-							<m-icon
-								class="md-24"
-								:i="'stop'"
-								:t="'light'"
-							></m-icon>
-							<ripple></ripple>
-						</button>
-					</div>
-
-					<div
-						class="d-flex"
-					>
-						<input
-							@change="setVolume($event)"
-							v-model="state.volume"
-							class="d-flex align-items-center"
-							type="range"
-							min="0"
-							max="1"
-							step="0.01"
-						/>
-
-						<span class="ml-3 d-flex align-items-center">
-							<!-- TODO: округлить до целых -->
-							{{Math.round(state.volume * 100)}}
-						</span>
-					</div>
-				</div>
-				
 				<!-- search station input, status -->
 				<div class="d-flex flex-shrink-0 row no-gutters py-2 position-relative px-2">
 					<div
@@ -144,6 +94,61 @@
 							{{state.status}}
 						</div>
 					</transition>
+				</div>
+
+				<!-- user panel with contols -->
+				<user-panel
+					:animations="state.animations"
+				></user-panel>
+				
+				<!-- buttons, volume -->
+				<div class="d-flex flex-wrap flex-shrink-0 justify-content-between py-2 pb-2 px-2">
+					<div
+						class="d-flex"
+					>
+						<button
+							class="btn btn-outline-info btn-fab btn-round"
+							@click="playStream"
+						>
+							<m-icon
+								class="md-24"
+								:i="'play_arrow'"
+								:t="'light'"
+							></m-icon>
+							<ripple></ripple>
+						</button>
+
+						<button
+							class="btn btn-outline-info btn-fab btn-round"
+							@click="stopStream"
+						>
+							<m-icon
+								class="md-24"
+								:i="'stop'"
+								:t="'light'"
+							></m-icon>
+							<ripple></ripple>
+						</button>
+					</div>
+
+					<div
+						class="d-flex"
+					>
+						<input
+							@change="setVolume($event)"
+							v-model="state.volume"
+							class="d-flex align-items-center"
+							type="range"
+							min="0"
+							max="1"
+							step="0.01"
+						/>
+
+						<span class="ml-3 d-flex align-items-center">
+							<!-- TODO: округлить до целых -->
+							{{Math.round(state.volume * 100)}}
+						</span>
+					</div>
 				</div>
 
 				<!-- playlists Panel -->
@@ -370,9 +375,12 @@ import Utils from '@/Utils.js';
 
 import Log from '@/components/Log';
 import Station from '@/components/Station';
+import UserPanel from '@/components/UserPanel';
+
 
 
 Vue.component('Station', Station);
+Vue.component('UserPanel', UserPanel);
 
 
 export default {

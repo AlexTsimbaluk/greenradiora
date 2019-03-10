@@ -46,6 +46,7 @@ Vue.component('MIcon', MIcon);
 Vue.component('Fractal', Fractal);
 
 
+
 Vue.directive('focus', Focus);
 Vue.directive('scroll', Scroll);
 

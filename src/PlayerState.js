@@ -39,7 +39,11 @@ export default new Vue({
 				status: '',
 				translated: false,
 				playlistNameError: -1,
-				animations: {}
+				animations: {},
+				animationState: {
+					activeAnimation: null,
+					state: false
+				},
 			},
 
 			sub$: null,
@@ -125,6 +129,21 @@ export default new Vue({
 	        }
 
 			this.playerState.paused = this.playerTag.paused;
+			this.stateChanged();
+		},
+
+		toggleAnimation (event, animation) {
+			// console.log(animation.name);
+			// console.log(this.playerState.animations[animation.name]);
+
+			if(!this.playerState.animationState) {
+				this.playerState.animations[animation.name].start();
+				this.playerState.animationState = !this.playerState.animationState;
+			} else {
+				this.playerState.animations[animation.name].stop();
+				this.playerState.animationState = !this.playerState.animationState;
+			}
+
 			this.stateChanged();
 		},
 

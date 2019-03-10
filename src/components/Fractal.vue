@@ -7,14 +7,13 @@
 <script>
 	import Vue from 'vue';
 
-	import Rx from 'rxjs/Rx';
 
 	import PlayerData from '@/PlayerData.js';
 	import PlayerState from '@/PlayerState.js';
 	import PlayerAudio from '@/PlayerAudio.js';
 	
-	import { of } from 'rxjs';
-	import { fromPromise } from 'rxjs';
+	// import Rx from 'rxjs/Rx';
+	// import { of } from 'rxjs';
 
 
 	export default {
@@ -31,6 +30,8 @@
 				_q: 1,
 				bW: 1,
 
+				animationState: '',
+
 				sub: null
 			}
 		},
@@ -42,30 +43,26 @@
 					
 					this.initCanvas();
 
-					/*console.log(this.audioCtx);
-					console.log(this.source);
-					console.log(this.canvas);
-					console.log(this.analyserEq);*/
-
-
 					this.analyserEq = new this.Analyser(
 						'eq',
 						this.audioCtx,
 						this.source,
 						this.drawEq,	
-						{smoothingTimeConstant: 0.4, fftSize: 1024}
+						{smoothingTimeConstant: 0.4, fftSize: 1024},
+						'equalizer'
+						// 'graphic_eq'
 					);
 
-					PlayerAudio.createAnimations(this.analyserEq);
+					// PlayerAudio.createAnimations(this.analyserEq);
 				});
 			},
-			Analyser (name, audioCtx, src, drawCb, analyserOpts) {
-				let animationFrame;
+			Analyser (name, audioCtx, src, drawCb, analyserOpts, icon) {
+				let animationFrame = null;
+			    // this.animationState = false;
 
-				// audioCtx.resume().then(() => {});
-				// audioCtx.resume();
-
+			    this.running = false;
 				this.name = name;
+				this.icon = icon;
 			    this.analyser = audioCtx.createAnalyser();
 
 		    	this.analyser.smoothingTimeConstant = analyserOpts.smoothingTimeConstant || 0.7;
@@ -76,7 +73,13 @@
 
 			    this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
 
+
 		        this.start = () => {
+		        	if(!this.running) {
+		        		this.running = true;
+		        		this.animationState = name;
+		        		console.log(this.animationState);
+		        	}
 		            this.analyser.getByteFrequencyData(this.streamData);
 		            drawCb(this.streamData);
 		            animationFrame = requestAnimationFrame(this.start);
@@ -84,10 +87,17 @@
 
 		        this.stop = () => {
 		        	console.log('@@@ Fractal:animation:stop');
+	        		this.running = false;
 				    this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
 		            drawCb(this.streamData, true);
 		        	cancelAnimationFrame(animationFrame);
 		        }
+
+		        /*this.getState = () => {
+		        	return this.animationState;
+		        }*/
+
+		        PlayerAudio.createAnimations(this);
 			},
 
 			initCanvas () {
@@ -186,6 +196,11 @@
 			PlayerData.$on('dataTransfer', () => {
 				this.audioCtx = new window.AudioContext;
 				this.init();
+			});
+
+			PlayerState.$on('stateChanged', (state) => {
+				// console.log(state);
+				this.animationState = state.animationState;
 			});
 
 			// this.bW = (document.documentElement.clientWidth > 511) ?  +(document.documentElement.clientWidth / 512).toFixed(1) : 1;
