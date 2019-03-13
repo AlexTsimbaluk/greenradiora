@@ -38,12 +38,33 @@
 		// TODO: разделить каналы - https://dzone.com/articles/exploring-html5-web-audio
 		methods: {
 			init () {
+				console.log('');
+				console.log('# Fractal::init');
+				console.log(this.audioCtx.state);
+
+				if(this.audioCtx.state.toLowerCase() != 'running') {
+					this.audioCtx = new window.AudioContext;
+				}
+
+				let initRepeat = () => {
+					if(this.audioCtx.state.toLowerCase() != 'running') {
+						console.log('!!! AudioContext is not running');
+						setTimeout(() => {
+							this.init();
+						}, 200)
+					}
+				};
+
 				this.audioCtx.resume().then(() => {
+					console.log('+++ Fractal::audiocontext is running successfully');
+
+					console.log(this.audioCtx.state);
 					this.source = this.audioCtx.createMediaElementSource(PlayerState.playerTag);
 					
 					this.initCanvas();
 
-					this.analyserEq = new this.Analyser(
+					// this.analyserEq = new this.Analyser(
+					let analyserEq = new this.Analyser(
 						'eq',
 						this.audioCtx,
 						this.source,
@@ -52,15 +73,141 @@
 						'equalizer'
 						// 'graphic_eq'
 					);
+					let analyserEq2 = new this.Analyser(
+						'eq2',
+						this.audioCtx,
+						this.source,
+						this.drawEq2,	
+						{smoothingTimeConstant: 0.4, fftSize: 1024},
+						'graphic_eq'
+					);
 
-					// PlayerAudio.createAnimations(this.analyserEq);
+					// analyserEq.start();
+					// analyserEq2.start();
+				}).catch(() => {
+					console.log(this.audioCtx.state);
+					initRepeat();
+				}).finally(() => {
+					console.log(this.audioCtx.state);
+					initRepeat();
+					// this.audioCtx.resume();
 				});
 			},
+			/*Analyser (name, audioCtx, src, drawCb, analyserOpts, icon) {
+				let animationFrame = null;
+
+			    // this.running = false;
+				this.name = name;
+				this.icon = icon;
+			    this.analyser = audioCtx.createAnalyser();
+
+		    	this.analyser.smoothingTimeConstant = analyserOpts.smoothingTimeConstant || 0.7;
+		    	this.analyser.fftSize = analyserOpts.fftSize || 512;
+
+		    	src.connect(this.analyser);
+		    	this.analyser.connect(audioCtx.destination);
+
+			    let streamData = new Uint8Array(this.analyser.frequencyBinCount);
+
+
+		        this.start = () => {
+		        	// if(!this.running) {
+		        	// 	this.running = true;
+		        	// }
+		            this.analyser.getByteFrequencyData(streamData);
+		            drawCb(streamData);
+		            animationFrame = requestAnimationFrame(this.start);
+		        }
+
+		        this.stop = () => {
+		        	console.log('@@@ Fractal:animation:stop');
+	        		// this.running = false;
+				    streamData = new Uint8Array(this.analyser.frequencyBinCount);
+		            drawCb(streamData, true);
+		        	cancelAnimationFrame(animationFrame);
+		        }
+
+		        PlayerState.createAnimations(this);
+			},*/
+			/*Analyser (name, audioCtx, src, drawCb, analyserOpts, icon) {
+				let animationFrame = null;
+
+				this.name = name;
+				this.icon = icon;
+			    this.analyser = audioCtx.createAnalyser();
+
+		    	this.analyser.smoothingTimeConstant = analyserOpts.smoothingTimeConstant || 0.7;
+		    	this.analyser.fftSize = analyserOpts.fftSize || 512;
+
+		    	src.connect(this.analyser);
+		    	this.analyser.connect(audioCtx.destination);
+
+			    let streamData = new Uint8Array(this.analyser.frequencyBinCount);
+
+
+		        this.start = () => {
+		            // this.analyser.getByteFrequencyData(streamData);
+		            // drawCb(streamData);
+		            // animationFrame = requestAnimationFrame(this.start);
+		            
+		            drawCb(this.analyser);
+		        }
+
+		        this.stop = () => {
+		        	console.log('@@@ Fractal:animation:stop');
+				    streamData = new Uint8Array(this.analyser.frequencyBinCount);
+		            drawCb(streamData, true);
+		        	cancelAnimationFrame(animationFrame);
+		        }
+
+		        PlayerState.createAnimations(this);
+			},*/
+			/*drawEq (streamData, stop) {
+				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+				
+				if(stop) {
+					return false;
+				}
+
+			    for(let bin = 0; streamData && bin < streamData.length; bin ++) {
+			        let val = streamData[bin];
+
+			        // this.canvas.ctx.fillStyle = 'rgb(' + (val) + ',' + (val) + ',' + (val) + ')';
+			        this.canvas.ctx.fillStyle = 'rgb(' + (val) + ',' + (255 - val) + ',' + (255) + ')';
+			        // this.canvas.ctx.fillStyle = 'rgb(' + (255 - val) + ',' + (val) + ',' + (255 - val) + ')';
+
+			        this.canvas.ctx.fillRect(bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
+			        // this.canvas.ctx.fillRect(this.canvas.canvasWidth - bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
+			    }
+			},*/
+			/*drawEq (analyser, stop) {
+				let animationFrame = null;
+
+				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+				
+				if(stop) {
+					return false;
+				}
+
+				let streamData = new Uint8Array(analyser.frequencyBinCount);
+				analyser.getByteFrequencyData(streamData);
+
+			    for(let bin = 0; streamData && bin < streamData.length; bin ++) {
+			        let val = streamData[bin];
+
+			        // this.canvas.ctx.fillStyle = 'rgb(' + (val) + ',' + (val) + ',' + (val) + ')';
+			        this.canvas.ctx.fillStyle = 'rgb(' + (val) + ',' + (255 - val) + ',' + (255) + ')';
+			        // this.canvas.ctx.fillStyle = 'rgb(' + (255 - val) + ',' + (val) + ',' + (255 - val) + ')';
+
+			        this.canvas.ctx.fillRect(bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
+			        // this.canvas.ctx.fillRect(this.canvas.canvasWidth - bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
+			    }
+
+			    animationFrame = requestAnimationFrame(drawEq(analyser));
+			},*/
 			Analyser (name, audioCtx, src, drawCb, analyserOpts, icon) {
 				let animationFrame = null;
-			    // this.animationState = false;
 
-			    this.running = false;
 				this.name = name;
 				this.icon = icon;
 			    this.analyser = audioCtx.createAnalyser();
@@ -73,13 +220,13 @@
 
 			    this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
 
+			    /*this.drawCb = () => {
+			        this.analyser.getByteFrequencyData(streamData);
+			        drawCb(streamData);
+			        animationFrame = requestAnimationFrame(this.start);
+			    }*/
 
 		        this.start = () => {
-		        	if(!this.running) {
-		        		this.running = true;
-		        		this.animationState = name;
-		        		console.log(this.animationState);
-		        	}
 		            this.analyser.getByteFrequencyData(this.streamData);
 		            drawCb(this.streamData);
 		            animationFrame = requestAnimationFrame(this.start);
@@ -87,34 +234,13 @@
 
 		        this.stop = () => {
 		        	console.log('@@@ Fractal:animation:stop');
-	        		this.running = false;
+	        		// this.running = false;
 				    this.streamData = new Uint8Array(this.analyser.frequencyBinCount);
 		            drawCb(this.streamData, true);
 		        	cancelAnimationFrame(animationFrame);
 		        }
 
-		        /*this.getState = () => {
-		        	return this.animationState;
-		        }*/
-
-		        PlayerAudio.createAnimations(this);
-			},
-
-			initCanvas () {
-				this.canvas = new this.AudioCanvas('visEqLeft', document.documentElement.clientWidth, document.documentElement.clientHeight - 10);
-				this._q = +((this.canvas.canvasHeight / 2 / 255).toFixed(2));				
-			},
-
-			// Возвращает объект контекста для canvas и его размеры
-			// Принимает DOM-элемент и размеры
-			AudioCanvas(id, width, height) {
-				let canvas = document.getElementById(id);
-
-				canvas.width 		= width;
-				canvas.height 		= height;
-				this.ctx			= canvas.getContext("2d");
-				this.canvasWidth 	= canvas.width;
-				this.canvasHeight 	= canvas.height;
+		        PlayerState.createAnimations(this);
 			},
 			drawEq (streamData, stop) {
 				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
@@ -131,8 +257,26 @@
 			        // this.canvas.ctx.fillStyle = 'rgb(' + (255 - val) + ',' + (val) + ',' + (255 - val) + ')';
 
 			        this.canvas.ctx.fillRect(bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
+			        // this.canvas.ctx.fillRect(this.canvas.canvasWidth - bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
+			    }
+			},
+
+			drawEq2 (streamData, stop) {
+				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+				
+				if(stop) {
+					return false;
+				}
+
+			    for(let bin = 0; streamData && bin < streamData.length; bin ++) {
+			        let val = streamData[bin];
+
+			        this.canvas.ctx.fillStyle = 'rgb(' + (val) + ',' + (val) + ',' + (val) + ')';
+			        // this.canvas.ctx.fillStyle = 'rgb(' + (val) + ',' + (255 - val) + ',' + (255) + ')';
+			        // this.canvas.ctx.fillStyle = 'rgb(' + (255 - val) + ',' + (val) + ',' + (255 - val) + ')';
+
+			        // this.canvas.ctx.fillRect(bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
 			        this.canvas.ctx.fillRect(this.canvas.canvasWidth - bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
-			        // this.canvas.ctx.fillRect(bin, this.canvas.canvasHeight / 2 - 1, 1, Math.floor(val / 1.5));
 			    }
 			},
 			/*drawFractal () {
@@ -188,20 +332,40 @@
 				startHue += 15 % 360;
 				// console.log(startHue);
 			}*/
+
+			initCanvas () {
+				this.canvas = new this.AudioCanvas('visEqLeft', document.documentElement.clientWidth, document.documentElement.clientHeight - 10);
+				this._q = +((this.canvas.canvasHeight / 2 / 255).toFixed(2));				
+			},
+
+			// Возвращает объект контекста для canvas и его размеры
+			// Принимает DOM-элемент и размеры
+			AudioCanvas(id, width, height) {
+				let canvas = document.getElementById(id);
+
+				canvas.width 		= width;
+				canvas.height 		= height;
+				this.ctx			= canvas.getContext("2d");
+				this.canvasWidth 	= canvas.width;
+				this.canvasHeight 	= canvas.height;
+			},
 		},
 		created () {
 			console.log('@@@ Fractal:hook:created');
 
 
 			PlayerData.$on('dataTransfer', () => {
-				this.audioCtx = new window.AudioContext;
-				this.init();
+				setTimeout(() => {
+					this.audioCtx = new window.AudioContext;
+					this.init();
+				}, 200);
 			});
 
 			PlayerState.$on('stateChanged', (state) => {
-				// console.log(state);
-				this.animationState = state.animationState;
+				// this.animationState = state.animationState;
 			});
+
+
 
 			// this.bW = (document.documentElement.clientWidth > 511) ?  +(document.documentElement.clientWidth / 512).toFixed(1) : 1;
 

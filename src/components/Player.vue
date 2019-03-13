@@ -98,7 +98,7 @@
 
 				<!-- user panel with contols -->
 				<user-panel
-					:animations="state.animations"
+					:state="state"
 				></user-panel>
 				
 				<!-- buttons, volume -->

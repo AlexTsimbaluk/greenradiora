@@ -3,7 +3,7 @@
 			<!-- :station="stationsArray[track]" -->
 			<!-- :class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}" -->
 		<div
-			v-for="(animation, key) in animations"
+			v-for="(animation, key) in state.animations"
 			:key="animation.name"
 		>
 			<div
@@ -16,10 +16,11 @@
 					<m-icon
 						class="md-24"
 						:i="animation.icon"
+						:class="[state.animationState[animation.name] ? '' : 'md-inactive']"
 						:t="'light'"
 					></m-icon>
 						<!-- :t="PlayerState.playerState.animationState ? 'light' : ''" -->
-						<!-- :class="{: PlayerState.}" -->
+						<!-- :class="{active: PlayerState}" -->
 					<ripple></ripple>
 				</button>
 			</div>
@@ -38,7 +39,7 @@
 	export default {
 		name: 'user-panel',
 		props: {
-			animations: {
+			state: {
 				type: Object,
 				reqired: true
 			}

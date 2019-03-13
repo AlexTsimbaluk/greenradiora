@@ -40,10 +40,7 @@ export default new Vue({
 				translated: false,
 				playlistNameError: -1,
 				animations: {},
-				animationState: {
-					activeAnimation: null,
-					state: false
-				},
+				animationState: {}
 			},
 
 			sub$: null,
@@ -82,11 +79,10 @@ export default new Vue({
 			this.playerTag = document.getElementById(id);
 			this.playerTag.volume = this.playerState.volume;
 
-			this.playerState.animations = PlayerAudio.getAnimations();
+			// this.playerState.animations = PlayerAudio.getAnimations();
 			console.log(this.animations);
+			this.initAnimations();
 
-     		// PlayerAudio.init(this.playerTag);
-     		
 			return this.playerTag;
 		},
 
@@ -106,14 +102,26 @@ export default new Vue({
 
 			let playPromise = this.playerTag.play();
 
-			let _eq = this.playerState.animations['eq'];
 
 	        if (playPromise !== undefined) {
 				playPromise.then(function() {
 					console.log('::playPromise::Success::Begin');
 
-					_eq.stop();
-					_eq.start();
+					for (let key in self.playerState.animationState) {
+						console.log(self.playerState.animationState[key]);
+						if(self.playerState.animationState[key]) {
+							let _a = self.playerState.animations[key];
+							console.log(_a);
+							// _a.stop();
+							_a.start();
+						}
+					}
+
+					/*self.playerState.animations['eq'].start();
+					setTimeout(function(){
+						self.playerState.animations['eq2'].start();
+				    }, 3000);*/
+
 
 					self.setCurrentTrack(track);
 					self.setNowPlaying(track);
@@ -132,31 +140,76 @@ export default new Vue({
 			this.stateChanged();
 		},
 
-		toggleAnimation (event, animation) {
-			// console.log(animation.name);
-			// console.log(this.playerState.animations[animation.name]);
-
-			if(!this.playerState.animationState) {
-				this.playerState.animations[animation.name].start();
-				this.playerState.animationState = !this.playerState.animationState;
-			} else {
-				this.playerState.animations[animation.name].stop();
-				this.playerState.animationState = !this.playerState.animationState;
-			}
-
-			this.stateChanged();
-		},
-
 		stopStream () {
 			Utils.logs('::PlayerState::stopStream::');
 
-			let _eq = this.playerState.animations['eq'];
-			_eq.stop();
+			// this.playerState.activeAnimation && this.playerState.animations[this.playerState.activeAnimation].stop();
+
+			for (let key in this.playerState.animationState) {
+				if(this.playerState.animationState[key]) {
+					let _a = this.playerState.animations[key];
+					_a.stop();
+				}
+			}
 
 			this.playerTag.pause();
 			this.playerState.paused = this.playerTag.paused;
 			this.playerState.nowPlaying = {};
 			this.setDocumentTitle(false);
+			this.stateChanged();
+		},
+
+		createAnimations(animation) {
+			Vue.set(this.playerState.animations, animation.name, animation);
+		},
+
+		initAnimations () {
+			console.log(Object.keys(this.playerState.animations));
+			console.log(Object.keys(this.playerState.animationState));
+
+			let _a = Object.keys(this.playerState.animations);
+
+			if(!Object.keys(this.playerState.animationState).length && _a.length) {
+				console.log('! no init a');
+
+				for (let key in this.playerState.animations) {
+					console.log(this.playerState.animations[key].name);
+					Vue.set(this.playerState.animationState, this.playerState.animations[key].name, false);
+				}
+				
+				console.log(Object.keys(this.playerState.animationState));
+				console.log((this.playerState.animationState));
+			}
+		},
+
+		toggleAnimation (event, animation) {
+			// console.log(this.playerState.animations[animation.name]);
+
+
+			/*if(animation.name != this.playerState.activeAnimation) {
+				this.playerState.animations[animation.name].start();
+				this.playerState.activeAnimation = animation.name;
+			} else if(animation.name == this.playerState.activeAnimation) {
+				this.playerState.animations[animation.name].stop();
+				this.playerState.activeAnimation = '';
+			} else {
+				this.playerState.animations[animation.name].stop();
+				this.playerState.activeAnimation = '';
+			}*/
+
+			// console.log(this.playerState.animationState[animation.name]);
+
+			if(!this.playerState.animationState[animation.name]) {
+				console.log(animation.name + ' start');
+				this.playerState.animations[animation.name].start();
+				this.playerState.animationState[animation.name] = true;
+			} else {
+				console.log(animation.name + ' stop');
+				this.playerState.animations[animation.name].stop();
+				this.playerState.animationState[animation.name] = false;
+			}
+			// this.playerState.animationState[animation.name] = !this.playerState.animationState[animation.name];
+
 			this.stateChanged();
 		},
 

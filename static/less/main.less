@@ -295,6 +295,13 @@ body {
 		.user-panel & {
 			border: 0;
 			box-shadow: none;
+
+			&:focus,
+			&:active,
+			&:focus:active {
+				border: 0;
+				background: transparent;
+			}
 		}
 	}
 }
