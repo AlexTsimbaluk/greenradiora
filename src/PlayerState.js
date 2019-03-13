@@ -40,7 +40,7 @@ export default new Vue({
 				translated: false,
 				playlistNameError: -1,
 				animations: {},
-				animationState: {}
+				// animationState: {}
 			},
 
 			sub$: null,
@@ -117,12 +117,6 @@ export default new Vue({
 						}
 					}
 
-					/*self.playerState.animations['eq'].start();
-					setTimeout(function(){
-						self.playerState.animations['eq2'].start();
-				    }, 3000);*/
-
-
 					self.setCurrentTrack(track);
 					self.setNowPlaying(track);
 
@@ -198,13 +192,25 @@ export default new Vue({
 			}*/
 
 			// console.log(this.playerState.animationState[animation.name]);
+			console.log(this.playerState.animationState);
 
 			if(!this.playerState.animationState[animation.name]) {
 				console.log(animation.name + ' start');
+
+				Object.keys(this.playerState.animationState).forEach((_a) => {
+					if(this.playerState.animationState[_a]) {
+						console.log(_a);
+						console.log(this.playerState.animationState[_a]);
+
+						this.playerState.animationState[_a] = false;
+					}
+				});
+
 				this.playerState.animations[animation.name].start();
 				this.playerState.animationState[animation.name] = true;
-			} else {
+			} else if(this.playerState.animationState[animation.name]) {
 				console.log(animation.name + ' stop');
+
 				this.playerState.animations[animation.name].stop();
 				this.playerState.animationState[animation.name] = false;
 			}
@@ -559,6 +565,8 @@ export default new Vue({
 	},
 	created () {
 		console.log('@@@ PlayerState:hook:created');
+
+		Vue.set(this.playerState, 'animationState', {});
 
 		/*this.stateChanged = () => {
 			return new Promise((resolve, reject) => {

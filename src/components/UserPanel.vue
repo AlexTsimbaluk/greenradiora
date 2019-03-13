@@ -54,7 +54,12 @@
 				PlayerState.toggleAnimation (event, animation);
 			}
 		},
-		created () {}
+		created () {
+			console.log('@@@ UserPanel:hook:created');
+
+			console.log(this.state.animationState);
+			console.log(PlayerState.playerState.animationState);
+		}
 	}
 </script>
 
