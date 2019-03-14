@@ -37,7 +37,7 @@
 		},
 		// TODO: разделить каналы - https://dzone.com/articles/exploring-html5-web-audio
 		methods: {
-			init () {
+			/*init () {
 				console.log('');
 				console.log('# Fractal::init');
 				
@@ -79,6 +79,53 @@
 				}).finally(() => {
 					console.log(this.audioCtx.state);
 					initRepeat();
+					// this.audioCtx.resume();
+				});
+			},*/
+			init () {
+				console.log('');
+				console.log('# Fractal::init');
+				
+				/*console.log(this.audioCtx.state);
+
+				if(this.audioCtx.state.toLowerCase() != 'running') {
+					this.audioCtx = new window.AudioContext;
+				}
+
+				let initRepeat = () => {
+					if(this.audioCtx.state.toLowerCase() != 'running') {
+						console.log('!!! AudioContext is not running');
+						setTimeout(() => {
+							this.init();
+						}, 200)
+					}
+				};*/
+
+				this.audioCtx = new window.AudioContext;
+
+				this.audioCtx.resume().then(() => {
+					console.log('+++ Fractal::audiocontext is running successfully');
+
+					console.log(this.audioCtx.state);
+					this.source = this.audioCtx.createMediaElementSource(PlayerState.playerTag);
+					
+					this.initCanvas();
+
+					let analyserEq = new this.Analyser(
+						'eq',
+						this.audioCtx,
+						this.source,
+						this.drawEq,	
+						{smoothingTimeConstant: 0.4, fftSize: 1024},
+						'equalizer'
+						// 'graphic_eq'
+					);
+				}).catch(() => {
+					console.log(this.audioCtx.state);
+					// initRepeat();
+				}).finally(() => {
+					console.log(this.audioCtx.state);
+					// initRepeat();
 					// this.audioCtx.resume();
 				});
 			},
@@ -214,10 +261,15 @@
 
 
 			PlayerData.$on('dataTransfer', () => {
-				this.audioCtx = new window.AudioContext;
+				/*this.audioCtx = new window.AudioContext;
+				console.log(this.audioCtx.state);
 				setTimeout(() => {
+					// (this.audioCtx.state == 'suspended') && (this.audioCtx = new window.AudioContext);
+					console.log(this.audioCtx.state);
 					this.init();
-				}, 100);
+				}, 100);*/
+				
+				this.init();
 			});
 
 			PlayerState.$on('stateChanged', (state) => {
