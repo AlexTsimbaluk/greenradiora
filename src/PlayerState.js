@@ -16,6 +16,8 @@ import PlayerAudio from '@/PlayerAudio.js';
 import Utils from '@/Utils.js';
 import P_Config from '@/P_Config.js';
 
+import Translater from '@/core/translater/Translater.js';
+
 export default new Vue({
 	data () {
 		return {
@@ -177,23 +179,6 @@ export default new Vue({
 		},
 
 		toggleAnimation (event, animation) {
-			// console.log(this.playerState.animations[animation.name]);
-
-
-			/*if(animation.name != this.playerState.activeAnimation) {
-				this.playerState.animations[animation.name].start();
-				this.playerState.activeAnimation = animation.name;
-			} else if(animation.name == this.playerState.activeAnimation) {
-				this.playerState.animations[animation.name].stop();
-				this.playerState.activeAnimation = '';
-			} else {
-				this.playerState.animations[animation.name].stop();
-				this.playerState.activeAnimation = '';
-			}*/
-
-			// console.log(this.playerState.animationState[animation.name]);
-			console.log(this.playerState.animationState);
-
 			if(!this.playerState.animationState[animation.name]) {
 				console.log(animation.name + ' start');
 
@@ -565,6 +550,23 @@ export default new Vue({
 	},
 	created () {
 		console.log('@@@ PlayerState:hook:created');
+
+		// console.log('');
+		// console.log(decodeCode(57));
+		// console.log(decodeCode(58));
+		// console.log(decodeCode(59));
+		// console.log(decodeCode(59));
+		// console.log(decodeCode(60));
+		// console.log(decodeCode(108));
+		// console.log(decodeCode(109));
+		// console.log(decodeCode(110));
+		// console.log(decodeCode(111));
+		// console.log(decodeCode(112));
+		// console.log(decodeCode(113));
+		// console.log(decodeCode(114));
+		// console.log(decodeCode(115));
+
+		console.log(Translater.decodeText('Sun'));
 
 		Vue.set(this.playerState, 'animationState', {});
 
