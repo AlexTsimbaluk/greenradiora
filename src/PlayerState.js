@@ -10,11 +10,11 @@ import { fromPromise } from 'rxjs';
 // import { fromPromise } from 'rxjs/observable/fromPromise';
 // import 'rxjs/add/observable/fromPromise';
 
-// import PlayerAudio from '@/PlayerAudio.js';
 
-import PlayerAudio from '@/PlayerAudio.js';
 import Utils from '@/Utils.js';
 import P_Config from '@/P_Config.js';
+
+// import PlayerAudio from '@/PlayerAudio.js';
 
 import Translater from '@/core/translater/Translater.js';
 
@@ -81,7 +81,6 @@ export default new Vue({
 			this.playerTag = document.getElementById(id);
 			this.playerTag.volume = this.playerState.volume;
 
-			// this.playerState.animations = PlayerAudio.getAnimations();
 			console.log(this.animations);
 			this.initAnimations();
 
@@ -459,8 +458,6 @@ export default new Vue({
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('loadeddata');
-
-	     		// PlayerAudio.init(player);
 	        });
 	        player.addEventListener('loadedmetadata', (e) => {
 	     		console.log('# Event.type: ' + e.type);
