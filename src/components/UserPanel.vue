@@ -19,8 +19,19 @@
 						:class="[state.animationState[animation.name] ? '' : 'md-inactive']"
 						:t="'light'"
 					></m-icon>
-						<!-- :t="PlayerState.playerState.animationState ? 'light' : ''" -->
-						<!-- :class="{active: PlayerState}" -->
+					<ripple></ripple>
+				</button>
+
+				<button
+					class="btn btn-outline-info btn-fab btn-round"
+					@click="translate()"
+				>
+					<m-icon
+						class="md-24"
+						:i="'translate'"
+						:class="[state.translated ? '' : 'md-inactive']"
+						:t="'light'"
+					></m-icon>
 					<ripple></ripple>
 				</button>
 			</div>
@@ -52,13 +63,16 @@
 		methods: {
 			toggleAnimation (event, animation) {
 				PlayerState.toggleAnimation (event, animation);
+			},
+			translate () {
+				PlayerState.translate();
 			}
 		},
 		created () {
 			console.log('@@@ UserPanel:hook:created');
 
-			console.log(this.state.animationState);
-			console.log(PlayerState.playerState.animationState);
+			// console.log(this.state.animationState);
+			// console.log(PlayerState.playerState.animationState);
 		}
 	}
 </script>

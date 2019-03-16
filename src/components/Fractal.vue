@@ -157,7 +157,7 @@
 		        }
 
 		        this.stop = () => {
-		        	console.log('@@@ Fractal:animation:stop');
+		        	// console.log('@@@ Fractal:animation:stop');
 
 	        		this.running = false;
 				    streamData = new Uint8Array(this.analyser.frequencyBinCount);

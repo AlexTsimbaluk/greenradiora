@@ -103,16 +103,30 @@ export default new Vue({
 
 			let playPromise = this.playerTag.play();
 
+			/*
+				Event.type: abort
+				emptied
+				play
+				waiting
+				loadstart
+				durationchange
+				loadedmetadata
+				loadeddata
+				canplay
+				playing
+			*/
+
 
 	        if (playPromise !== undefined) {
 				playPromise.then(function() {
+					// Event.type: playing
+
 					console.log('::playPromise::Success::Begin');
 
+
 					for (let key in self.playerState.animationState) {
-						console.log(self.playerState.animationState[key]);
 						if(self.playerState.animationState[key]) {
 							let _a = self.playerState.animations[key];
-							console.log(_a);
 							// _a.stop();
 							_a.start();
 						}
@@ -137,6 +151,16 @@ export default new Vue({
 
 		stopStream () {
 			Utils.logs('::PlayerState::stopStream::');
+
+			/*
+				Event.type: pause
+
+				seeking
+				seeked
+				canplay
+				suspend
+				canplaythrough
+			*/
 
 			// this.playerState.activeAnimation && this.playerState.animations[this.playerState.activeAnimation].stop();
 
@@ -179,7 +203,7 @@ export default new Vue({
 
 		toggleAnimation (event, animation) {
 			if(!this.playerState.animationState[animation.name]) {
-				console.log(animation.name + ' start');
+				// console.log(animation.name + ' start');
 
 				Object.keys(this.playerState.animationState).forEach((_a) => {
 					if(this.playerState.animationState[_a]) {
@@ -193,7 +217,7 @@ export default new Vue({
 				this.playerState.animations[animation.name].start();
 				this.playerState.animationState[animation.name] = true;
 			} else if(this.playerState.animationState[animation.name]) {
-				console.log(animation.name + ' stop');
+				// console.log(animation.name + ' stop');
 
 				this.playerState.animations[animation.name].stop();
 				this.playerState.animationState[animation.name] = false;
@@ -465,12 +489,12 @@ export default new Vue({
 	     		this.setStatus('loadedmetadata');
 	     		player.mozGetMetadata && console.log(player.mozGetMetadata());
 
-	     		this.getMetaData(this.playerTag.src);
+	     		// this.getMetaData(this.playerTag.src);
 	        });
 	        player.addEventListener('loadstart', (e) => {
 	     		console.log('# Event.type: ' + e.type);
 
-	     		this.getMetaData(this.playerTag.src);
+	     		// this.getMetaData(this.playerTag.src);
 	     		this.setStatus('loadstart');
 	        });
 	        player.addEventListener('mozaudioavailable', (e) => {
@@ -484,7 +508,7 @@ export default new Vue({
 	     		this.setStatus('pause');
 	     		this.loader(false);
 
-	     		console.log('pause::' +  player.paused);
+	     		// console.log('pause::' +  player.paused);
 	     		player.currentTime = 0;
 	        });
 	        player.addEventListener('play', (e) => {
@@ -543,27 +567,15 @@ export default new Vue({
 
 	     		this.setStatus('waiting');
 	        });
+	    },
+
+	    translate () {
+			console.log(Translater.decodeText('translate TEXT'));
 	    }
 	},
 	created () {
 		console.log('@@@ PlayerState:hook:created');
 
-		// console.log('');
-		// console.log(decodeCode(57));
-		// console.log(decodeCode(58));
-		// console.log(decodeCode(59));
-		// console.log(decodeCode(59));
-		// console.log(decodeCode(60));
-		// console.log(decodeCode(108));
-		// console.log(decodeCode(109));
-		// console.log(decodeCode(110));
-		// console.log(decodeCode(111));
-		// console.log(decodeCode(112));
-		// console.log(decodeCode(113));
-		// console.log(decodeCode(114));
-		// console.log(decodeCode(115));
-
-		console.log(Translater.decodeText('Sun'));
 
 		Vue.set(this.playerState, 'animationState', {});
 

@@ -6,7 +6,7 @@
 		<div class="d-flex flex-row-reverse flex-shrink-0">
 			<div class="controls d-flex">
 				<!-- <button
-					class="btn btn-default btn-fab btn-round btn-control"
+					class="btn btn-outline-info btn-fab btn-round btn-control"
 					@click="playerDataInit"
 				>
 					<m-icon
@@ -16,55 +16,59 @@
 				</button> -->
 
 				<button
-					class="btn btn-default btn-fab btn-round btn-control"
+					class="btn btn-outline-info btn-fab btn-round btn-control"
 					@click="toggleOpacityRange"
 				>
 					<m-icon
+						:class="[opacityRangeVisible ? '' : 'md-inactive']"
 						:i="'settings'"
-						:t="opacityRangeVisible ? 'light' : ''"
+						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
 				</button>
 
 				<button
-					class="btn btn-default btn-fab btn-round btn-control"
+					class="btn btn-outline-info btn-fab btn-round btn-control"
 					@click="clearLocalStorage"
 				>
 					<m-icon
 						:i="'cached'"
+						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
 				</button>
 				
 				<button
-					class="btn btn-default btn-fab btn-round btn-control"
+					class="btn btn-outline-info btn-fab btn-round btn-control"
 					@click="locationReload"
 				>
 					<m-icon
 						:i="'autorenew'"
+						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
 				</button>
 
 				<button 
-					class="btn btn-default btn-fab btn-round btn-control clear"
+					class="btn btn-outline-info btn-fab btn-round btn-control clear"
 					@click="clear"
 					:disabled="!logs.length"
 				>
 					<m-icon
 						:class="[!!logs.length ? '' : 'md-inactive']"
 						:i="'not_interested'"
+						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
 				</button>
 				
 				<button
-					class="btn btn-default btn-fab btn-round btn-control"
+					class="btn btn-outline-info btn-fab btn-round btn-control"
 					@click="toggleLog"
 				>
 					<m-icon
 						:i="'bug_report'"
-						:t="logVisible ? 'light' : ''"
+						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
 				</button>
