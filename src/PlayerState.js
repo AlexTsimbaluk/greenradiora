@@ -92,6 +92,17 @@ export default new Vue({
 			
 			let self = this;
 
+			/*let prefixUrl = 'https://cross-origin.com/' + track.station_url;
+
+			let deleted = 'http://';
+
+			if(prefixUrl.indexOf(deleted) != -1) {
+				let from = prefixUrl.indexOf(deleted);
+				prefixUrl = prefixUrl.split('');
+				prefixUrl.splice(from, deleted.length);
+				prefixUrl = prefixUrl.join('');
+			}*/
+
 			this.playerTag.src = track.station_url;
 
 		    this.playerTag.crossOrigin = 'anonymous';
@@ -109,11 +120,21 @@ export default new Vue({
 				play
 				waiting
 				loadstart
-				durationchange
-				loadedmetadata
-				loadeddata
-				canplay
-				playing
+
+					Error - catch().
+						error
+
+						pause
+					
+					Success - then().
+						durationchange
+						loadedmetadata
+						loadeddata
+						canplay
+						
+						playing
+
+
 			*/
 
 
@@ -140,7 +161,10 @@ export default new Vue({
 					Utils.logs(`Playing ${track.station_title}`);					
 				}).catch(function() {
 					// TODO: src = "https://cross-origin.com/myvideo.html" - ?
+
+					// Event.type: error
 					console.log('::playPromise::Failed::Begin');
+					// Event.type: pause
 					self.stopStream();
 				});
 	        }
