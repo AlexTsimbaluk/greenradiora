@@ -103,7 +103,7 @@ export default new Vue({
 				prefixUrl = prefixUrl.join('');
 			}*/
 
-			this.playerTag.src = track.station_url;
+			this.playerTag.src = track.station_url.original;
 
 		    this.playerTag.crossOrigin = 'anonymous';
 			setTimeout(function(){
@@ -158,7 +158,7 @@ export default new Vue({
 
 					self.setDocumentTitle(true);
 					
-					Utils.logs(`Playing ${track.station_title}`);					
+					Utils.logs(`Playing ${track.station_title.original}`);					
 				}).catch(function() {
 					// TODO: src = "https://cross-origin.com/myvideo.html" - ?
 
@@ -414,7 +414,7 @@ export default new Vue({
 
 		setDocumentTitle (newTitle) {
 			if(newTitle) {
-				document.title =  this.playerState.nowPlaying.track.station_title + '::Radiora';
+				document.title =  this.playerState.nowPlaying.track.station_title.original + '::Radiora';
 				return;
 			}
 
@@ -422,14 +422,14 @@ export default new Vue({
 		},
 
 		deleteStation (station) {
-			console.log('::' + station.station_title + ' from ' + this.playerState.currentPlaylist + ' playlist deleted');
+			console.log('::' + station.station_title.original + ' from ' + this.playerState.currentPlaylist + ' playlist deleted');
 			let plCur = this.getCurrentPlaylist();
 			this.playerState.playlists[this.playerState.currentPlaylist].tracks.splice(plCur.indexOf(+station.station_id), 1);
 			this.stateChanged();
 		},
 
 		addStation (station) {
-			Utils.logs('::' + station.station_title + ' added to ' + this.playerState.currentPlaylist + ' playlist');
+			Utils.logs('::' + station.station_title.original + ' added to ' + this.playerState.currentPlaylist + ' playlist');
 			
 			let plCur = this.getCurrentPlaylist();
 			
@@ -595,6 +595,10 @@ export default new Vue({
 
 	    translate () {
 			console.log(Translater.decodeText('translate TEXT'));
+
+			this.playerState.translated = !this.playerState.translated;
+
+			this.stateChanged();
 	    }
 	},
 	created () {

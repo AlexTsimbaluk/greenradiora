@@ -61,6 +61,22 @@ export default new Vue({
 						clearInterval(xhrTimeout);
 						
 						this.stationsArray = (response.data);
+
+						for(let key in this.stationsArray) {
+							let title = {
+								original: this.stationsArray[key].station_title,
+								translate: ''
+							};
+
+							let url = {
+								original: this.stationsArray[key].station_url,
+								translate: ''
+							};
+
+							this.stationsArray[key].station_title = title;
+							this.stationsArray[key].station_url = url;
+						}
+
 						this.xhrResponceRecieved = true;
 						localStorage.setItem('stations', JSON.stringify(this.stationsArray));
 

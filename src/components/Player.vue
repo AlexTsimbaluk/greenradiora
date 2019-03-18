@@ -22,7 +22,7 @@
 							v-if="!state.paused && state.nowPlaying.track"
 							class="flex-grow-1 track-title"
 						>
-							{{state.nowPlaying.track.station_title}}
+							{{state.nowPlaying.track.station_title.original}}
 						</div>
 					</transition>
 
@@ -280,6 +280,7 @@
 				<div
 					class="d-flex flex-column flex-grow-1 no-gutters track-list-container"
 				>
+					<!-- playlist's tracks -->
 					<transition name="slide" mode="out-in">
 						<div
 							v-if="!searchFull"
@@ -294,6 +295,7 @@
 								<station
 									v-for="(track, key) in state.playlists[state.currentPlaylist].tracks"
 									:station="stationsArray[track]"
+									:translated="state.translated"
 									:key="track"
 									:class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}"
 								></station>
@@ -301,6 +303,7 @@
 						</div>
 					</transition>
 
+					<!-- search -->
 					<transition name="slide" mode="out-in">
 						<div
 							v-if="searchResults.length"
@@ -423,6 +426,8 @@ export default {
 			// this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
 
 			this.xhrResponceRecieved = true;
+
+			console.log(this.stationsArray[2]);
 		},
 		makeOn100 () {
 			// массив имен станций
@@ -493,7 +498,7 @@ export default {
 						continue;
 					}
 
-					let val = _st[_p].toLowerCase();
+					let val = _st[_p].original.toLowerCase();
 
 					if(val.indexOf(this.searchString) != -1) {
 						this.searchResults.push(_st['station_id']);

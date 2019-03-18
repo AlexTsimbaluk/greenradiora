@@ -3,12 +3,32 @@
 		@click="togglePlaying($event)"
 		class="d-flex flex-column no-gutters station"
 	>
-		<div class="station-title col">
-			{{ station.station_title }}
+		<div
+			v-if="!translated"
+			class="station-title col"
+		>
+			{{ station.station_title.original }}
 		</div>
 
-		<div class="station-url col">
-			{{ station.station_url }}
+		<div
+			v-if="!translated"
+			class="station-url col"
+		>
+			{{ station.station_url.original }}
+		</div>
+
+		<div
+			v-if="translated"
+			class="station-title col"
+		>
+			{{ station.station_title.translated }}
+		</div>
+
+		<div
+			v-if="translated"
+			class="station-url col"
+		>
+			{{ station.station_url.translated }}
 		</div>
 
 		<button
@@ -59,6 +79,10 @@
 				reqired: true
 			},
 			search: {
+				type: Boolean,
+				reqired: false
+			},
+			translated: {
 				type: Boolean,
 				reqired: false
 			}
