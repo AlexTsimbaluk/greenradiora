@@ -625,11 +625,9 @@ export default new Vue({
 
 		// https://stackoverflow.com/questions/45784825/frompromise-does-not-exist-on-type-observable/45785513
 
-		this.promiseSource = from(new Promise(resolve => resolve('Hello World!')));
-		const subscribe = this.promiseSource.subscribe(val => console.log(val));
-
-		// this.promiseSourceState = from(this.stateChanged());
-		// const subscribe2 = this.promiseSourceState.subscribe(val => console.log(val));
+		// это работает
+		/*this.promiseSource = from(new Promise(resolve => resolve('Hello World!')));
+		const subscribe = this.promiseSource.subscribe(val => console.log(val));*/
 
 		/*of(this.playerState).subscribe(
 			(state) => {
