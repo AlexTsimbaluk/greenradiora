@@ -418,13 +418,15 @@ export default {
 		}
 	},
 	methods: {
-		init () {
+		init (reinit) {
 			Utils.logs('+++ Player:init successfully');
 
 			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
-			this.makeOn100();
-			// this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
 
+			if(reinit) return false;
+
+			console.log('make100');
+			this.makeOn100();
 			this.xhrResponceRecieved = true;
 		},
 		makeOn100 () {
@@ -591,13 +593,11 @@ export default {
 	created () {
 		console.log('@@@ Player:hook:created');
 
-
 		PlayerData.$on('dataTransfer', () => {
 			Utils.logs('');
 			console.log('+++ Player:$on:dataTransfer::Data from PlayerData recieved successfully');
 
 			PlayerState.getAudioTag('playerTag');
-
 			this.playerTag = PlayerState.playerTag;
 
 			PlayerState.playerTag.addEventListener('timeupdate', (e)=> {
@@ -609,19 +609,18 @@ export default {
 				this.playingTime = min + ':' + sec;
 			});
 
-			this.init();
+			this.init(false);
 
 			this.state = PlayerState.playerState;
 			this.state.status = '';
 		});
 
 		PlayerState.$on('stateChanged', (state) => {
-			// console.log(state);
 			this.state = state;
 		});
 
 		PlayerState.$on('stationsChanged', () => {
-			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
+			this.init(true);
 		});
 
 		PlayerState.$on('loader', (visible) => {
