@@ -30,6 +30,8 @@
 				_q: 1,
 				bW: 1,
 
+				maxWidth: document.documentElement.clientWidth,
+
 				animationState: '',
 
 				sub: null
@@ -111,12 +113,14 @@
 					
 					this.initCanvas();
 
+					let analyserEqFft = (this.maxWidth >= 512) ? 1024 : 512;
+
 					let analyserEq = new this.Analyser(
 						'eq',
 						this.audioCtx,
 						this.source,
 						this.drawEq,	
-						{smoothingTimeConstant: 0.4, fftSize: 1024},
+						{smoothingTimeConstant: 0.4, fftSize: analyserEqFft},
 						'equalizer'
 						// 'graphic_eq'
 					);
@@ -169,7 +173,7 @@
 			},
 
 			initCanvas () {
-				this.canvas = new this.AudioCanvas('visEqLeft', document.documentElement.clientWidth, document.documentElement.clientHeight - 10);
+				this.canvas = new this.AudioCanvas('visEqLeft', this.maxWidth, document.documentElement.clientHeight - 10);
 				this._q = +((this.canvas.canvasHeight / 2 / 255).toFixed(2));				
 			},
 
@@ -272,9 +276,9 @@
 				this.init();
 			});
 
-			PlayerState.$on('stateChanged', (state) => {
-				// this.animationState = state.animationState;
-			});
+			/*PlayerState.$on('stateChanged', (state) => {
+				
+			});*/
 
 
 
