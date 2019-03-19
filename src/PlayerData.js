@@ -19,7 +19,7 @@ export default new Vue({
 		dataTransfer (msec) {
 			// передача с отсрочкой, потому что Player не успевает создаться
 			setTimeout(() => {
-				PlayerState.getAudioTag('playerTag');
+				// PlayerState.getAudioTag('playerTag');
 				this.$emit('dataTransfer');
 			}, msec);
 		},

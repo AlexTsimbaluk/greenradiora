@@ -426,8 +426,6 @@ export default {
 			// this.random = this.stationKeys[this.getRandomInt(0, this.stTotal)];
 
 			this.xhrResponceRecieved = true;
-
-			console.log(this.stationsArray[2]);
 		},
 		makeOn100 () {
 			// массив имен станций
@@ -598,7 +596,8 @@ export default {
 			Utils.logs('');
 			console.log('+++ Player:$on:dataTransfer::Data from PlayerData recieved successfully');
 
-			
+			PlayerState.getAudioTag('playerTag');
+
 			this.playerTag = PlayerState.playerTag;
 
 			PlayerState.playerTag.addEventListener('timeupdate', (e)=> {
@@ -619,6 +618,10 @@ export default {
 		PlayerState.$on('stateChanged', (state) => {
 			// console.log(state);
 			this.state = state;
+		});
+
+		PlayerState.$on('stationsChanged', () => {
+			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 		});
 
 		PlayerState.$on('loader', (visible) => {

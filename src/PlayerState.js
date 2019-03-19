@@ -11,6 +11,7 @@ import { fromPromise } from 'rxjs';
 // import 'rxjs/add/observable/fromPromise';
 
 
+import PlayerData from '@/PlayerData.js';
 import Utils from '@/Utils.js';
 import P_Config from '@/P_Config.js';
 
@@ -24,6 +25,8 @@ export default new Vue({
 			playerTag: null,
 			playingTime: null,
 			DEFAULT_PLAYLIST_NAME: '___',
+
+			stationsArray: {},
 
 			playerState: {
 				playlists: {
@@ -73,18 +76,42 @@ export default new Vue({
 			});
 		},
 
+		stationsChanged () {
+			localStorage.setItem('stations', JSON.stringify(this.stationsArray));
+			this.$emit('stationsChanged');
+		},
+
 		loader (visible) {
 			this.$emit('loader', visible);
 		},
 
 		getAudioTag (id) {
+			console.log('::PlayerState::getAudioTag');
 			this.playerTag = document.getElementById(id);
 			this.playerTag.volume = this.playerState.volume;
 
-			console.log(this.animations);
+			console.log('+++ PlayerState:audioTag received successfully');
+			
 			this.initAnimations();
+			this.initStationsArray();
 
 			return this.playerTag;
+		},
+
+		initAnimations () {
+			console.log('::PlayerState::initAnimations');
+			let _a = Object.keys(this.playerState.animations);
+
+			if(!Object.keys(this.playerState.animationState).length && _a.length) {
+				for (let key in this.playerState.animations) {
+					Vue.set(this.playerState.animationState, this.playerState.animations[key].name, false);
+				}
+			}
+		},
+
+		initStationsArray () {
+			console.log('::PlayerState::initStationsArray');
+			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 		},
 
 		playStream (track) {
@@ -204,25 +231,6 @@ export default new Vue({
 
 		createAnimations(animation) {
 			Vue.set(this.playerState.animations, animation.name, animation);
-		},
-
-		initAnimations () {
-			console.log(Object.keys(this.playerState.animations));
-			console.log(Object.keys(this.playerState.animationState));
-
-			let _a = Object.keys(this.playerState.animations);
-
-			if(!Object.keys(this.playerState.animationState).length && _a.length) {
-				console.log('! no init a');
-
-				for (let key in this.playerState.animations) {
-					console.log(this.playerState.animations[key].name);
-					Vue.set(this.playerState.animationState, this.playerState.animations[key].name, false);
-				}
-				
-				console.log(Object.keys(this.playerState.animationState));
-				console.log((this.playerState.animationState));
-			}
 		},
 
 		toggleAnimation (event, animation) {
@@ -596,9 +604,40 @@ export default new Vue({
 	    translate () {
 			console.log(Translater.decodeText('translate TEXT'));
 
-			this.playerState.translated = !this.playerState.translated;
+			if(!this.playerState.translated) {
+				this.playerState.translated = true;
+				
+				this.translateAll(true);
+			} else {
+				this.playerState.translated = false;
+				this.translateAll(false);
+			}
+
 
 			this.stateChanged();
+			this.stationsChanged();
+	    },
+
+	    translateAll (needTranslate) {
+	    	let ids = this.getCurrentPlaylist();
+
+
+	    	for(let id in this.stationsArray) {
+	    		if(!ids.some((el) => {return el == id})) continue;
+
+	    		if(needTranslate) {
+		    		this.stationsArray[id].station_title.translated = Translater.decodeText(
+		    			this.stationsArray[id].station_title.original
+		    		);
+
+		    		this.stationsArray[id].station_url.translated = Translater.decodeText(
+		    			this.stationsArray[id].station_url.original
+		    		);
+	    		} else {
+	    			this.stationsArray[id].station_title.translated = '';
+	    			this.stationsArray[id].station_url.translated = '';
+	    		}
+	    	}
 	    }
 	},
 	created () {
@@ -606,6 +645,10 @@ export default new Vue({
 
 
 		Vue.set(this.playerState, 'animationState', {});
+
+		/*PlayerData.$on('dataTransfer', () => {
+			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
+		});*/
 
 		/*this.stateChanged = () => {
 			return new Promise((resolve, reject) => {
