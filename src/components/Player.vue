@@ -170,9 +170,10 @@
 							>
 								No, please
 								<!-- <m-icon
-									class="md-16 ml-1"
+									class="ml-1"
 									:i="'sentiment_dissatisfied'"
 									:t="'light'"
+									:s="'16'"
 								></m-icon> -->
 								<span class="font-size-15">☹</span>
 								<!-- <span class="font-size-24" style="margin-top: -4px;">☺</span> -->
@@ -199,9 +200,9 @@
 											@click.stop="deletePlaylist(playlist, index, playlist == state.currentPlaylist)"
 										>
 											<m-icon
-												class="md-16"
 												:i="'not_interested'"
 												:t="'light'"
+												:s="'16'"
 											></m-icon>
 										</div>
 
@@ -250,9 +251,9 @@
 											@click.stop="toggleEditPlaylist(playlist, index, playlist == state.currentPlaylist)"
 										>
 											<m-icon
-												class="md-16"
 												:i="'edit'"
 												:t="'light'"
+												:s="'16'"
 											></m-icon>
 										</div>
 									</div>
@@ -419,12 +420,11 @@ export default {
 	},
 	methods: {
 		init (reinit) {
-			Utils.logs('+++ Player:init successfully');
-
 			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 
 			if(reinit) return false;
 
+			Utils.logs('+++ Player:init successfully');
 			console.log('make100');
 			this.makeOn100();
 			this.xhrResponceRecieved = true;

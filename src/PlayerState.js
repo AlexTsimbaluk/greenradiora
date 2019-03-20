@@ -160,8 +160,6 @@ export default new Vue({
 						canplay
 						
 						playing
-
-
 			*/
 
 
@@ -190,7 +188,7 @@ export default new Vue({
 					// TODO: src = "https://cross-origin.com/myvideo.html" - ?
 
 					// Event.type: error
-					console.log('::playPromise::Failed::Begin');
+					Utils.log('::playPromise::Failed::Begin');
 					// Event.type: pause
 					self.stopStream();
 				});

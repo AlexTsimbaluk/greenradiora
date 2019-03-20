@@ -7,7 +7,7 @@ export default new Vue({
 	data: {
 		// инициализировалась ли cordova
 		cordovaReady: false,
-		device: '',
+		// device: 'unknown',
 		// Массив со всеми станциями
 		stationsArray: {},
 		apiPrefix: 'http://vuea.radiora.ru',
@@ -65,12 +65,12 @@ export default new Vue({
 						for(let key in this.stationsArray) {
 							let title = {
 								original: this.stationsArray[key].station_title,
-								translate: ''
+								translated: ''
 							};
 
 							let url = {
 								original: this.stationsArray[key].station_url,
-								translate: ''
+								translated: ''
 							};
 
 							this.stationsArray[key].station_title = title;
