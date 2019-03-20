@@ -1,6 +1,6 @@
 <template>
 	<i
-		:class="[t == 'light' ? 'md-light' : 'md-dark']"
+		:class="[t == 'light' ? 'md-light' : 'md-dark', s != undefined ? `md-${s}` : 'md-24']"
 		class="material-icons"
 	>{{i}}</i>
 </template>
@@ -16,6 +16,11 @@
 			},
 			// icon theme
 			t: {
+				type: String,
+				reqired: false
+			},
+			// icon size
+			s: {
 				type: String,
 				reqired: false
 			}
