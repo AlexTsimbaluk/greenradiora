@@ -2,6 +2,33 @@
 	<div class="d-flex flex-shrink-0 row no-gutters py-2 position-relative px-2 user-panel">
 			<!-- :station="stationsArray[track]" -->
 			<!-- :class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}" -->
+		<a
+			v-if="device != 'android'"
+			href="app-debug.apk"
+			download="radiora-apk.apk"
+			class="btn btn-outline-info btn-fab btn-round"
+		>
+			<m-icon
+				:i="'phone_android'"
+				:t="'light'"
+				:s="'20'"
+			></m-icon>
+			<ripple></ripple>
+		</a>
+
+		<a
+			v-if="device == 'android'"
+			href="http://vuea.radiora.ru/"
+			class="btn btn-outline-info btn-fab btn-round"
+		>
+			<m-icon
+				:i="'laptop'"
+				:t="'light'"
+				:s="'20'"
+			></m-icon>
+			<ripple></ripple>
+		</a>
+
 		<div
 			v-for="(animation, key) in state.animations"
 			:key="animation.name"
@@ -14,7 +41,6 @@
 					@click="toggleAnimation($event, animation)"
 				>
 					<m-icon
-						class="md-24"
 						:i="animation.icon"
 						:class="[state.animationState[animation.name] ? '' : 'md-inactive']"
 						:t="'light'"
@@ -22,20 +48,20 @@
 					<ripple></ripple>
 				</button>
 
-				<button
-					class="btn btn-outline-info btn-fab btn-round"
-					@click="translate()"
-				>
-					<m-icon
-						class="md-24"
-						:i="'translate'"
-						:class="[state.translated ? '' : 'md-inactive']"
-						:t="'light'"
-					></m-icon>
-					<ripple></ripple>
-				</button>
 			</div>
 		</div>
+
+		<button
+			class="btn btn-outline-info btn-fab btn-round"
+			@click="translate()"
+		>
+			<m-icon
+				:i="'translate'"
+				:class="[state.translated ? '' : 'md-inactive']"
+				:t="'light'"
+			></m-icon>
+			<ripple></ripple>
+		</button>
 	</div>
 </template>
 
@@ -45,7 +71,9 @@
 
 	import PlayerData from '@/PlayerData.js';
 	import PlayerState from '@/PlayerState.js';
-	import PlayerAudio from '@/PlayerAudio.js';
+	import Cordova from '@/Cordova.js';
+
+	import Utils from '@/Utils.js';
 
 	export default {
 		name: 'user-panel',
@@ -57,7 +85,7 @@
 		},
 		data () {
 			return {
-				
+				device: ''
 			}
 		},
 		methods: {
@@ -69,10 +97,13 @@
 			}
 		},
 		created () {
-			console.log('@@@ UserPanel:hook:created');
+			Utils.logs('@@@ UserPanel:hook:created');
 
-			// console.log(this.state.animationState);
-			// console.log(PlayerState.playerState.animationState);
+			Cordova.$on('device', (device) => {
+				Utils.logs('@@@ UserPanel:$on:device');
+				this.device = device;
+				Utils.logs(this.device);
+			});
 		}
 	}
 </script>
