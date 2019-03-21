@@ -317,6 +317,11 @@ export default new Vue({
 
 		setCurrentPlaylist (playlist) {
 			this.playerState.currentPlaylist = playlist;
+
+			if(this.playerState.translated) {
+				this.translateAll(true);
+			}
+
 			this.stateChanged();
 		},
 
@@ -600,7 +605,6 @@ export default new Vue({
 	    },
 
 	    translate () {
-
 			if(!this.playerState.translated) {
 				this.playerState.translated = true;
 				this.translateAll(true);
