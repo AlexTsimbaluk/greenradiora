@@ -11,6 +11,8 @@
 	import PlayerData from '@/PlayerData.js';
 	import PlayerState from '@/PlayerState.js';
 	import PlayerAudio from '@/PlayerAudio.js';
+
+	import Utils from '@/Utils.js';
 	
 	// import Rx from 'rxjs/Rx';
 	// import { of } from 'rxjs';
@@ -86,7 +88,7 @@
 			},*/
 			init () {
 				console.log('');
-				console.log('# Fractal::init');
+				Utils.logs('# Fractal::init');
 				
 				/*console.log(this.audioCtx.state);
 
@@ -103,7 +105,19 @@
 					}
 				};*/
 
-				this.audioCtx = new window.AudioContext;
+				this.audioCtx = new AudioContext;
+
+				Utils.logs('audioContext state is ' + this.audioCtx.state);
+
+				if(this.audioCtx.state == 'suspended') {
+					this.audioCtx = null;
+
+					setTimeout(() => {
+						this.init();
+					}, 300);
+
+					return false;
+				}
 
 				this.audioCtx.resume().then(() => {
 					console.log('+++ Fractal::audiocontext is running successfully');
