@@ -600,17 +600,16 @@ export default new Vue({
 	    },
 
 	    translate () {
-			console.log(Translater.decodeText('translate TEXT'));
 
 			if(!this.playerState.translated) {
 				this.playerState.translated = true;
-				
 				this.translateAll(true);
+				console.log(Translater.decodeText('# Translater::Translated'));
 			} else {
 				this.playerState.translated = false;
 				this.translateAll(false);
+				console.log(Translater.decodeText('# Translater::Original'));
 			}
-
 
 			this.stateChanged();
 			this.stationsChanged();
@@ -618,7 +617,6 @@ export default new Vue({
 
 	    translateAll (needTranslate) {
 	    	let ids = this.getCurrentPlaylist();
-
 
 	    	for(let id in this.stationsArray) {
 	    		if(!ids.some((el) => {return el == id})) continue;
@@ -644,21 +642,6 @@ export default new Vue({
 
 		Vue.set(this.playerState, 'animationState', {});
 
-		/*PlayerData.$on('dataTransfer', () => {
-			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
-		});*/
-
-		/*this.stateChanged = () => {
-			return new Promise((resolve, reject) => {
-				console.log(this.playerState);
-				resolve(this.playerState);
-
-				localStorage.setItem('playerState', JSON.stringify(this.playerState));
-				this.$emit('stateChanged', this.playerState);
-			});
-		};*/
-
-
 		/*this.sub$ = Observable.create((observer) => {
 			console.log('');
 			console.log('Observable created');
@@ -674,17 +657,6 @@ export default new Vue({
 		/*this.promiseSource = from(new Promise(resolve => resolve('Hello World!')));
 		const subscribe = this.promiseSource.subscribe(val => console.log(val));*/
 
-		/*of(this.playerState).subscribe(
-			(state) => {
-				console.log('');
-				console.log('PlayerState changed');
-				console.log(state);
-				// console.log(PlayerState.playerTag);
-			},
-			(err) => console.error('error:', err),
-			() => console.log('Completed')
-		);*/
-
 		/*let sub = from(this.stateChanged()).subscribe(
 			(val) => {
 				console.log('');
@@ -694,7 +666,6 @@ export default new Vue({
 			(err) => console.error('error:', err),
 			() => console.log('completed')
 		);*/
-
 
 		if(localStorage.getItem('playerState') == undefined) {
 			P_Config.init();
