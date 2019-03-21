@@ -206,7 +206,7 @@
 
 <style>
 .log {
-	padding: 0 8px;
+	/*padding: 0 8px;*/
 	bottom: 0;
 	overflow-y: hidden;
 }

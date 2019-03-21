@@ -98,6 +98,11 @@ export default new Vue({
 			return this.playerTag;
 		},
 
+		initStationsArray () {
+			console.log('::PlayerState::initStationsArray');
+			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
+		},
+
 		initAnimations () {
 			console.log('::PlayerState::initAnimations');
 			let _a = Object.keys(this.playerState.animations);
@@ -107,11 +112,6 @@ export default new Vue({
 					Vue.set(this.playerState.animationState, this.playerState.animations[key].name, false);
 				}
 			}
-		},
-
-		initStationsArray () {
-			console.log('::PlayerState::initStationsArray');
-			this.stationsArray = JSON.parse(localStorage.getItem('stations'));
 		},
 
 		playStream (track) {
@@ -188,7 +188,7 @@ export default new Vue({
 					// TODO: src = "https://cross-origin.com/myvideo.html" - ?
 
 					// Event.type: error
-					Utils.log('::playPromise::Failed::Begin');
+					Utils.logs('::playPromise::Failed::Begin');
 					// Event.type: pause
 					self.stopStream();
 				});
