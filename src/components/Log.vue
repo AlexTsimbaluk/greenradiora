@@ -20,30 +20,7 @@
 					@click="toggleOpacityRange"
 				>
 					<m-icon
-						:class="[opacityRangeVisible ? '' : 'md-inactive']"
 						:i="'settings'"
-						:t="!logVisible ? 'light' : ''"
-					></m-icon>
-					<ripple></ripple>
-				</button>
-
-				<button
-					class="btn btn-outline-info btn-fab btn-round btn-control"
-					@click="clearLocalStorage"
-				>
-					<m-icon
-						:i="'cached'"
-						:t="!logVisible ? 'light' : ''"
-					></m-icon>
-					<ripple></ripple>
-				</button>
-				
-				<button
-					class="btn btn-outline-info btn-fab btn-round btn-control"
-					@click="locationReload"
-				>
-					<m-icon
-						:i="'autorenew'"
 						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
@@ -96,7 +73,6 @@
 			v-if="logVisible && opacityRangeVisible"
 			class="m-auto"
 		>
-				<!-- v-model="state.volume" -->
 			<input
 				@change="setAppOpacity($event)"
 				@opacityChanged="opacityChanged(event)"
@@ -125,9 +101,6 @@
 				logs: [],
 				logVisible: false,
 				logEl: null,
-
-				locationReload: Utils.locationReload,
-				clearLocalStorage: Utils.clearLocalStorage,
 
 				opacityRangeVisible: false,
 				appOpacity: 1

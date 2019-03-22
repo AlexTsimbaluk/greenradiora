@@ -2,66 +2,93 @@
 	<div class="d-flex flex-shrink-0 row no-gutters py-2 position-relative px-2 user-panel">
 			<!-- :station="stationsArray[track]" -->
 			<!-- :class="{playing: state.nowPlaying.track && state.nowPlaying.track.station_id == track}" -->
-		<a
-			v-if="device != 'android'"
-			href="app-debug.apk"
-			download="radiora-apk.apk"
-			class="btn btn-outline-info btn-fab btn-round"
-		>
-			<m-icon
-				:i="'phone_android'"
-				:t="'light'"
-				:s="'20'"
-			></m-icon>
-			<ripple></ripple>
-		</a>
-
-		<a
-			v-if="device == 'android'"
-			href="http://vuea.radiora.ru/"
-			class="btn btn-outline-info btn-fab btn-round"
-		>
-			<m-icon
-				:i="'laptop'"
-				:t="'light'"
-				:s="'20'"
-			></m-icon>
-			<ripple></ripple>
-		</a>
-
-		<div
-			v-for="(animation, key) in state.animations"
-			:key="animation.name"
-		>
-			<div
-				class="d-flex"
+		<div class="d-flex col">
+			<a
+				v-if="device != 'android'"
+				href="app-debug.apk"
+				download="radiora-apk.apk"
+				class="btn btn-outline-info btn-fab btn-round"
+				title="Download apk"
 			>
-				<button
-					class="btn btn-outline-info btn-fab btn-round"
-					@click="toggleAnimation($event, animation)"
-				>
-					<m-icon
-						:i="animation.icon"
-						:class="[state.animationState[animation.name] ? '' : 'md-inactive']"
-						:t="'light'"
-					></m-icon>
-					<ripple></ripple>
-				</button>
+				<m-icon
+					:i="'phone_android'"
+					:t="'light'"
+					:s="'20'"
+				></m-icon>
+				<ripple></ripple>
+			</a>
 
+			<a
+				v-if="device == 'android'"
+				href="http://vuea.radiora.ru/"
+				class="btn btn-outline-info btn-fab btn-round"
+			>
+				<m-icon
+					:i="'laptop'"
+					:t="'light'"
+					:s="'20'"
+				></m-icon>
+				<ripple></ripple>
+			</a>
+
+			<div
+				v-for="(animation, key) in state.animations"
+				:key="animation.name"
+			>
+				<div
+					class="d-flex"
+				>
+					<button
+						class="btn btn-outline-info btn-fab btn-round"
+						@click="toggleAnimation($event, animation)"
+					>
+						<m-icon
+							:i="animation.icon"
+							:class="[state.animationState[animation.name] ? '' : 'md-inactive']"
+							:t="'light'"
+						></m-icon>
+						<ripple></ripple>
+					</button>
+
+				</div>
 			</div>
+
+			<button
+				class="btn btn-outline-info btn-fab btn-round"
+				@click="translate()"
+			>
+				<m-icon
+					:i="'translate'"
+					:class="[state.translated ? '' : 'md-inactive']"
+					:t="'light'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
 		</div>
 
-		<button
-			class="btn btn-outline-info btn-fab btn-round"
-			@click="translate()"
-		>
-			<m-icon
-				:i="'translate'"
-				:class="[state.translated ? '' : 'md-inactive']"
-				:t="'light'"
-			></m-icon>
-			<ripple></ripple>
-		</button>
+		<div class="d-flex">
+			<button
+				class="btn btn-outline-info btn-fab btn-round"
+				@click="clearLocalStorage()"
+			>
+				<m-icon
+					:i="'cached'"
+					:t="'light'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
+			
+			<button
+				class="btn btn-outline-info btn-fab btn-round"
+				@click="locationReload()"
+			>
+				<m-icon
+					:i="'autorenew'"
+					:t="'light'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -94,6 +121,12 @@
 			},
 			translate () {
 				PlayerState.translate();
+			},
+			clearLocalStorage () {
+				Utils.clearLocalStorage();
+			},
+			locationReload () {
+				Utils.locationReload();
 			}
 		},
 		created () {
@@ -108,4 +141,8 @@
 	}
 </script>
 
-<style></style>
+<style>
+	.user-panel .btn {
+		margin-left: 0 !important;
+	}
+</style>
