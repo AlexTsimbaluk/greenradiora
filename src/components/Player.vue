@@ -279,7 +279,7 @@
 				
 				<!-- track list -->
 				<div
-					class="d-flex flex-column flex-grow-1 no-gutters track-list-container"
+					class="d-flex flex-column flex-grow-1 no-gutters track-list-container pb-3"
 				>
 					<!-- playlist's tracks -->
 					<transition name="slide" mode="out-in">

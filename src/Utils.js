@@ -35,12 +35,20 @@ export default new Vue({
 			this.$emit('log', text);
 		},
 
+		toggleLog () {
+			this.$emit('toggleLog');
+		},
+
+		clearLog () {
+			this.$emit('clearLog');
+		},
+
 		setCursorPosition(input, start, end) {
-		    if (input.setSelectionRange) {
-		      input.focus();
-		      input.setSelectionRange(start, end);
-		    }
-		  }
+			if (input.setSelectionRange) {
+				input.focus();
+				input.setSelectionRange(start, end);
+			}
+		}
 	},
 	created () {
 		console.log('@@@ Utils:hook:created');

@@ -1,10 +1,15 @@
 <template>
+		<!-- @toggleLog="toggleLog()"
+		@clearLog="clear()" -->
 	<div
 		class="log w-100 d-flex flex-column-reverse justify-content-between"
 		:class="{active: logVisible}"
 	>
 		<div class="d-flex flex-row-reverse flex-shrink-0">
-			<div class="controls d-flex">
+			<div
+				v-if="false"
+				class="controls d-flex"
+			>
 				<!-- <button
 					class="btn btn-outline-info btn-fab btn-round btn-control"
 					@click="playerDataInit"
@@ -26,7 +31,7 @@
 					<ripple></ripple>
 				</button>
 
-				<button 
+				<!-- <button 
 					class="btn btn-outline-info btn-fab btn-round btn-control clear"
 					@click="clear"
 					:disabled="!logs.length"
@@ -37,9 +42,9 @@
 						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
-				</button>
+				</button> -->
 				
-				<button
+				<!-- <button
 					class="btn btn-outline-info btn-fab btn-round btn-control"
 					@click="toggleLog"
 				>
@@ -48,7 +53,7 @@
 						:t="!logVisible ? 'light' : ''"
 					></m-icon>
 					<ripple></ripple>
-				</button>
+				</button> -->
 			</div>
 		</div>
 
@@ -93,6 +98,7 @@
 
 	import Utils from '@/Utils.js';
 	import PlayerData from '@/PlayerData.js';
+	import PlayerState from '@/PlayerState.js';
 
 	export default {
 		name: 'Log',
@@ -171,6 +177,14 @@
 
 			Utils.$on('log', (text) => {
 				this.add(text);
+			});
+
+			Utils.$on('toggleLog', () => {
+				this.toggleLog();
+			});
+
+			Utils.$on('clearLog', () => {
+				this.clear();
 			});
 		}
 	}

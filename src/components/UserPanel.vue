@@ -88,6 +88,42 @@
 				></m-icon>
 				<ripple></ripple>
 			</button>
+
+			<!-- <button
+				class="btn btn-outline-info btn-fab btn-round btn-control"
+				@click="toggleOpacityRange"
+			>
+				<m-icon
+					:i="'settings'"
+					:t="!logVisible ? 'light' : ''"
+				></m-icon>
+				<ripple></ripple>
+			</button> -->
+
+				<!-- :disabled="!logs.length" -->
+			<button 
+				class="btn btn-outline-info btn-fab btn-round"
+				@click="clearLog"
+			>
+					<!-- :class="[!!logs.length ? '' : 'md-inactive']" -->
+				<m-icon
+					:i="'not_interested'"
+					:t="'light'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
+			
+				<!-- @click="$emit('toggleLog')" -->
+			<button
+				class="btn btn-outline-info btn-fab btn-round"
+				@click="toggleLog"
+			>
+				<m-icon
+					:i="'bug_report'"
+					:t="'light'"
+				></m-icon>
+				<ripple></ripple>
+			</button>
 		</div>
 	</div>
 </template>
@@ -127,6 +163,13 @@
 			},
 			locationReload () {
 				Utils.locationReload();
+			},
+			toggleLog () {
+				Utils.toggleLog();
+				console.log('toggleLog');
+			},
+			clearLog () {
+				Utils.clearLog();
 			}
 		},
 		created () {
