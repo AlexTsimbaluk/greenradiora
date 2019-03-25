@@ -109,7 +109,7 @@ if ($_POST['action'] == 'configToFile' && !empty($_POST['config'])) {
 }
 
 
-if ($_POST['action'] == 'getMetaData' && !empty($_POST['url'])) {
+/*if ($_POST['action'] == 'getMetaData' && !empty($_POST['url'])) {
 // if ($_POST['action'] == 'getMetaData') {
 	getMp3StreamTitle($_POST['url'], 19200);
 	// echo (getMp3StreamTitle('http://graalradio.com:8123/future', 19200));
@@ -123,3 +123,4 @@ if (!empty($_GET['url'])) {
 	// echo (getMp3StreamTitle('http://graalradio.com:8123/future', 19200));
 	// var_dump(getMp3StreamTitle($_GET['url'], 19200));
 }
+*/

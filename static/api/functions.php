@@ -461,7 +461,7 @@ function configToFile($config) {
 	mysqli_close($link);
 }
 
-function getMp3StreamTitle($streamingUrl, $interval, $offset = 0, $headers = true) {
+/*function getMp3StreamTitle($streamingUrl, $interval, $offset = 0, $headers = true) {
 	// global $link;
 
 	echo 'getMp3StreamTitle';
@@ -512,4 +512,4 @@ function getMp3StreamTitle($streamingUrl, $interval, $offset = 0, $headers = tru
     // echo ($data);
 
     // mysqli_close($link);
-}
+}*/

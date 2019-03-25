@@ -18,11 +18,18 @@
 					class="d-flex flex-shrink-0 justify-content-between current-track px-2"
 				>
 					<transition name="flip" mode="out-in">
-						<div
+						<!-- <div
 							v-if="!state.paused && state.nowPlaying.track"
 							class="flex-grow-1 track-title"
 						>
 							{{state.nowPlaying.track.station_title.original}}
+						</div> -->
+
+						<div
+							v-if="!state.paused && state.streamInfo"
+							class="flex-grow-1 track-title"
+						>
+							{{state.streamInfo}}
 						</div>
 					</transition>
 

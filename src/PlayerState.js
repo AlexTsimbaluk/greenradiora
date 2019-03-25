@@ -28,6 +28,8 @@ export default new Vue({
 
 			stationsArray: {},
 
+			getMetaDataInterval: null,
+
 			playerState: {
 				playlists: {
 					'___': {
@@ -39,6 +41,7 @@ export default new Vue({
 				playlistsOrder: [],
 				currentPlaylist: '',
 				nowPlaying: {},
+				streamInfo: '',
 				volume: .27,
 				paused: true,
 				status: '',
@@ -118,6 +121,7 @@ export default new Vue({
 			Utils.logs('::PlayerState::playStream::');
 			
 			let self = this;
+			this.playerState.streamInfo = '';
 
 			/*let prefixUrl = 'https://cross-origin.com/' + track.station_url;
 
@@ -183,7 +187,11 @@ export default new Vue({
 
 					self.setDocumentTitle(true);
 					
-					Utils.logs(`Playing ${track.station_title.original}`);					
+					Utils.logs(`Playing ${track.station_title.original}`);
+
+					self.getMetaDataInterval = setInterval(() => {
+						self.getMetaData(self.playerTag.src);
+					}, 15000);		
 				}).catch(function() {
 					// TODO: src = "https://cross-origin.com/myvideo.html" - ?
 
@@ -200,6 +208,8 @@ export default new Vue({
 
 		stopStream () {
 			Utils.logs('::PlayerState::stopStream::');
+
+			clearInterval(this.getMetaDataInterval);
 
 			/*
 				Event.type: pause
@@ -223,6 +233,7 @@ export default new Vue({
 			this.playerTag.pause();
 			this.playerState.paused = this.playerTag.paused;
 			this.playerState.nowPlaying = {};
+			this.playerState.streamInfo = '';
 			this.setDocumentTitle(false);
 			this.stateChanged();
 		},
@@ -293,26 +304,19 @@ export default new Vue({
 		},
 
 		getMetaData (streamingUrl) {
-			console.log('getMetaData');
-
-			/*axios
-				.post(
-					'/api/actions.php',
-					{
-						actions: 'getMetaData',
-						url: streamingUrl
-					}
-				)
-				// .get('/api/actions.php?url=' + streamingUrl)
+			axios
+				.get('http://vuea.radiora.ru/api/icecast.php?url=' + streamingUrl)
 				.then((response) => {
-					console.log(response);
+					// console.log(response.data);
+					this.playerState.streamInfo = response.data[0];
+
+					this.stateChanged();
 				})
 				.catch((error) => {
 					console.log('Error::не удалось создать ajax-запрос');
 					console.log('::Ajax failed');
-					// TODO: переделать на добавление класса объекту Vue
 					console.log(error)
-				});*/
+				});
 		},
 
 		setCurrentPlaylist (playlist) {
@@ -556,8 +560,8 @@ export default new Vue({
 	     		console.log('# Event.type: ' + e.type);
 
 	     		this.setStatus('playing');
-	     		
 
+	     		this.getMetaData(this.playerTag.src);
 
 	     		this.loader(false);
 	        });
@@ -638,6 +642,17 @@ export default new Vue({
 	    			this.stationsArray[id].station_url.translated = '';
 	    		}
 	    	}
+	    },
+
+	    cleanState () {
+	    	this.playerState.paused = true;
+	    	this.playerState.searchString = '';
+	    	this.playerState.streamInfo = '';
+	    	this.playerState.playlistEdit = -1;
+	    	this.playerState.searchResults = [];
+	    	this.playerState.nowPlaying = {};
+	    	this.playerState.playlistNameError = -1;
+	    	this.stateChanged();
 	    }
 	},
 	created () {
@@ -691,12 +706,16 @@ export default new Vue({
 			this.playerState = JSON.parse(localStorage.getItem('playerState'));
 			// console.log(this.playerState);
 			// console.log(this.playerState.status);
+			
+			// this.cleanState();
 			this.playerState.paused = true;
-			this.playerState.searchString = '';
-			this.playerState.playlistEdit = -1;
-			this.playerState.searchResults = [];
 			this.playerState.nowPlaying = {};
+			this.playerState.streamInfo = '';
+			this.playerState.searchString = '';
+			this.playerState.searchResults = [];
+			this.playerState.playlistEdit = -1;
 			this.playerState.playlistNameError = -1;
+
 			this.stateChanged();
 		}
 	}
