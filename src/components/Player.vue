@@ -27,16 +27,18 @@
 
 						<div
 							v-if="!state.paused && state.streamInfo"
-							class="flex-grow-1 track-title"
+							class="flex-grow-1 position-relative o-x-hidden"
 						>
-							{{state.streamInfo}}
+							<div class="track-title running-string">
+								{{state.streamInfo}}
+							</div>
 						</div>
 					</transition>
 
 					<transition name="flip" mode="out-in">
 						<div
 							v-if="!state.paused"
-							class="d-flex align-items-center time"
+							class="d-flex align-items-center time ml-2"
 						>
 							{{playingTime}}
 						</div>
@@ -931,6 +933,26 @@ export default {
 		overflow-x: hidden;
 		overflow-y: auto;
 		scroll-behavior: smooth;
+	}
+
+	.track-title.running-string {
+		animation: running-string linear infinite 24s;
+		position: absolute;
+		width: max-content;
+	}
+	@keyframes running-string {
+		0% {
+			left: 105%;
+			transform: translateX(0);
+		}
+		50% {
+			left: -5%;
+			transform: translateX(-100%);
+		}
+		100% {
+			left: 105%;
+			transform: translateX(0);
+		}
 	}
 
 	.total-search {
