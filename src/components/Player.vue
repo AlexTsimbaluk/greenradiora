@@ -26,10 +26,12 @@
 						</div> -->
 
 						<div
-							v-if="!state.paused && state.streamInfo"
 							class="flex-grow-1 position-relative o-x-hidden"
 						>
-							<div class="track-title running-string">
+							<div
+								v-if="!state.paused && state.streamInfo"
+								class="track-title running-string"
+							>
 								{{state.streamInfo}}
 							</div>
 						</div>
