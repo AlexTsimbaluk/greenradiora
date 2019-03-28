@@ -242,26 +242,35 @@ export default new Vue({
 			Vue.set(this.playerState.animations, animation.name, animation);
 		},
 
+		enableAnimation(name, start) {
+			if(start) {
+				this.playerState.animations[name].start();
+				this.playerState.animationState[name] = true;
+			} else {
+				this.playerState.animationState[name] = false;
+				this.playerState.animations[name].stop();
+			}
+		},
+
 		toggleAnimation (event, animation) {
 			if(!this.playerState.animationState[animation.name]) {
-				// console.log(animation.name + ' start');
+				console.log(animation.name + ' start');
 
 				Object.keys(this.playerState.animationState).forEach((_a) => {
 					if(this.playerState.animationState[_a]) {
-						console.log(_a);
+						console.log(_a + ' stop');
 						console.log(this.playerState.animationState[_a]);
 
 						this.playerState.animationState[_a] = false;
+						this.playerState.animations[_a].stop();
 					}
 				});
 
-				this.playerState.animations[animation.name].start();
-				this.playerState.animationState[animation.name] = true;
+				this.enableAnimation(animation.name, true);
 			} else if(this.playerState.animationState[animation.name]) {
-				// console.log(animation.name + ' stop');
+				console.log(animation.name + ' stop');
 
-				this.playerState.animations[animation.name].stop();
-				this.playerState.animationState[animation.name] = false;
+				this.enableAnimation(animation.name, false);
 			}
 			// this.playerState.animationState[animation.name] = !this.playerState.animationState[animation.name];
 
@@ -327,6 +336,7 @@ export default new Vue({
 			}
 
 			this.stateChanged();
+			this.stationsChanged();
 		},
 
 		getCurrentPlaylist () {

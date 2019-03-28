@@ -26,7 +26,6 @@
 				audioCtx: null,
 				// источник звука для аудиоконтекста
 				source: null,
-				analyserEq: null,
 
 				canvas: null,
 				_q: 1,
@@ -43,21 +42,6 @@
 		methods: {
 			init (reinit) {
 				!reinit && Utils.logs('# Fractal::init');
-				
-				/*console.log(this.audioCtx.state);
-
-				if(this.audioCtx.state.toLowerCase() != 'running') {
-					this.audioCtx = new window.AudioContext;
-				}
-
-				let initRepeat = () => {
-					if(this.audioCtx.state.toLowerCase() != 'running') {
-						console.log('!!! AudioContext is not running');
-						setTimeout(() => {
-							this.init();
-						}, 200)
-					}
-				};*/
 
 				this.audioCtx = new AudioContext;
 
@@ -80,11 +64,31 @@
 					this.source = this.audioCtx.createMediaElementSource(PlayerState.playerTag);
 					
 					this.initCanvas();
+				
+					/*let cX = this.canvas.canvasWidth / 2;
+					let cY = this.canvas.canvasHeight / 2;
+
+					this.canvas.ctx.translate(cX, cY);
+
+				    for(let bin = 0, qt = 128; bin < qt; bin ++) {
+
+			    		this.canvas.ctx.strokeRect(0, 0, 100, 100);
+			    		
+			    		if (bin % 2 == 0) {
+			    			this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - 255 / qt * bin) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+			    		} else {
+			    			this.canvas.ctx.strokeStyle = "rgb(0," + Math.floor(255 - 255 / qt * bin) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+			    		}
+			    		
+			    		this.canvas.ctx.stroke();
+			    		this.canvas.ctx.rotate(2 * Math.PI * 4 / (qt - 1));
+				    }*/
 
 					let analyserEqFft = (this.maxWidth >= 512) ? 1024 : 512;
 
 					let analyserEq = new this.Analyser(
 						'eq',
+						this.canvas,
 						this.audioCtx,
 						this.source,
 						this.drawEq,	
@@ -92,16 +96,23 @@
 						'equalizer'
 						// 'graphic_eq'
 					);
+
+					let analyserFractal = new this.Analyser(
+						'fractal',
+						this.canvas,
+						this.audioCtx,
+						this.source,
+						this.drawFractal,	
+						{smoothingTimeConstant: 0.7, fftSize: 32},
+						'brightness_auto'
+					);
 				}).catch(() => {
 					console.log(this.audioCtx.state);
-					// initRepeat();
 				}).finally(() => {
 					console.log(this.audioCtx.state);
-					// initRepeat();
-					// this.audioCtx.resume();
 				});
 			},
-			Analyser (name, audioCtx, src, drawCb, analyserOpts, icon) {
+			Analyser (name, canvas, audioCtx, src, drawCb, analyserOpts, icon) {
 				let animationFrame = null;
 
 			    this.running = false;
@@ -124,13 +135,16 @@
 		        	}
 
 		            this.analyser.getByteFrequencyData(streamData);
+
+		            canvas.ctx.clearRect(0, 0, canvas.canvasWidth, canvas.canvasHeight);
+		            
+		            canvas.ctx.save();
 		            drawCb(streamData);
+		            canvas.ctx.restore();
 		            animationFrame = requestAnimationFrame(this.start);
 		        }
 
 		        this.stop = () => {
-		        	// console.log('@@@ Fractal:animation:stop');
-
 	        		this.running = false;
 				    streamData = new Uint8Array(this.analyser.frequencyBinCount);
 		            drawCb(streamData, true);
@@ -174,6 +188,105 @@
 			        this.canvas.ctx.fillRect(this.canvas.canvasWidth - bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
 			    }
 			},
+			drawFractal (streamData, stop) {				
+				// this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+				
+				if(stop) {
+					return false;
+				}
+
+				// let fib = 1.6180339;
+
+				let cX = this.canvas.canvasWidth / 2;
+				let cY = this.canvas.canvasHeight / 2;
+
+				this.canvas.ctx.translate(cX, cY);
+				// this.canvas.ctx.transform(1, 0, 0, 1, cX, cY);
+
+			    for(let bin = 0, qt = 8; streamData && bin < qt; bin ++) {
+			    	let val = streamData[bin];
+
+		    		this.canvas.ctx.strokeRect(0, 0, 100, 100);
+
+		    		// this.canvas.ctx.moveTo(streamData[bin],streamData[bin]);
+		    		// this.canvas.ctx.lineTo(streamData[bin] % 5,streamData[bin] / 1.618);
+		    		// this.canvas.ctx.lineTo(streamData[bin] / 1.618,streamData[bin]);
+		    		// this.canvas.ctx.lineTo(streamData[bin],streamData[bin]);
+		    		
+		    		if (bin % 2 == 0) {
+		    			this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - 255 / qt * bin) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+		    		} else {
+		    			this.canvas.ctx.strokeStyle = "rgb(0," + Math.floor(255 - 255 / qt * bin) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+		    		}
+		    		
+		    		this.canvas.ctx.stroke();
+		    		this.canvas.ctx.rotate(2 * Math.PI * 4 / (qt - 1));
+			    }
+
+			    // this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+			    // this.canvas.ctx.translate(0, 0);
+			    // this.canvas.ctx.restore();
+			},
+			draw (streamData, stop) {
+				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+				
+				if(stop) {
+					return false;
+				}
+
+			    for(let bin = 0; streamData && bin < streamData.length; bin ++) {
+			        
+			    }
+			},
+			/*drawTriangle () {
+				canvas.ctx.translate(canvas.canvasWidth / 2, canvas.canvasHeight / 2);
+				canvas.ctx.clearRect(0, 0, canvas.canvasWidth, canvas.canvasHeight);
+
+				var fib =  	1.6180339;
+
+				// при fftSize > 64 тормозит
+			    for(var bin = 0; audioApiElement.streamDataTriangle && bin < audioApiElement.streamDataTriangle.length; bin ++) {
+			        // var val = audioApiElement.streamDataTriangle[bin] % 50;
+			        if(bin % 6 == 0) {
+			        	continue;
+			        }
+			        var val = audioApiElement.streamDataTriangle[bin] % 7;
+
+			        // canvas.ctx.strokeStyle = 'rgb(' + (val) + ',' + (val) + ',' + (val) + ')';
+			        canvas.ctx.strokeStyle = 'rgb(255, 255, 255)';
+			        
+
+			        if (bin % 2 == 0) {
+			        	canvas.ctx.strokeStyle = "rgb(" + Math.floor(255 - 255 / val * bin) + "0," + Math.floor(255 - 255 / val * bin) + ")";
+			        } else if (bin % 3 == 0) { 
+			        	canvas.ctx.strokeStyle = "rgb(0," + Math.floor(0 + 255 / val * bin) + "," + Math.floor(0 + 255 / val * bin) + ")";
+			        } else { 
+			        	canvas.ctx.strokeStyle = "rgba(" + Math.floor(255 - 255 / val * bin) + "," + Math.floor(0 + 255 / val * bin) + "," + Math.floor(255 - 255 / val * bin) + ".5)";
+			        }
+
+			        canvas.ctx.moveTo(audioApiElement.streamDataTriangle[bin],audioApiElement.streamDataTriangle[bin]);
+			        canvas.ctx.lineTo(audioApiElement.streamDataTriangle[bin] % 5,audioApiElement.streamDataTriangle[bin] / 1.618);
+			        canvas.ctx.lineTo(audioApiElement.streamDataTriangle[bin] / 1.618,audioApiElement.streamDataTriangle[bin]);
+			        canvas.ctx.lineTo(audioApiElement.streamDataTriangle[bin],audioApiElement.streamDataTriangle[bin]);
+
+			        // canvas.ctx.moveTo(240, val * 1.7);
+			        // canvas.ctx.lineTo(val * 1.7, val * 3);
+			        // canvas.ctx.lineTo(val * 3, val * 1.7);
+			        // canvas.ctx.lineTo(240, val * 1.7);
+
+			        
+			        canvas.ctx.stroke();
+			        canvas.ctx.strokeRect(0, 0, audioApiElement.streamDataTriangle[bin], audioApiElement.streamDataTriangle[bin]);
+			        // canvas.ctx.strokeRect(0, 0, val, 45);
+
+			        canvas.ctx.rotate(4 * Math.PI);
+			        canvas.ctx.rotate(Math.PI * 3 / 60);
+			        canvas.ctx.rotate(2 * Math.PI);
+			        canvas.ctx.rotate(Math.PI / 4 );
+			    	
+			    }
+			    requestAnimationFrame(drawTriangle);
+			},*/
 			/*drawFractal () {
 				var canvas = new AudioCanvas('visFractal', 500, 255 * 2);
 				canvas.ctx.clearRect(0, 0, canvas.canvasWidth, canvas.canvasHeight);
@@ -183,9 +296,6 @@
 
 			    for(var bin = 0; bin < audioApiElement.streamData_4.length; bin ++) {
 			        var val = audioApiElement.streamData_4[bin];
-			        // canvas.ctx.fillStyle = 'rgb(' + (val) + ',' + (val) + ',' + (val) + ')';
-			        // canvas.ctx.fillRect(bin, canvas.canvasHeight / 2 + 1, 1, Math.floor(-val / 1.5));
-			        // canvas.ctx.fillRect(bin, canvas.canvasHeight / 2 - 1, 1, Math.floor(val / 1.5));
 		        	if (qt <= qtMin) {
 		        		canvas.ctx.stroke();
 		        	} else {

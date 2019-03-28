@@ -938,7 +938,7 @@ export default {
 	}
 
 	.track-title.running-string {
-		animation: running-string linear infinite 24s;
+		animation: running-string linear infinite 30s;
 		position: absolute;
 		width: max-content;
 	}
