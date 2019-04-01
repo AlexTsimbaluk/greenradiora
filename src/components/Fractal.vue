@@ -32,6 +32,10 @@
 				bW: 1,
 
 				maxWidth: document.documentElement.clientWidth,
+				maxHeight: document.documentElement.clientHeight - 10,
+
+				// для отладки, вывести в консоль что-то один раз в requestAnimationFrame
+				one: false,
 
 				animationState: '',
 
@@ -103,7 +107,7 @@
 						this.audioCtx,
 						this.source,
 						this.drawFractal,	
-						{smoothingTimeConstant: 0.7, fftSize: 32},
+						{smoothingTimeConstant: 0.9, fftSize: 32},
 						'brightness_auto'
 					);
 				}).catch(() => {
@@ -134,13 +138,9 @@
 		        		this.running = true;
 		        	}
 
-		            this.analyser.getByteFrequencyData(streamData);
+		            this.analyser.getByteFrequencyData(streamData);		            
 
-		            canvas.ctx.clearRect(0, 0, canvas.canvasWidth, canvas.canvasHeight);
-		            
-		            canvas.ctx.save();
-		            drawCb(streamData);
-		            canvas.ctx.restore();
+		            drawCb(streamData, false);
 		            animationFrame = requestAnimationFrame(this.start);
 		        }
 
@@ -155,7 +155,7 @@
 			},
 
 			initCanvas () {
-				this.canvas = new this.AudioCanvas('visEqLeft', this.maxWidth, document.documentElement.clientHeight - 10);
+				this.canvas = new this.AudioCanvas('visEqLeft', this.maxWidth, this.maxHeight);
 				this._q = +((this.canvas.canvasHeight / 2 / 255).toFixed(2));				
 			},
 
@@ -170,6 +170,14 @@
 				this.canvasWidth 	= canvas.width;
 				this.canvasHeight 	= canvas.height;
 			},
+
+			// получим суммарный уровень частот в момент времени
+			getTotal(data) {
+				return data.reduce((sum, current) => {
+					return sum + current;
+				}, 0);
+			},
+
 			drawEq (streamData, stop) {
 				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
 				
@@ -189,43 +197,192 @@
 			    }
 			},
 			drawFractal (streamData, stop) {				
-				// this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+
+				// const MAX_SIZE = 
 				
 				if(stop) {
 					return false;
 				}
 
-				// let fib = 1.6180339;
+				let fib = 1.6180339;
 
 				let cX = this.canvas.canvasWidth / 2;
 				let cY = this.canvas.canvasHeight / 2;
 
-				this.canvas.ctx.translate(cX, cY);
-				// this.canvas.ctx.transform(1, 0, 0, 1, cX, cY);
+				// всего полосок
+				let totalBands = streamData.length;
+				let maxTotal = totalBands * 255;
 
-			    for(let bin = 0, qt = 8; streamData && bin < qt; bin ++) {
+	            let total = this.getTotal(streamData);
+
+				let maxTotalShapeSize = Math.min(this.maxHeight, this.maxWidth) / 2;
+				let ratio = Math.floor(maxTotal / maxTotalShapeSize);
+				let totalShapeSize = Math.floor(total / ratio);
+
+				let colorRatio = +(totalBands / 360).toFixed(3);
+				let hue = Math.floor(total / colorRatio);
+				let levelNumber = Math.floor(total / 255);
+				let color = `hsla(${hue}, 100%, 50%, 0.5)`;
+
+				this.canvas.ctx.save();
+				this.canvas.ctx.translate(cX, cY);
+
+
+				let gradient = this.canvas.ctx.createLinearGradient(-50, 0, -50, 50, 0);
+
+				let gradientRad = this.canvas.ctx.createRadialGradient(0, 0, 0, 0, 0, Math.min(this.maxHeight / 2, this.maxWidth / 2));
+				let gradientRad2 = this.canvas.ctx.createRadialGradient(0, 0, 0, 0, 0, total % maxTotalShapeSize);
+
+
+				this.canvas.ctx.globalCompositeOperation = 'darken';
+				// this.canvas.ctx.globalCompositeOperation = 'lighten';
+				// this.canvas.ctx.globalCompositeOperation = 'lighter';
+				// this.canvas.ctx.globalCompositeOperation = 'multiply';
+				// this.canvas.ctx.globalCompositeOperation = 'overlay';
+
+				/*gradientRad.addColorStop(0, 'rgba(255, 0, 255, 0.8)');
+				gradientRad.addColorStop(1, 'rgba(0, 255, 0, 0.5)');
+
+				gradientRad2.addColorStop(0, 'rgba(0, 255, 255, 0.1)'); 
+				gradientRad2.addColorStop(1, 'rgba(255, 255, 0, 0.7)');*/
+
+				// gradientRad.addColorStop(0, `hsla(${hue}, 100%, 50%, 0.8)`);
+				// gradientRad.addColorStop(1, `hsla(${hue - 360}, 100%, 50%, 0.5)`);
+
+				// gradientRad2.addColorStop(0, `hsla(${360 - hue}, 100%, 50%, 0.1)`); 
+				// gradientRad2.addColorStop(1, `hsla(${hue}, 100%, 50%, 0.7)`);
+
+				let startTotalShapeSize = 10;
+
+				for(let i = 0, startSize = totalShapeSize / 10; i < totalBands; i++) {
+					let pos = +(i / totalBands).toFixed(2);
+					let hue = (300 + Math.ceil(360 / 16 * i)) % 360;
+
+					gradientRad.addColorStop(pos, `hsla(${(hue + 180) % 360}, 100%, 50%, ${pos})`);
+					gradientRad2.addColorStop(pos, `hsla(${360 - hue}, 100%, 50%, ${1 - pos})`);
+
+					this.canvas.ctx.fillStyle = gradientRad;
+	    			// this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
+	    			this.canvas.ctx.fillRect(-startSize, -startSize, startSize * 2, startSize * 2);
+					
+					this.canvas.ctx.rotate(Math.PI / totalBands);
+
+					startSize *= fib;
+
+					this.canvas.ctx.fillStyle = gradientRad2;
+	    			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
+				}
+
+				
+				  
+
+				/*this.canvas.ctx.fillStyle = gradientRad;
+    			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
+				
+				this.canvas.ctx.rotate(Math.PI / 4);
+
+				this.canvas.ctx.fillStyle = gradientRad2;
+    			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);*/
+    			
+    			// this.canvas.ctx.fillRect(Math.round(-(total % maxTotalShapeSize) / 2), Math.round(-(total % maxTotalShapeSize) / 2), (total % maxTotalShapeSize), (total % maxTotalShapeSize));
+    			
+    			// this.canvas.ctx.arc(0, 0, totalShapeSize, 0, Math.PI * 2);
+    			// this.canvas.ctx.fill();
+
+			    for(let bin = 0, qt = totalBands * 3; false && streamData && bin < qt; bin ++) {
 			    	let val = streamData[bin];
 
-		    		this.canvas.ctx.strokeRect(0, 0, 100, 100);
+			    	/*if(!this.one) {
+						console.log(totalBands);
+						this.one = false;
+					}*/
 
-		    		// this.canvas.ctx.moveTo(streamData[bin],streamData[bin]);
-		    		// this.canvas.ctx.lineTo(streamData[bin] % 5,streamData[bin] / 1.618);
-		    		// this.canvas.ctx.lineTo(streamData[bin] / 1.618,streamData[bin]);
-		    		// this.canvas.ctx.lineTo(streamData[bin],streamData[bin]);
-		    		
-		    		if (bin % 2 == 0) {
-		    			this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - 255 / qt * bin) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+			    	if (bin % 2 == 0) {
+		    			// this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - 255 / qt * bin) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+		    			this.canvas.ctx.strokeStyle = 'rgb(255,' + Math.floor(val) + ',' + Math.floor(val) + ')';
 		    		} else {
-		    			this.canvas.ctx.strokeStyle = "rgb(0," + Math.floor(255 - 255 / qt * bin) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+		    			this.canvas.ctx.strokeStyle = 'rgb(0,' + Math.floor(255 - 255 / qt * bin) + ',' + Math.floor(0 + 255 / qt * bin) + ')';
+		    			// this.canvas.ctx.strokeStyle = "rgb(0," + Math.floor(255 - val) + "," + Math.floor(0 + 255 / qt * bin) + ")";
+		    		}
+
+		    		// let stopColorPos = +(Math.floor(1 / qt).toFixed(2));
+		    		let stopColorPos = +((1 / qt).toFixed(2));
+	    			// gradient.addColorStop(stopColorPos, 'rgb(255,' + (255 - val) + ',' + (255 - val) + ')');
+	    			// gradient.addColorStop(stopColorPos, 'rgb(' + val + ',' + Math.floor(255 - 255 / qt * bin) + ',' + Math.floor(0 + 255 / qt * bin) + ')');
+	    			// gradient.addColorStop(stopColorPos, `rgb(${val}, ${Math.floor(255 - 255 / qt * bin)}, ${Math.floor(255 / qt * bin)})`);
+
+		    		/*if(bin == 0) {
+						gradient.addColorStop(0, 'rgb(255,' + val + ',' + 0 + ')');
+						gradient.addColorStop(0.5, 'rgb(255,' + (255 - val) + ',' + val + ')');
+						gradient.addColorStop(1, 'rgb(255,' + (255 - val) + ',' + (255 - val) + ')'); 
+						  
+						this.canvas.ctx.fillStyle = gradient;
+		    			this.canvas.ctx.fillRect(Math.round(-val / 2), Math.round(-val / 2), val * 2, val * 2);
+		    			
+		    			// this.canvas.ctx.arc(0, 0, val, 0, Math.PI * 2);
+		    			// this.canvas.ctx.fill();
+
+
+		    			// this.canvas.ctx.arc(0, 0, total / 30, 0, Math.PI * 2);
+			    		// this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
+		    		}*/
+			    	
+			    	if(bin < 7) {
+			    		// this.canvas.ctx.strokeRect(Math.round(100 * 1), Math.round(-100 * 1), val, val);
+			    		val *= 2;
+			    		this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - val) + "," + Math.floor(val) + ")";
+			    	} else if(bin < 13) {
+
+			    		// val *= 2;
+			    	} else if(bin < 19) {
+			    		// val *= 2;
+			    	} else if(bin < 25) {
+			    		// val *= 2;
+			    	} else if(bin >= 25) {
+			    		// val *= 2;
+			    	}
+
+			    	this.canvas.ctx.fillStyle = gradient;
+			    	// this.canvas.ctx.strokeStyle = gradient;
+
+		    		this.canvas.ctx.strokeRect(Math.round(-val / 2), Math.round(-val / 2), val, val);
+		    		// this.canvas.ctx.fillRect(Math.round(-val / 2), Math.round(-val / 2), val / 2, val / 2);
+
+
+		    		// this.canvas.ctx.strokeRect(Math.round(val * 2), Math.round(-val * 2), val, val);
+
+		    		// this.canvas.ctx.arc(0, 0, Math.round(val), 0, Math.PI * 2);
+
+		    		/*this.canvas.ctx.moveTo(val, val);
+		    		this.canvas.ctx.lineTo(val, val / 1.618);
+		    		this.canvas.ctx.lineTo(val / 1.618, val);
+		    		this.canvas.ctx.lineTo(val, val);*/
+
+		    		if(false && bin == 0) {
+						gradient.addColorStop(0, 'rgb(0,' + val + ',' + 0 + ')');
+						// gradient.addColorStop(0.5, 'rgb(255,' + (255 - val) + ',' + val + ')');
+						gradient.addColorStop(1, 'rgb(0,' + (255 - val) + ',' + (255 - val) + ')'); 
+						  
+						this.canvas.ctx.fillStyle = gradient;
+		    			this.canvas.ctx.fillRect(Math.round(-val / 2), Math.round(-val / 2), val * 2, val * 2);
+		    			
+		    			// this.canvas.ctx.arc(0, 0, val, 0, Math.PI * 2);
+		    			// this.canvas.ctx.fill();
+
+
+		    			// this.canvas.ctx.arc(0, 0, total / 30, 0, Math.PI * 2);
+			    		// this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
 		    		}
 		    		
+		    		
+		    		
 		    		this.canvas.ctx.stroke();
+		    		this.canvas.ctx.rotate(2 * Math.PI * 3 / (qt - 1));
 		    		this.canvas.ctx.rotate(2 * Math.PI * 4 / (qt - 1));
 			    }
 
-			    // this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
-			    // this.canvas.ctx.translate(0, 0);
-			    // this.canvas.ctx.restore();
+			    this.canvas.ctx.restore();
 			},
 			draw (streamData, stop) {
 				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
@@ -238,6 +395,9 @@
 			        
 			    }
 			},
+			toRad (degree) {
+				return degree * Math.PI / 180;
+			}
 			/*drawTriangle () {
 				canvas.ctx.translate(canvas.canvasWidth / 2, canvas.canvasHeight / 2);
 				canvas.ctx.clearRect(0, 0, canvas.canvasWidth, canvas.canvasHeight);
@@ -341,6 +501,8 @@
 		created () {
 			console.log('@@@ Fractal:hook:created');
 
+			console.log(this.toRad(33));
+			console.log(Utils.round(this.toRad(1), 4));
 
 			PlayerData.$on('dataTransfer', () => {
 				/*this.audioCtx = new window.AudioContext;

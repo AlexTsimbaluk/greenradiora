@@ -48,6 +48,12 @@ export default new Vue({
 				input.focus();
 				input.setSelectionRange(start, end);
 			}
+		},
+
+		round(val, precission) {
+			if(typeof val == 'number') {
+				return +(val.toFixed(precission ? precission : 0));
+			}
 		}
 	},
 	created () {
