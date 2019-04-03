@@ -200,8 +200,6 @@
 			drawFractal (streamData, stop) {				
 				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
 
-				// const MAX_SIZE = 
-				
 				if(stop) {
 					return false;
 				}
@@ -242,19 +240,6 @@
 				// this.canvas.ctx.globalCompositeOperation = 'multiply';
 				// this.canvas.ctx.globalCompositeOperation = 'overlay';
 
-				/*gradientRad.addColorStop(0, 'rgba(255, 0, 255, 0.8)');
-				gradientRad.addColorStop(1, 'rgba(0, 255, 0, 0.5)');
-
-				gradientRad2.addColorStop(0, 'rgba(0, 255, 255, 0.1)'); 
-				gradientRad2.addColorStop(1, 'rgba(255, 255, 0, 0.7)');*/
-
-				// gradientRad.addColorStop(0, `hsla(${hue}, 100%, 50%, 0.8)`);
-				// gradientRad.addColorStop(1, `hsla(${hue - 360}, 100%, 50%, 0.5)`);
-
-				// gradientRad2.addColorStop(0, `hsla(${360 - hue}, 100%, 50%, 0.1)`); 
-				// gradientRad2.addColorStop(1, `hsla(${hue}, 100%, 50%, 0.7)`);
-
-				let startTotalShapeSize = 10;
 
 				for(let i = 0, startSize = totalShapeSize / 10; i < totalBands; i++) {
 					let pos = +(i / totalBands).toFixed(2);
@@ -276,8 +261,6 @@
 	    			// this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
 	    			this.canvas.ctx.fillRect(-totalShapeSize / 2, -totalShapeSize / 2, totalShapeSize, totalShapeSize);	    			
 				}
-
-				// this.canvas.ctx.rotate(this.toRad(Utils.round(360 / 36)));
 
 				/*let firstX = 100, firstY = 150, secondX = 250, secondY = 50, endingX = 0, endingY = 100;
 				this.canvas.ctx.bezierCurveTo( firstX, firstY, secondX, secondY, endingX, endingY );*/
@@ -308,14 +291,15 @@
     			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
     			
 				rgbColor = (rgbColor * (total % 11)) % 360;
+				
 				gradRad.addColorStop(0, 'rgba(' + (rgbColor) + ', 0, ' + (255 - rgbColor) + ', 0.3)'); 
 				gradRad.addColorStop(1, 'rgba(' + 0 + ', 255, ' + (255 - rgbColor) + ', 0.3)');
+    			
     			this.canvas.ctx.rotate(Math.PI / 3);
     			this.canvas.ctx.fillStyle = gradRad;
     			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
 
     			// this.canvas.ctx.arc(0, 0, totalShapeSize, 0, Math.PI * 2);
-    			// this.canvas.ctx.fill();
 
 			    for(let bin = 0, qt = totalBands * 3; streamData && bin < qt; bin ++) {
 			    	let val = streamData[bin];
@@ -330,41 +314,16 @@
 		    			this.canvas.ctx.strokeStyle = 'rgb(255,' + Math.floor(val) + ',' + Math.floor(val) + ')';
 		    		} else {
 		    			this.canvas.ctx.strokeStyle = 'rgb(0,' + Math.floor(255 - 255 / qt * bin) + ',' + Math.floor(0 + 255 / qt * bin) + ')';
-		    			// this.canvas.ctx.strokeStyle = "rgb(0," + Math.floor(255 - val) + "," + Math.floor(0 + 255 / qt * bin) + ")";
 		    		}
 
-		    		// let stopColorPos = +(Math.floor(1 / qt).toFixed(2));
 		    		let stopColorPos = +((1 / qt).toFixed(2));
-	    			// gradient.addColorStop(stopColorPos, 'rgb(255,' + (255 - val) + ',' + (255 - val) + ')');
-	    			// gradient.addColorStop(stopColorPos, 'rgb(' + val + ',' + Math.floor(255 - 255 / qt * bin) + ',' + Math.floor(0 + 255 / qt * bin) + ')');
-	    			// gradient.addColorStop(stopColorPos, `rgb(${val}, ${Math.floor(255 - 255 / qt * bin)}, ${Math.floor(255 / qt * bin)})`);
-
-		    		/*if(bin == 0) {
-						gradient.addColorStop(0, 'rgb(255,' + val + ',' + 0 + ')');
-						gradient.addColorStop(0.5, 'rgb(255,' + (255 - val) + ',' + val + ')');
-						gradient.addColorStop(1, 'rgb(255,' + (255 - val) + ',' + (255 - val) + ')'); 
-						  
-						this.canvas.ctx.fillStyle = gradient;
-		    			this.canvas.ctx.fillRect(Math.round(-val / 2), Math.round(-val / 2), val * 2, val * 2);
-		    			
-		    			// this.canvas.ctx.arc(0, 0, val, 0, Math.PI * 2);
-		    			// this.canvas.ctx.fill();
-
-
-		    			// this.canvas.ctx.arc(0, 0, total / 30, 0, Math.PI * 2);
-			    		// this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
-		    		}*/
 			    	
 			    	if(bin < 4) {
-			    		// this.canvas.ctx.strokeRect(Math.round(100 * 1), Math.round(-100 * 1), val, val);
+		    			this.canvas.ctx.strokeStyle = "rgb(0," + Math.floor(val) + "," + Math.floor(0 + 255 / qt * bin) + ")";
 			    		val /= 4;
-			    		this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - val) + "," + Math.floor(val) + ")";
 			    	} else if(bin < 7) {
-			    		// this.canvas.ctx.strokeRect(Math.round(100 * 1), Math.round(-100 * 1), val, val);
-			    		// val /= 4;
-			    		this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - val) + "," + Math.floor(val) + ")";
+			    		
 			    	} else if(bin < 13) {
-
 			    		// val *= 2;
 			    	} else if(bin < 19) {
 			    		// val *= 2;
@@ -374,38 +333,21 @@
 			    		// val *= 2;
 			    	}
 
-			    	this.canvas.ctx.fillStyle = gradient;
-			    	// this.canvas.ctx.strokeStyle = gradient;
+			    	let cond = bin + 1 < qt / 2;
+
+		    		// !cond && this.canvas.ctx.rotate(2 * Math.PI * 3 / (qt - 1));
+
+		    		if(bin < 4) {
+		    			this.canvas.ctx.rotate(this.toRad(val * 2 * (Utils.round(360 / 255, 3))));
+		    		} else if(cond) {
+		    			this.canvas.ctx.rotate(this.toRad(360 / qt + val / 2));
+		    		}
+		    		else {
+		    			this.canvas.ctx.rotate(-this.toRad(360 / qt * 2 + val / 2));
+		    		}
 
 		    		this.canvas.ctx.strokeRect(Math.round(-val / 2), Math.round(-val / 2), val, val);
-		    		// this.canvas.ctx.fillRect(Math.round(-val / 2), Math.round(-val / 2), val / 2, val / 2);
-
-
-		    		// this.canvas.ctx.strokeRect(Math.round(val * 2), Math.round(-val * 2), val, val);
-
-		    		// this.canvas.ctx.arc(0, 0, Math.round(val), 0, Math.PI * 2);
-
-		    		if(false && bin == 0) {
-						gradient.addColorStop(0, 'rgb(0,' + val + ',' + 0 + ')');
-						// gradient.addColorStop(0.5, 'rgb(255,' + (255 - val) + ',' + val + ')');
-						gradient.addColorStop(1, 'rgb(0,' + (255 - val) + ',' + (255 - val) + ')'); 
-						  
-						this.canvas.ctx.fillStyle = gradient;
-		    			this.canvas.ctx.fillRect(Math.round(-val / 2), Math.round(-val / 2), val * 2, val * 2);
-		    			
-		    			// this.canvas.ctx.arc(0, 0, val, 0, Math.PI * 2);
-		    			// this.canvas.ctx.fill();
-
-
-		    			// this.canvas.ctx.arc(0, 0, total / 30, 0, Math.PI * 2);
-			    		// this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
-		    		}
-		    		
-		    		
-		    		
-		    		this.canvas.ctx.stroke();
-		    		this.canvas.ctx.rotate(2 * Math.PI * 3 / (qt - 1));
-		    		this.canvas.ctx.rotate(2 * Math.PI * 4 / (qt - 1));
+		    		// cond && this.canvas.ctx.rotate(2 * Math.PI * 4 / (qt - 1));
 			    }
 
 			    this.canvas.ctx.restore();
