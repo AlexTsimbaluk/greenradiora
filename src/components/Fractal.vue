@@ -196,6 +196,7 @@
 			        this.canvas.ctx.fillRect(this.canvas.canvasWidth - bin, (this.canvas.canvasHeight / 2) - (val * this._q), this.bW, Math.floor(val * this._q * 2));
 			    }
 			},
+
 			drawFractal (streamData, stop) {				
 				this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
 
@@ -257,40 +258,66 @@
 
 				for(let i = 0, startSize = totalShapeSize / 10; i < totalBands; i++) {
 					let pos = +(i / totalBands).toFixed(2);
-					let hue = (300 + Math.ceil(360 / 16 * i)) % 360;
+					let hue = (((i % 2 == 0) ? 300 : 120) + Math.ceil(360 / 16 * i)) % 360;
 
-					gradientRad.addColorStop(pos, `hsla(${(hue + 180) % 360}, 100%, 50%, ${pos})`);
-					gradientRad2.addColorStop(pos, `hsla(${360 - hue}, 100%, 50%, ${1 - pos})`);
+					gradientRad.addColorStop(pos, `hsla(${(hue) % 360}, 100%, 50%, ${pos})`);
+					gradientRad2.addColorStop(pos, `hsla(${Math.abs((45 + hue) % 360)}, 100%, 50%, ${1 - pos})`);
+
+					// let _r = !(!!(i % 3)) ? (i % 3) : 1.5;
 
 					this.canvas.ctx.fillStyle = gradientRad;
 	    			// this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
-	    			this.canvas.ctx.fillRect(-startSize, -startSize, startSize * 2, startSize * 2);
+	    			this.canvas.ctx.fillRect(-totalShapeSize / 2, -totalShapeSize / 2, totalShapeSize, totalShapeSize);
 					
-					this.canvas.ctx.rotate(Math.PI / totalBands);
-
-					startSize *= fib;
+					// this.canvas.ctx.rotate(Math.PI / totalBands);
+					this.canvas.ctx.rotate(this.toRad(Utils.round(360 / totalBands * 3)));
 
 					this.canvas.ctx.fillStyle = gradientRad2;
-	    			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
+	    			// this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
+	    			this.canvas.ctx.fillRect(-totalShapeSize / 2, -totalShapeSize / 2, totalShapeSize, totalShapeSize);	    			
 				}
 
-				
-				  
+				// this.canvas.ctx.rotate(this.toRad(Utils.round(360 / 36)));
 
-				/*this.canvas.ctx.fillStyle = gradientRad;
+				/*let firstX = 100, firstY = 150, secondX = 250, secondY = 50, endingX = 0, endingY = 100;
+				this.canvas.ctx.bezierCurveTo( firstX, firstY, secondX, secondY, endingX, endingY );*/
+
+				let rgbColor = Math.floor(total / totalBands);
+				rgbColor = (rgbColor * (total % 4)) % 360;
+
+				this.canvas.ctx.globalCompositeOperation = 'lighter';
+				
+				let gradRad = this.canvas.ctx.createRadialGradient(0, 0, 0, 0, 0, Math.min(this.maxHeight / 2, this.maxWidth / 2));
+				let gradRad2 = this.canvas.ctx.createRadialGradient(0, 0, 0, 0, 0, total % maxTotalShapeSize);
+
+				gradRad.addColorStop(0, 'rgba(' + (255 - rgbColor) + ', 0, 255, 0.5)'); 
+				gradRad.addColorStop(1, 'rgba(' + rgbColor + ', 0, ' + (255 - rgbColor) + ', 0.3)');
+
+				gradRad2.addColorStop(0, 'rgba(0, ' + rgbColor + ', 255, 0.3)'); 
+				gradRad2.addColorStop(1, 'rgba(' + rgbColor + ', ' + (255 - rgbColor) + ', 0, 0.4)');
+
+				this.canvas.ctx.fillStyle = gradRad;
+    			// this.canvas.ctx.fillRect(-totalShapeSize * 1.5, -totalShapeSize * 1.5, totalShapeSize * 2 * 1.5, totalShapeSize * 2 * 1.5);
     			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
 				
-				this.canvas.ctx.rotate(Math.PI / 4);
+				rgbColor = (rgbColor * (total % 8)) % 360;
+				this.canvas.ctx.rotate(Math.PI / 3);
 
-				this.canvas.ctx.fillStyle = gradientRad2;
-    			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);*/
+				this.canvas.ctx.fillStyle = gradRad2;
+    			// this.canvas.ctx.fillRect(-totalShapeSize * 1.5, -totalShapeSize * 1.5, totalShapeSize * 2 * 1.5, totalShapeSize * 2 * 1.5);
+    			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
     			
-    			// this.canvas.ctx.fillRect(Math.round(-(total % maxTotalShapeSize) / 2), Math.round(-(total % maxTotalShapeSize) / 2), (total % maxTotalShapeSize), (total % maxTotalShapeSize));
-    			
+				rgbColor = (rgbColor * (total % 11)) % 360;
+				gradRad.addColorStop(0, 'rgba(' + (rgbColor) + ', 0, ' + (255 - rgbColor) + ', 0.3)'); 
+				gradRad.addColorStop(1, 'rgba(' + 0 + ', 255, ' + (255 - rgbColor) + ', 0.3)');
+    			this.canvas.ctx.rotate(Math.PI / 3);
+    			this.canvas.ctx.fillStyle = gradRad;
+    			this.canvas.ctx.fillRect(-totalShapeSize, -totalShapeSize, totalShapeSize * 2, totalShapeSize * 2);
+
     			// this.canvas.ctx.arc(0, 0, totalShapeSize, 0, Math.PI * 2);
     			// this.canvas.ctx.fill();
 
-			    for(let bin = 0, qt = totalBands * 3; false && streamData && bin < qt; bin ++) {
+			    for(let bin = 0, qt = totalBands * 3; streamData && bin < qt; bin ++) {
 			    	let val = streamData[bin];
 
 			    	/*if(!this.one) {
@@ -328,9 +355,13 @@
 			    		// this.canvas.ctx.clearRect(0, 0, this.canvas.canvasWidth, this.canvas.canvasHeight);
 		    		}*/
 			    	
-			    	if(bin < 7) {
+			    	if(bin < 4) {
 			    		// this.canvas.ctx.strokeRect(Math.round(100 * 1), Math.round(-100 * 1), val, val);
-			    		val *= 2;
+			    		val /= 4;
+			    		this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - val) + "," + Math.floor(val) + ")";
+			    	} else if(bin < 7) {
+			    		// this.canvas.ctx.strokeRect(Math.round(100 * 1), Math.round(-100 * 1), val, val);
+			    		// val /= 4;
 			    		this.canvas.ctx.strokeStyle = "rgb(255," + Math.floor(255 - val) + "," + Math.floor(val) + ")";
 			    	} else if(bin < 13) {
 
@@ -353,11 +384,6 @@
 		    		// this.canvas.ctx.strokeRect(Math.round(val * 2), Math.round(-val * 2), val, val);
 
 		    		// this.canvas.ctx.arc(0, 0, Math.round(val), 0, Math.PI * 2);
-
-		    		/*this.canvas.ctx.moveTo(val, val);
-		    		this.canvas.ctx.lineTo(val, val / 1.618);
-		    		this.canvas.ctx.lineTo(val / 1.618, val);
-		    		this.canvas.ctx.lineTo(val, val);*/
 
 		    		if(false && bin == 0) {
 						gradient.addColorStop(0, 'rgb(0,' + val + ',' + 0 + ')');
@@ -501,18 +527,7 @@
 		created () {
 			console.log('@@@ Fractal:hook:created');
 
-			console.log(this.toRad(33));
-			console.log(Utils.round(this.toRad(1), 4));
-
 			PlayerData.$on('dataTransfer', () => {
-				/*this.audioCtx = new window.AudioContext;
-				console.log(this.audioCtx.state);
-				setTimeout(() => {
-					// (this.audioCtx.state == 'suspended') && (this.audioCtx = new window.AudioContext);
-					console.log(this.audioCtx.state);
-					this.init();
-				}, 100);*/
-				
 				this.init(false);
 			});
 
