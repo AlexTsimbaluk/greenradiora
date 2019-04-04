@@ -730,8 +730,6 @@ export default new Vue({
 		}
 
 		document.addEventListener('keyup', (event) => {
-			// console.log(event);
-			// console.log(event.charCode);
 			// console.log(event.keyCode);
 			// console.log(event.which);
 			// console.log(event.code);
@@ -746,6 +744,18 @@ export default new Vue({
 					this.stopStream();
 				}
 			}
+
+			if(event.code == 'ArrowUp' || event.keyCode == 38) {
+				this.playerState.volume < 1
+					&& this.setVolume(Utils.round(this.playerState.volume + 0.01, 2));
+			}
+
+			if(event.code == 'ArrowDown' || event.keyCode == 40) {
+				this.playerState.volume >= 0.01
+					&& this.setVolume(Utils.round(this.playerState.volume - 0.01, 2));
+			}
+
+			return false;
 		});
 	}
 });

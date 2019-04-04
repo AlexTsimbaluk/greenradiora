@@ -161,7 +161,7 @@
 
 			// Возвращает объект контекста для canvas и его размеры
 			// Принимает DOM-элемент и размеры
-			AudioCanvas(id, width, height) {
+			AudioCanvas (id, width, height) {
 				let canvas = document.getElementById(id);
 
 				canvas.width 		= width;
@@ -172,7 +172,7 @@
 			},
 
 			// получим суммарный уровень частот в момент времени
-			getTotal(data) {
+			getTotal (data) {
 				return data.reduce((sum, current) => {
 					return sum + current;
 				}, 0);
