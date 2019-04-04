@@ -91,10 +91,8 @@
 								></m-icon>
 								<ripple></ripple>
 							</button>
-						</transition>
-
+						</transition>					
 					</div>
-
 					
 					<transition name="flip" mode="out-in">
 						<div
