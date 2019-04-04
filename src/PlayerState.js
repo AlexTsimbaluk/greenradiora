@@ -728,5 +728,24 @@ export default new Vue({
 
 			this.stateChanged();
 		}
+
+		document.addEventListener('keyup', (event) => {
+			// console.log(event);
+			// console.log(event.charCode);
+			// console.log(event.keyCode);
+			// console.log(event.which);
+			// console.log(event.code);
+
+			if(event.code == 'Space' || event.keyCode == 32) {
+				if(this.playerState.paused) {
+					let track = this.getCurrentTrack() || this.playerState.playlists[this.playerState.currentPlaylist].currentTrack;
+					console.log('::PlayerState:playStream::' + track.station_url);
+
+					this.playStream(track);
+				} else {
+					this.stopStream();
+				}
+			}
+		});
 	}
 });
