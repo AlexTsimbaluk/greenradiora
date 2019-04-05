@@ -291,7 +291,10 @@
 					class="d-flex flex-column flex-grow-1 no-gutters track-list-container pb-3"
 				>
 					<!-- playlist's tracks -->
-					<transition name="slide" mode="out-in">
+					<transition
+						name="slide"
+						mode="out-in"
+					>
 						<div
 							v-if="!searchFull"
 							class="col pb-2 track-list"
@@ -485,7 +488,7 @@ export default {
 		},
 		searchStation (event) {
 			event.stopPropagation();
-			
+
 			let searchString = event.target.value;
 			this.searchResults = [];
 			this.noSearchResults = false;
