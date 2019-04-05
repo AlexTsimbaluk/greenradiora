@@ -480,7 +480,10 @@ export default {
 			// console.log(event.clientX);
 			// console.log(event.pageX);
 			// console.log(event.screenX);
-			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist);
+			let d = new Date().getTime();
+			Utils.logs(d);
+			playlist != this.state.currentPlaylist && PlayerState.setCurrentPlaylist(playlist, d);
+			Utils.logs(new Date().getTime() - d);
 		},
 		setVolume (event) {
 			let val = +event.target.value;

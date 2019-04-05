@@ -328,15 +328,18 @@ export default new Vue({
 				});
 		},
 
-		setCurrentPlaylist (playlist) {
+		setCurrentPlaylist (playlist, d) {
+			Utils.logs(d);
 			this.playerState.currentPlaylist = playlist;
 
 			if(this.playerState.translated) {
 				this.translateAll(true);
+				this.stationsChanged();
 			}
 
 			this.stateChanged();
-			this.stationsChanged();
+
+			Utils.logs(new Date().getTime() - d);
 		},
 
 		getCurrentPlaylist () {
@@ -633,6 +636,7 @@ export default new Vue({
 			this.stationsChanged();
 	    },
 
+	    // TODO: ускорить
 	    translateAll (needTranslate) {
 	    	let ids = this.getCurrentPlaylist();
 
