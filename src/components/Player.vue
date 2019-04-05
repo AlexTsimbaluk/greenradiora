@@ -484,6 +484,8 @@ export default {
 			PlayerState.setVolume(val);
 		},
 		searchStation (event) {
+			event.stopPropagation();
+			
 			let searchString = event.target.value;
 			this.searchResults = [];
 			this.noSearchResults = false;
